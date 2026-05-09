@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>汉语 · Mandarin Study Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4ede0;
+      --surface: #fdf8f0;
+      --surface2: #ede5d4;
+      --ink: #1c0d00;
+      --ink-light: #4a3322;
+      --ink-muted: #8a7060;
+      --red: #b83226;
+      --red-hover: #962a1f;
+      --red-soft: #f5e5e3;
+      --blue: #1a4f72;
+      --gold: #a8780a;
+      --border: #d6c9b0;
+      --border-light: #e8dfd0;
+      --shadow: rgba(28,13,0,0.10);
+      --shadow-md: rgba(28,13,0,0.18);
+      --r: 10px;
+      --r-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────── */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--ink);
+      color: #e8d8c4;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-hanzi {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--red);
+      line-height: 1;
+      text-shadow: 0 2px 8px rgba(184,50,38,0.4);
+    }
+
+    .logo-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f0e4d2;
+      letter-spacing: 0.02em;
+    }
+    .logo-text p {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+      font-weight: 300;
+    }
+
+    .sidebar-nav {
+      padding: 16px 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-section-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      padding: 12px 8px 6px;
+    }
+
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      padding: 9px 12px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.07); color: #f0e4d2; }
+    .nav-btn.active { background: var(--red); color: #fff; font-weight: 500; }
+    .nav-btn .icon { width: 18px; text-align: center; font-size: 1rem; }
+
+    .sidebar-lessons {
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-lessons h4 {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      padding: 0 4px 8px;
+    }
+    .lesson-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .lesson-chip:hover { background: rgba(255,255,255,0.07); }
+    .lesson-chip.active-lesson { background: rgba(184,50,38,0.25); }
+    .lesson-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+    .lesson-chip-text { font-size: 0.78rem; color: rgba(255,255,255,0.6); }
+    .lesson-chip.active-lesson .lesson-chip-text { color: #f0e4d2; }
+
+    /* ── MAIN ─────────────────────────────────── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-light);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .topbar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .topbar-sub { font-size: 0.78rem; color: var(--ink-muted); margin-top: 1px; }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: var(--r-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-primary:hover { background: var(--red-hover); }
+    .btn-ghost { background: none; border: 1.5px solid var(--border); color: var(--ink-light); }
+    .btn-ghost:hover { background: var(--surface2); border-color: var(--ink-muted); }
+
+    .content { padding: 28px 32px; }
+
+    /* ── VIEWS ───────────────────────────────── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── DASHBOARD ─────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--r);
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--red);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--ink-muted); margin-top: 6px; }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .dash-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--r);
+      padding: 22px;
+    }
+    .dash-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .quick-actions { display: flex; flex-direction: column; gap: 10px; }
+    .quick-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--ink);
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .quick-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+    .quick-btn .qicon { font-size: 1.2rem; }
+    .quick-btn-desc { font-size: 0.72rem; color: var(--ink-muted); font-weight: 300; }
+
+    .recent-words {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .mini-word-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .mini-word-chip:hover { border-color: var(--red); background: var(--red-soft); }
+    .mini-char { font-family: 'Noto Serif SC', serif; font-size: 1rem; font-weight: 600; }
+    .mini-pinyin { font-size: 0.62rem; color: var(--ink-muted); }
+
+    /* ── VOCABULARY ───────────────────────────── */
+    .vocab-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      background: var(--surface);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-box:focus { border-color: var(--red); }
+    .search-box::placeholder { color: var(--ink-muted); }
+
+    .filter-select {
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .vocab-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--r);
+      padding: 18px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .vocab-card:hover {
+      border-color: var(--red);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+    .vocab-char {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .vocab-pinyin {
+      font-size: 0.78rem;
+      color: var(--blue);
+      font-weight: 500;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+    .vocab-meaning {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+    .vocab-lesson-tag {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 0.6rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 5px;
+      color: var(--ink-muted);
+    }
+    .vocab-audio-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      font-size: 0.85rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s;
+      padding: 2px;
+    }
+    .vocab-card:hover .vocab-audio-btn { opacity: 1; }
+
+    /* ── FLASHCARDS ──────────────────────────── */
+    .flashcard-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .mode-toggle {
+      display: flex;
+      background: var(--surface2);
+      border-radius: var(--r-sm);
+      padding: 3px;
+      gap: 2px;
+    }
+    .mode-btn {
+      padding: 6px 14px;
+      border: none;
+      background: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      transition: all 0.15s;
+    }
+    .mode-btn.active { background: var(--surface); color: var(--red); box-shadow: 0 1px 4px var(--shadow); }
+
+    .fc-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      justify-content: flex-end;
+    }
+    .fc-counter { font-size: 0.82rem; color: var(--ink-muted); }
+    .progress-bar {
+      width: 140px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .flashcard-arena {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .flashcard-wrap {
+      perspective: 1000px;
+      width: 420px;
+      height: 280px;
+      margin-bottom: 28px;
+      cursor: pointer;
+    }
+
+    .flashcard-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .flashcard-inner.flipped { transform: rotateY(180deg); }
+
+    .flashcard-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      box-shadow: 0 8px 32px var(--shadow-md);
+    }
+    .flashcard-front {
+      background: var(--surface);
+      border: 2px solid var(--border);
+    }
+    .flashcard-back {
+      background: var(--ink);
+      border: 2px solid transparent;
+      transform: rotateY(180deg);
+    }
+
+    .fc-char {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 4.5rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .fc-hint {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      margin-top: 14px;
+      letter-spacing: 0.05em;
+    }
+    .fc-back-pinyin {
+      font-size: 1.2rem;
+      color: #f0c080;
+      font-style: italic;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .fc-back-char {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .fc-back-meaning {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .fc-back-play {
+      margin-top: 14px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .fc-back-play:hover { background: rgba(255,255,255,0.2); }
+
+    .fc-nav {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .fc-nav-btn {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--ink-light);
+      transition: all 0.15s;
+    }
+    .fc-nav-btn:hover { border-color: var(--red); color: var(--red); }
+    .fc-nav-btn.correct-btn:hover { border-color: #27ae60; color: #27ae60; background: #eafaf1; }
+    .fc-nav-btn.wrong-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+
+    .fc-shuffle-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: var(--ink-light);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
+    }
+    .fc-shuffle-btn:hover { border-color: var(--red); color: var(--red); }
+
+    .fc-empty {
+      text-align: center;
+      padding: 60px;
+      color: var(--ink-muted);
+    }
+    .fc-empty h3 { font-size: 1.5rem; margin-bottom: 8px; }
+
+    /* ── QUIZ ───────────────────────────────── */
+    .quiz-setup {
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px 0;
+    }
+    .quiz-setup h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .quiz-setup p { color: var(--ink-muted); margin-bottom: 32px; }
+
+    .quiz-config-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .quiz-config-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .quiz-config-card:hover { border-color: var(--red); }
+    .quiz-config-card.selected { border-color: var(--red); background: var(--red-soft); }
+    .quiz-config-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+    .quiz-config-card p { font-size: 0.75rem; color: var(--ink-muted); }
+
+    .quiz-question-area {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .quiz-score {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+    }
+    .quiz-score span { color: var(--red); font-weight: 600; }
+
+    .quiz-prompt-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: 16px;
+      padding: 36px;
+      text-align: center;
+      margin-bottom: 24px;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .quiz-q-char {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 3.5rem;
+      font-weight: 600;
+    }
+    .quiz-q-pinyin { font-size: 1rem; color: var(--blue); font-style: italic; }
+    .quiz-q-prompt { font-size: 0.78rem; color: var(--ink-muted); }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .quiz-option {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      transition: all 0.15s;
+      text-align: left;
+      color: var(--ink);
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--blue); background: #f0f5fb; }
+    .quiz-option.correct { border-color: #27ae60 !important; background: #eafaf1 !important; color: #1e8449 !important; }
+    .quiz-option.wrong { border-color: var(--red) !important; background: var(--red-soft) !important; color: var(--red) !important; }
+    .quiz-option:disabled { cursor: default; }
+
+    .quiz-next-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.15s;
+      display: none;
+    }
+    .quiz-next-btn:hover { background: var(--red-hover); }
+    .quiz-next-btn.show { display: block; }
+
+    .quiz-results {
+      max-width: 440px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px 0;
+    }
+    .quiz-score-big {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      font-weight: 800;
+      color: var(--red);
+      line-height: 1;
+    }
+    .quiz-score-label { font-size: 1rem; color: var(--ink-muted); margin: 8px 0 24px; }
+    .quiz-result-msg { font-size: 1.2rem; font-weight: 500; margin-bottom: 28px; }
+
+    /* ── SENTENCES ──────────────────────────── */
+    .sentences-filter {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tag-btn {
+      padding: 5px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      background: var(--surface);
+      color: var(--ink-muted);
+      transition: all 0.15s;
+    }
+    .tag-btn:hover, .tag-btn.active { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+
+    .sentences-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .sentence-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      transition: border-color 0.15s;
+    }
+    .sentence-card:hover { border-color: var(--border); }
+
+    .sentence-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .sentence-num {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      background: var(--surface2);
+      border-radius: 4px;
+      padding: 2px 7px;
+    }
+    .sentence-type-tag {
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .tag-vocab { background: #e8f4f8; color: var(--blue); }
+    .tag-dialogue { background: #eaf5eb; color: #1e8449; }
+    .tag-question { background: #fef5e7; color: var(--gold); }
+
+    .sentence-audio-btn {
+      margin-left: auto;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s;
+      color: var(--ink-muted);
+    }
+    .sentence-audio-btn:hover { border-color: var(--red); color: var(--red); }
+    .sentence-audio-btn.playing { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+
+    .sentence-words {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .word-chip {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .word-chip:hover { border-color: var(--red); background: var(--red-soft); }
+    .wc-char { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; font-weight: 600; }
+    .wc-pinyin { font-size: 0.62rem; color: var(--blue); font-style: italic; }
+    .wc-meaning { font-size: 0.58rem; color: var(--ink-muted); max-width: 80px; text-align: center; line-height: 1.3; }
+    .show-meanings .wc-meaning { display: block; }
+    .hide-meanings .wc-meaning { display: none; }
+
+    .sentence-translation {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      font-style: italic;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* ── LESSONS MANAGER ─────────────────────── */
+    .lessons-manager { max-width: 680px; }
+    .add-lesson-form {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--r);
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+    .add-lesson-form h3 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; }
+    .url-input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .url-input {
+      flex: 1;
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      background: var(--bg);
+      color: var(--ink);
+      outline: none;
+    }
+    .url-input:focus { border-color: var(--red); }
+    .fetch-status {
+      font-size: 0.78rem;
+      padding: 8px 12px;
+      border-radius: var(--r-sm);
+      margin-top: 8px;
+      display: none;
+    }
+    .fetch-status.loading { display: block; background: #e8f4f8; color: var(--blue); }
+    .fetch-status.error { display: block; background: var(--red-soft); color: var(--red); }
+    .fetch-status.success { display: block; background: #eaf5eb; color: #1e8449; }
+
+    .paste-toggle { font-size: 0.78rem; color: var(--ink-muted); cursor: pointer; margin-top: 8px; }
+    .paste-toggle:hover { color: var(--red); }
+    .paste-area {
+      width: 100%;
+      height: 120px;
+      margin-top: 10px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      background: var(--bg);
+      color: var(--ink);
+      resize: vertical;
+      display: none;
+    }
+    .paste-area.show { display: block; }
+
+    .lesson-list-table {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+    .lesson-row {
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-light);
+      gap: 14px;
+      transition: background 0.15s;
+    }
+    .lesson-row:last-child { border-bottom: none; }
+    .lesson-row:hover { background: var(--bg); }
+    .lesson-row-icon { font-size: 1.1rem; }
+    .lesson-row-info { flex: 1; }
+    .lesson-row-title { font-weight: 500; font-size: 0.88rem; }
+    .lesson-row-meta { font-size: 0.72rem; color: var(--ink-muted); margin-top: 2px; }
+    .lesson-row-del {
+      background: none;
+      border: none;
+      color: var(--ink-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .lesson-row-del:hover { color: var(--red); background: var(--red-soft); }
+
+    /* ── TOOLTIP ────────────────────────────── */
+    .tooltip {
+      position: fixed;
+      background: var(--ink);
+      color: #f0e4d2;
+      border-radius: var(--r-sm);
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.15s;
+      max-width: 200px;
+      line-height: 1.4;
+    }
+    .tooltip.show { opacity: 1; transform: translateY(0); }
+    .tooltip-char { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; font-weight: 600; }
+    .tooltip-pinyin { color: #f0c080; font-style: italic; font-size: 0.72rem; }
+    .tooltip-meaning { color: rgba(255,255,255,0.75); font-size: 0.72rem; margin-top: 2px; }
+
+    /* ── EMPTY STATE ───────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+      color: var(--ink-muted);
+    }
+    .empty-state .es-icon { font-size: 3rem; margin-bottom: 14px; }
+    .empty-state h3 { font-size: 1.1rem; color: var(--ink-light); margin-bottom: 6px; }
+    .empty-state p { font-size: 0.82rem; }
+
+    /* ── SCROLLBAR ─────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── ANIMATIONS ─────────────────────────── */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .view.active { animation: fadeIn 0.25s ease; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-hanzi">汉</span>
+    <div class="logo-text">
+      <h1>Mandarin Hub</h1>
+      <p>Joshua's Study Space</p>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Study</span>
+    <button class="nav-btn active" onclick="showView('dashboard')" id="nav-dashboard">
+      <span class="icon">📊</span> Dashboard
+    </button>
+    <button class="nav-btn" onclick="showView('vocabulary')" id="nav-vocabulary">
+      <span class="icon">📚</span> Vocabulary
+    </button>
+    <button class="nav-btn" onclick="showView('flashcards')" id="nav-flashcards">
+      <span class="icon">🃏</span> Flashcards
+    </button>
+    <button class="nav-btn" onclick="showView('quiz')" id="nav-quiz">
+      <span class="icon">✏️</span> Quiz
+    </button>
+    <button class="nav-btn" onclick="showView('sentences')" id="nav-sentences">
+      <span class="icon">💬</span> Sentences
+    </button>
+    <span class="nav-section-label">Manage</span>
+    <button class="nav-btn" onclick="showView('lessons')" id="nav-lessons">
+      <span class="icon">📋</span> Lessons
+    </button>
+  </nav>
+  <div class="sidebar-lessons" id="sidebarLessons"></div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-sub" id="topbarSub">Overview of your study progress</div>
+    </div>
+    <div class="topbar-actions" id="topbarActions"></div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="dashboard-grid">
+        <div class="dash-card">
+          <h3>Quick Actions</h3>
+          <div class="quick-actions">
+            <button class="quick-btn" onclick="showView('flashcards')">
+              <span class="qicon">🃏</span>
+              <div><div>Flashcard Drill</div><div class="quick-btn-desc">Practice character recall</div></div>
+            </button>
+            <button class="quick-btn" onclick="startQuiz('char-to-meaning')">
+              <span class="qicon">✏️</span>
+              <div><div>Quick Quiz</div><div class="quick-btn-desc">Test your knowledge</div></div>
+            </button>
+            <button class="quick-btn" onclick="showView('sentences')">
+              <span class="qicon">💬</span>
+              <div><div>Review Sentences</div><div class="quick-btn-desc">Read lesson dialogues</div></div>
+            </button>
+          </div>
+        </div>
+        <div class="dash-card">
+          <h3>Recent Vocabulary</h3>
+          <div class="recent-words" id="recentWords"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div class="view" id="view-vocabulary">
+      <div class="vocab-controls">
+        <input class="search-box" id="vocabSearch" placeholder="Search characters, pinyin, or meaning..." oninput="renderVocab()">
+        <select class="filter-select" id="vocabLesson" onchange="renderVocab()">
+          <option value="all">All Lessons</option>
+        </select>
+        <button class="btn btn-ghost" onclick="toggleMeanings()">Toggle Meanings</button>
+      </div>
+      <div class="vocab-grid" id="vocabGrid"></div>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div class="view" id="view-flashcards">
+      <div class="flashcard-controls">
+        <div class="mode-toggle">
+          <button class="mode-btn active" onclick="setFCMode('char')" id="fcm-char">Character → Meaning</button>
+          <button class="mode-btn" onclick="setFCMode('meaning')" id="fcm-meaning">Meaning → Character</button>
+          <button class="mode-btn" onclick="setFCMode('pinyin')" id="fcm-pinyin">Pinyin → Character</button>
+        </div>
+        <select class="filter-select" id="fcLesson" onchange="initFlashcards()">
+          <option value="all">All Lessons</option>
+        </select>
+        <button class="fc-shuffle-btn" onclick="shuffleFlashcards()">🔀 Shuffle</button>
+        <div class="fc-progress">
+          <span class="fc-counter" id="fcCounter">0 / 0</span>
+          <div class="progress-bar"><div class="progress-fill" id="fcProgress" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="flashcard-arena" id="flashcardArena"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="view" id="view-quiz">
+      <div id="quizSetup" class="quiz-setup">
+        <h2>Quiz Mode</h2>
+        <p>Test your Mandarin vocabulary knowledge</p>
+        <div class="quiz-config-grid">
+          <div class="quiz-config-card selected" onclick="selectQuizType('char-to-meaning', this)">
+            <h4>🔤 Character → Meaning</h4>
+            <p>See a Chinese character, pick the correct meaning</p>
+          </div>
+          <div class="quiz-config-card" onclick="selectQuizType('meaning-to-char', this)">
+            <h4>📖 Meaning → Character</h4>
+            <p>See an English meaning, pick the correct character</p>
+          </div>
+          <div class="quiz-config-card" onclick="selectQuizType('pinyin-to-char', this)">
+            <h4>🔊 Pinyin → Character</h4>
+            <p>See the pinyin, pick the correct character</p>
+          </div>
+          <div class="quiz-config-card" onclick="selectQuizType('char-to-pinyin', this)">
+            <h4>🀄 Character → Pinyin</h4>
+            <p>See a character, pick the correct pronunciation</p>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <select class="filter-select" id="quizLesson" style="margin-right:10px">
+            <option value="all">All Lessons</option>
+          </select>
+          <select class="filter-select" id="quizCount">
+            <option value="10">10 Questions</option>
+            <option value="20" selected>20 Questions</option>
+            <option value="30">30 Questions</option>
+            <option value="all">All Words</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="padding:12px 36px;font-size:0.95rem" onclick="startQuizFromSetup()">Start Quiz →</button>
+      </div>
+      <div id="quizPlay" style="display:none">
+        <div class="quiz-question-area">
+          <div class="quiz-header">
+            <div class="quiz-score">Score: <span id="quizScoreDisplay">0</span> / <span id="quizTotalDisplay">0</span></div>
+            <button class="btn btn-ghost" style="padding:5px 12px;font-size:0.78rem" onclick="resetQuiz()">✕ End Quiz</button>
+          </div>
+          <div class="quiz-prompt-card" id="quizPromptCard"></div>
+          <div class="quiz-options" id="quizOptions"></div>
+          <button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuestion()">Next Question →</button>
+        </div>
+      </div>
+      <div id="quizResults" style="display:none">
+        <div class="quiz-results">
+          <div class="quiz-score-big" id="quizFinalScore"></div>
+          <div class="quiz-score-label">Correct Answers</div>
+          <div class="quiz-result-msg" id="quizResultMsg"></div>
+          <div style="display:flex;gap:12px;justify-content:center">
+            <button class="btn btn-primary" onclick="startQuizFromSetup()">Play Again</button>
+            <button class="btn btn-ghost" onclick="resetQuiz()">Change Settings</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENTENCES -->
+    <div class="view" id="view-sentences">
+      <div class="sentences-filter" id="sentencesFilter">
+        <button class="tag-btn active" onclick="filterSentences('all', this)">All</button>
+        <button class="tag-btn" onclick="filterSentences('vocab', this)">Vocabulary</button>
+        <button class="tag-btn" onclick="filterSentences('dialogue', this)">Dialogues</button>
+        <button class="tag-btn" onclick="filterSentences('question', this)">Questions</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">
+        <label style="font-size:0.8rem;color:var(--ink-muted);display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" id="showMeaningsCheck" onchange="toggleWordMeanings(this.checked)"> Show word meanings
+        </label>
+        <select class="filter-select" id="sentenceLesson" onchange="renderSentences()">
+          <option value="all">All Lessons</option>
+        </select>
+      </div>
+      <div class="sentences-list" id="sentencesList"></div>
+    </div>
+
+    <!-- LESSONS MANAGER -->
+    <div class="view" id="view-lessons">
+      <div class="lessons-manager">
+        <div class="add-lesson-form">
+          <h3>➕ Add a New Lesson</h3>
+          <p style="font-size:0.78rem;color:var(--ink-muted);margin-bottom:14px">Paste your teacher's lesson URL to automatically import vocabulary and sentences.</p>
+          <div class="url-input-row">
+            <input class="url-input" id="lessonUrlInput" type="url" placeholder="https://pub-...r2.dev/2026-03/...html">
+            <button class="btn btn-primary" onclick="fetchLesson()">Import</button>
+          </div>
+          <div class="fetch-status" id="fetchStatus"></div>
+          <div class="paste-toggle" onclick="togglePasteArea()">📋 Or paste lesson HTML directly</div>
+          <textarea class="paste-area" id="pasteArea" placeholder="Paste the full HTML source of the lesson page here..."></textarea>
+          <div id="pasteParseArea" style="display:none;margin-top:10px">
+            <input class="url-input" id="pasteTitle" placeholder="Lesson title (e.g. 2026-03-13)" style="margin-bottom:8px;width:100%">
+            <button class="btn btn-primary" onclick="parseHtmlPaste()">Parse & Import</button>
+          </div>
+        </div>
+        <div id="lessonListTable" class="lesson-list-table"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-char" id="ttChar"></div>
+  <div class="tooltip-pinyin" id="ttPinyin"></div>
+  <div class="tooltip-meaning" id="ttMeaning"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+
+const INITIAL_VOCAB = [
+  ["cháng cháng","常常","often"],
+  ["gēn","跟","with"],
+  ["duì yǒu","队友","teammate"],
+  ["yìqǐ","一起","together"],
+  ["chī fàn","吃饭","to eat a meal"],
+  ["ma","吗","yes/no question particle"],
+  ["tōngcháng","通常","usually"],
+  ["tài","太","too, excessively"],
+  ["lèi le","累了","tired"],
+  ["bù","不","no, not"],
+  ["xiǎng qù","想去","want to go"],
+  ["rúguǒ","如果","if, in case"],
+  ["nǐmen","你们","(plural) you"],
+  ["yíng","赢","to win"],
+  ["le","了","past / change particle"],
+  ["yào","要","to want / going to"],
+  ["zhòng zài cān yù","重在参与","it's more important to participate"],
+  ["bǐsài","比赛","match, competition"],
+  ["hěn wǎn","很晚","very late"],
+  ["huá bīng","滑冰","to skate"],
+  ["shì xùn","试训","tryout (sports)"],
+  ["hē","喝","to drink"],
+  ["yì diǎn","一点","a little"],
+  ["chá","茶","tea"],
+  ["jīchǎng","机场","airport"],
+  ["lí","离","to be away from"],
+  ["wǒ jiā","我家","my home"],
+  ["bù yuǎn","不远","not far"],
+  ["wǒ","我","I, me"],
+  ["lù shàng","路上","on the way / road"],
+  ["xiǎng yī xiǎng","想一想","think about it"],
+  ["sān nián qián","三年前","three years ago"],
+  ["qù nián","去年","last year"],
+  ["yòu","又","again (repeated action)"],
+  ["zài","再","again, once more"],
+  ["dì yuán zhèng zhì","地缘政治","geopolitics"],
+  ["duìhuà","对话","dialogue"],
+  ["jù cān","聚餐","group meal / team dinner"],
+  ["gāngcái","刚才","just now"],
+  ["jīng cǎi","精彩","wonderful, exciting"],
+  ["yīnwèi","因为","because"],
+  ["cái","才","only then"],
+  ["jiéshù","结束","to end, to finish"],
+  ["dàjiā","大家","everyone"],
+  ["zhī","只","only"],
+  ["huí jiā","回家","return home"],
+  ["xiū xi","休息","to rest"],
+  ["qìngzhù","庆祝","to celebrate"],
+  ["yǒu shí hòu","有时候","sometimes"],
+  ["gèng","更","more, to a greater extent"],
+  ["zhòngyào","重要","important"],
+  ["tīngshuō","听说","to hear about, to be told"],
+  ["míng tiān","明天","tomorrow"],
+  ["hái yǒu","还有","also have / moreover"],
+  ["suǒyǐ","所以","so, therefore"],
+  ["xiànzài","现在","now"],
+  ["shuì jiào","睡觉","to sleep"],
+  ["zǎo diǎn","早点","earlier"],
+  ["wèntí","问题","question, problem"],
+  ["wèi shénme","为什么","why"],
+  ["zuì","最","most"],
+  ["ānpái","安排","arrangement, plan"],
+  ["wèi","喂","hey (phone greeting)"],
+  ["dào","到","to arrive, to reach"],
+  ["nǎr","哪儿","where"],
+  ["lǎoshī","老师","teacher"],
+  ["fēijī","飞机","airplane"],
+  ["bié","别","don't"],
+  ["dān xīn","担心","to worry"],
+  ["qǐng","请","(polite) please"],
+  ["màn","慢","slow"],
+  ["ānquán","安全","safe, secure"],
+  ["dì yī","第一","first"],
+  ["fàng xīn","放心","to rest assured"],
+  ["kāi chē","开车","to drive (a car)"],
+  ["bàn gè xiǎoshí","半个小时","half an hour"],
+  ["jiù","就","then, right away"],
+  ["dǔ chē","堵车","traffic jam"],
+  ["xià bān shí jiān","下班时间","rush hour"],
+  ["yuè lái yuè","越来越","more and more"],
+  ["zhèngzài","正在","in the process of"],
+  ["duō cháng shí jiān","多长时间","how long (time)"],
+  ["ràng","让","to let, to allow"],
+  ["jìhuà","计划","plan"],
+  ["zài cì","再次","again, once more"],
+  ["kàn","看","to look at, watch, read"],
+  ["zuìjìn","最近","lately, recently"],
+  ["dìtú","地图","map"],
+  ["lǚyóu","旅游","to travel, take a trip"],
+  ["juéde","觉得","to think, to feel"],
+  ["fēicháng","非常","very, extremely"],
+  ["yǒu yìsi","有意思","interesting, fun"],
+  ["jìde","记得","to remember"],
+  ["suīrán","虽然","although, though"],
+  ["fùzá","复杂","complicated"],
+  ["háishi","还是","still, or"],
+  ["dǎsuàn","打算","to plan, intend"],
+  ["shén me shí hòu","什么时候","when"],
+  ["chū fā","出发","to depart, set off"],
+  ["děng","等","to wait"],
+  ["tiānqì","天气","weather"],
+  ["nuǎn huo","暖和","warm"],
+  ["guójiā","国家","country, nation"],
+  ["tuán duì","团队","team"],
+  ["guānyú","关于","about, regarding"],
+  ["cóng","从","from"],
+  ["jiā","家","home, family"],
+  ["Zhōngguó","中国","China"],
+];
+
+const INITIAL_SENTENCES = [
+  { id:1, type:'vocab', audio:null,
+    words:[["nǐ","你","you"],["cháng cháng","常常","often"],["gēn","跟","with"],["duì yǒu","队友","teammate"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat a meal"],["ma","吗","?"]],
+    translation:"Do you often eat with your teammates?" },
+  { id:2, type:'vocab', audio:null,
+    words:[["tōngcháng","通常","usually"],["tài","太","too"],["lèi le","累了","tired"],["bù","不","not"],["xiǎng qù","想去","want to go"],["chī fàn","吃饭","eat"]],
+    translation:"Usually too tired, don't want to go eat." },
+  { id:3, type:'vocab', audio:null,
+    words:[["rúguǒ","如果","if"],["nǐmen","你们","you (pl.)"],["yíng","赢","win"],["le","了","(past)"],["nǐmen","你们","you (pl.)"],["yào","要","will"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat"],["ma","吗","?"]],
+    translation:"If you win, will you eat together?" },
+  { id:4, type:'vocab', audio:null,
+    words:[["zhòng zài cān yù","重在参与","more important to participate"]],
+    translation:"It's more important to participate (than to win)." },
+  { id:5, type:'vocab', audio:null,
+    words:[["bǐsài","比赛","competition"],["cháng cháng","常常","often"],["hěn wǎn","很晚","very late"]],
+    translation:"Competitions are often very late." },
+  { id:6, type:'vocab', audio:null,
+    words:[["huá bīng","滑冰","ice skating"]],
+    translation:"Ice skating" },
+  { id:7, type:'vocab', audio:null,
+    words:[["shì xùn","试训","tryout (sports)"]],
+    translation:"Sports tryout" },
+  { id:8, type:'vocab', audio:null,
+    words:[["hē","喝","drink"],["yì diǎn","一点","a little"],["chá","茶","tea"]],
+    translation:"Drink a little tea." },
+  { id:9, type:'vocab', audio:null,
+    words:[["jīchǎng","机场","airport"],["lí","离","away from"],["wǒ jiā","我家","my home"],["bù yuǎn","不远","not far"]],
+    translation:"The airport is not far from my home." },
+  { id:10, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["zài qù","在去","on the way to"],["jīchǎng","机场","airport"],["de","的","(particle)"],["lù shàng","路上","road/way"]],
+    translation:"I'm on the way to the airport." },
+  { id:11, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["yào","要","need to"],["xiǎng yī xiǎng","想一想","think about it"]],
+    translation:"I need to think about it." },
+  { id:12, type:'vocab', audio:null,
+    words:[["sān nián","三年","three years"],["qián","前","ago"],["wǒ","我","I"],["qù le","去了","went to"],["Zhōngguó","中国","China"]],
+    translation:"Three years ago I went to China." },
+  { id:13, type:'vocab', audio:null,
+    words:[["qù nián","去年","last year"],["wǒ","我","I"],["yòu","又","again"],["qù le","去了","went to"],["Zhōngguó","中国","China"]],
+    translation:"Last year I went to China again." },
+  { id:14, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["yòu","又","again"],["xiǎng qù","想去","want to go"],["Zhōngguó","中国","China"]],
+    translation:"I want to go to China again." },
+  { id:15, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["xiǎng","想","want to"],["zài","再","once more"],["qù Zhōngguó","去中国","go to China"]],
+    translation:"I want to go to China once more." },
+  { id:16, type:'vocab', audio:null,
+    words:[["dì yuán","地缘","geo-"],["zhèng zhì","政治","politics"]],
+    translation:"Geopolitics" },
+  // Dialogue 1 - Competition & Team Dinner
+  { id:18, type:'dialogue', audio:null,
+    words:[["gāngcái","刚才","just now"],["de","的","(particle)"],["huá bīng","滑冰","skating"],["bǐsài","比赛","competition"],["tài jīng cǎi","太精彩","so exciting"],["le","了","!"],["nǐ","你","you"],["cháng cháng","常常","often"],["gēn","跟","with"],["duì yǒu","队友","teammates"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat"],["ma","吗","?"]],
+    translation:"That ice skating competition just now was so exciting! Do you often eat with your teammates?" },
+  { id:19, type:'dialogue', audio:null,
+    words:[["bù cháng","不常","not often"],["qù","去","go"],["yīnwèi","因为","because"],["bǐsài","比赛","competitions"],["cháng cháng","常常","often"],["hěn wǎn","很晚","very late"],["cái","才","only then"],["jiéshù","结束","finish"],["dàjiā","大家","everyone"],["tōngcháng","通常","usually"],["tài lèi le","太累了","too tired"],["zhī xiǎng","只想","just want to"],["huí jiā","回家","go home"],["xiū xi","休息","rest"]],
+    translation:"Not often. Because competitions usually end very late, everyone is too tired and just wants to go home and rest." },
+  { id:20, type:'dialogue', audio:null,
+    words:[["nà","那","then"],["rúguǒ","如果","if"],["nǐmen","你们","you (pl.)"],["yíng le","赢了","win"],["nǐmen","你们","you (pl.)"],["yào","要","will"],["yìqǐ","一起","together"],["qù","去","go"],["chī fàn","吃饭","eat"],["qìngzhù","庆祝","celebrate"],["ma","吗","?"]],
+    translation:"Then if you win, will you go eat together to celebrate?" },
+  { id:21, type:'dialogue', audio:null,
+    words:[["yǒu shí hòu","有时候","sometimes"],["huì qù","会去","will go"],["dàn","但","but"],["duì wǒ lái shuō","对我来说","for me"],["zhòng zài cān yù","重在参与","participating is key"],["gèng","更","more"],["zhòngyào","重要","important"]],
+    translation:"Sometimes we will, but for me, participating is more important than winning." },
+  { id:22, type:'dialogue', audio:null,
+    words:[["tīngshuō","听说","heard that"],["nǐ","你","you"],["míng tiān","明天","tomorrow"],["hái yǒu","还有","also have"],["yí gè","一个","one"],["shì xùn","试训","tryout"]],
+    translation:"I heard you have another tryout tomorrow?" },
+  { id:23, type:'dialogue', audio:null,
+    words:[["duì","对","yes"],["suǒyǐ","所以","so"],["wǒ","我","I"],["xiànzài","现在","now"],["dé hē","得喝","need to drink"],["yì diǎn","一点","a little"],["chá","茶","tea"],["zǎo diǎn","早点","earlier"],["shuì jiào","睡觉","sleep"]],
+    translation:"Right, so I need to drink some tea and sleep early tonight." },
+  // Questions for dialogue 1
+  { id:25, type:'question', audio:null,
+    words:[["wèi shénme","为什么","why"],["bù cháng","不常","not often"],["hé","和","and"],["duì yǒu","队友","teammates"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat"]],
+    translation:"Why don't you often eat with your teammates?" },
+  { id:26, type:'question', audio:null,
+    words:[["bǐsài","比赛","competition"],["zuì zhòngyào de","最重要的","most important"],["shì","是","is"],["shénme","什么","what"]],
+    translation:"For [the speaker], what is the most important thing about a competition?" },
+  { id:27, type:'question', audio:null,
+    words:[["míng tiān","明天","tomorrow"],["yǒu","有","have"],["shénme","什么","what"],["ānpái","安排","plans"]],
+    translation:"What are the plans for tomorrow?" },
+  // Dialogue 2 - Airport
+  { id:29, type:'dialogue', audio:null,
+    words:[["wèi","喂","hey"],["nǐ","你","you"],["dào","到","arrived"],["nǎr","哪儿","where"],["le","了","(change)"],["lǎoshī","老师","teacher"],["de","的","'s"],["fēijī","飞机","plane"],["kuài yào","快要","about to"],["dào le","到了","arrive"]],
+    translation:"Hey, where are you? The teacher's plane is about to arrive." },
+  { id:30, type:'dialogue', audio:null,
+    words:[["bié","别","don't"],["dān xīn","担心","worry"],["wǒ","我","I"],["zài qù","在去","on the way to"],["jīchǎng","机场","airport"],["de lù shàng","的路上","on the road"]],
+    translation:"Don't worry, I'm on the way to the airport." },
+  { id:31, type:'dialogue', audio:null,
+    words:[["nǐ kāi dé","你开得","you are driving"],["tài kuài le","太快了","too fast"],["qǐng","请","please"],["màn","慢","slow"],["yìdiǎnr","一点儿","a little"],["ānquán","安全","safety"],["dì yī","第一","first"]],
+    translation:"You're driving too fast, please slow down — safety first!" },
+  { id:32, type:'dialogue', audio:null,
+    words:[["fàng xīn","放心","rest assured"],["ba","吧","(suggestion)"],["jīchǎng","机场","airport"],["lí","离","from"],["wǒ jiā","我家","my home"],["bù yuǎn","不远","not far"],["kāi chē","开车","drive"],["bàn gè xiǎoshí","半个小时","half an hour"],["jiù dào le","就到了","will arrive"]],
+    translation:"Don't worry, the airport isn't far from home — just half an hour by car." },
+  { id:33, type:'dialogue', audio:null,
+    words:[["jīn tiān","今天","today"],["de lù","的路","the road"],["yuǎn","远","far"],["bù yuǎn","不远","not far"],["dǔ chē","堵车","traffic jam"],["ma","吗","?"]],
+    translation:"Is the road far today? Is there traffic?" },
+  { id:34, type:'dialogue', audio:null,
+    words:[["lù","路","road"],["bù yuǎn","不远","not far"],["dàn","但","but"],["xiànzài","现在","now"],["shì","是","is"],["xià bān shí jiān","下班时间","rush hour"],["chē","车","cars"],["yuè lái yuè","越来越","more and more"],["duō le","多了","increased"]],
+    translation:"Not far, but it's rush hour now and there are more and more cars." },
+  // Questions for dialogue 2
+  { id:36, type:'question', audio:null,
+    words:[["xiànzài","现在","now"],["zhèngzài","正在","currently"],["zuò","做","doing"],["shénme","什么","what"]],
+    translation:"What is [the speaker] currently doing?" },
+  { id:37, type:'question', audio:null,
+    words:[["cóng","从","from"],["jiā","家","home"],["dào","到","to"],["jīchǎng","机场","airport"],["kāi chē","开车","drive"],["yào","要","takes"],["duō cháng shí jiān","多长时间","how long"]],
+    translation:"How long does it take to drive from home to the airport?" },
+  { id:38, type:'question', audio:null,
+    words:[["wèi shénme","为什么","why"],["yào","要","should"],["ràng","让","let"],["tā","他/她","him/her"],["kāi màn","开慢","drive slowly"],["yìdiǎnr","一点儿","a bit"]],
+    translation:"Why should [the passenger] ask [the driver] to slow down?" },
+  // Dialogue 3 - China Trip
+  { id:40, type:'dialogue', audio:null,
+    words:[["wǒ kàn","我看","I see"],["nǐ","你","you"],["zuìjìn","最近","recently"],["zài kàn","在看","looking at"],["dìtú","地图","map"],["shì","是","is it"],["xiǎng qù","想去","want to go"],["lǚyóu","旅游","travel"],["ma","吗","?"]],
+    translation:"I see you've been looking at maps lately — do you want to travel?" },
+  { id:41, type:'dialogue', audio:null,
+    words:[["duì","对","yes"],["sān nián qián","三年前","three years ago"],["wǒ","我","I"],["qù le","去了","went to"],["Zhōngguó","中国","China"],["juéde","觉得","felt"],["fēicháng","非常","very"],["yǒu yìsi","有意思","interesting"]],
+    translation:"Yes, three years ago I went to China and found it very interesting." },
+  { id:42, type:'dialogue', audio:null,
+    words:[["wǒ jìde","我记得","I remember"],["nǐ","你","you"],["qù nián","去年","last year"],["yòu","又","again"],["qù le","去了","went"],["yī cì","一次","once"],["duì ma","对吗","right?"]],
+    translation:"I remember you went again last year, right?" },
+  { id:43, type:'dialogue', audio:null,
+    words:[["shì de","是的","yes"],["qù nián","去年","last year"],["wǒ","我","I"],["yòu qù le","又去了","went again"],["Zhōngguó","中国","China"],["suīrán","虽然","although"],["dì yuán zhèng zhì","地缘政治","geopolitics"],["yǒudiǎnr fùzá","有点儿复杂","a bit complicated"],["dàn wǒ háishi xiǎng","但我还是想","I still want to"],["zài qù","再去","go again"]],
+    translation:"Yes, I went to China again last year. Although geopolitics are a bit complicated, I still want to go again." },
+  { id:44, type:'dialogue', audio:null,
+    words:[["nǐ","你","you"],["dǎsuàn","打算","plan to"],["shén me shí hòu","什么时候","when"],["chū fā","出发","depart"]],
+    translation:"When do you plan to depart?" },
+  { id:45, type:'dialogue', audio:null,
+    words:[["wǒ","我","I"],["yào xiǎng yī xiǎng","要想一想","need to think"],["dǎsuàn","打算","plan to"],["děng","等","wait until"],["tiānqì","天气","weather"],["nuǎn huo","暖和","warm"],["yì diǎn","一点","a little"],["zài chū fā","再出发","then depart"]],
+    translation:"I need to think about it. I plan to wait until the weather gets a bit warmer before departing." },
+  // Questions for dialogue 3
+  { id:47, type:'question', audio:null,
+    words:[["qù nián","去年","last year"],["qù le","去了","went to"],["něi gè","哪个","which"],["guójiā","国家","country"]],
+    translation:"Which country did [the speaker] go to last year?" },
+  { id:48, type:'question', audio:null,
+    words:[["wèi shénme","为什么","why"],["hái","还","still"],["xiǎng qù","想去","want to go"],["Zhōngguó","中国","China"]],
+    translation:"Why does [the speaker] still want to go to China?" },
+  { id:49, type:'question', audio:null,
+    words:[["dǎsuàn","打算","planning to"],["shén me shí hòu","什么时候","when"],["qù","去","go"]],
+    translation:"When does [the speaker] plan to go?" },
+];
+
+const INITIAL_LESSON = {
+  id: "2026-03-06",
+  title: "Lesson 2026-03-06",
+  subtitle: "Ice skating, airport trip, China plans",
+  sourceUrl: "https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-03/Joshua_Pritchard/2026-03-06.html",
+  date: "2026-03-06",
+  vocabCount: INITIAL_VOCAB.length,
+  sentenceCount: INITIAL_SENTENCES.length,
+};
+
+// ── LESSON 2: 2026-03-30 ────────────────────────────────────────────────────
+
+const LESSON2_VOCAB = [
+  ["shēng jiàng zhuō","升降桌","adjustable / standing desk"],
+  ["yì bǎi duō","一百多","over 100"],
+  ["měi yuán","美元","US dollars"],
+  ["duì...lái shuō","对...来说","for..., as far as ... is concerned"],
+  ["shùxué","数学","mathematics"],
+  ["hěn","很","very, quite"],
+  ["nán","难","difficult"],
+  ["wùlǐ","物理","physics"],
+  ["bié de","别的","other, another"],
+  ["chéngshì","城市","city"],
+  ["yǐqián","以前","before, in the past"],
+  ["zuò fēi jī","坐飞机","to fly, travel by plane"],
+  ["Luòshānjī","洛杉矶","Los Angeles"],
+  ["fùjìn","附近","nearby, in the vicinity"],
+  ["bō shì dùn","波士顿","Boston"],
+  ["hěn yuǎn","很远","very far"],
+  ["jiù","就","right away; as early as; already (emphasis)"],
+  ["qǐ chuáng","起床","to get up, get out of bed"],
+  ["kāi shǐ","开始","to start, to begin"],
+  ["sǐ","死","to die; (intensifier) extremely"],
+  ["wúliáo","无聊","boring, bored"],
+  ["hái méi","还没","not yet"],
+  ["yǐjīng","已经","already"],
+  ["huó","活","to live; alive"],
+  ["huó zhe","活着","still alive, living"],
+  ["Bài dēng","拜登","Biden"],
+  ["xiǎoshí","小时","hour (duration)"],
+  ["fù huó jié","复活节","Easter"],
+  ["xīngqī","星期","week"],
+  ["jǐ tiān","几天","how many days / a few days"],
+  ["niǔ yuē","纽约","New York City"],
+  ["liǎng gè","两个","two (+ measure word)"],
+  ["zuò huǒ chē","坐火车","to take the train"],
+  ["bèi tòng","背痛","back pain"],
+  ["bèi","背","back (body part); to carry on one's back"],
+  ["tòng","痛","pain, ache, painful"],
+  ["sān gè","三个","three (+ measure word)"],
+  ["yuǎn","远","far, distant"],
+  ["liù gè","六个","six (+ measure word)"],
+  ["yǒudiǎnr","有点儿","a little, a bit"],
+  ["hǎo rén","好人","good person"],
+  ["sì shí sān suì","四十三岁","43 years old"],
+];
+
+const LESSON2_SENTENCES = [
+  { id:1, type:'vocab', audio:null,
+    words:[["shēng jiàng zhuō","升降桌","adjustable desk"]],
+    translation:"Adjustable / standing desk" },
+  { id:2, type:'vocab', audio:null,
+    words:[["yì bǎi duō","一百多","over 100"],["měi yuán","美元","US dollars"]],
+    translation:"Over 100 US dollars" },
+  { id:3, type:'vocab', audio:null,
+    words:[["duì","对","for"],["...","...","(subject)"],["lái shuō","来说","as far as ... is concerned"]],
+    translation:"For ... / As far as [someone] is concerned" },
+  { id:4, type:'vocab', audio:null,
+    words:[["duì","对","for"],["wǒ","我","me"],["lái shuō","来说","as far as I'm concerned"],["shùxué","数学","math"],["hěn","很","very"],["nán","难","difficult"]],
+    translation:"For me, math is very difficult." },
+  { id:5, type:'vocab', audio:null,
+    words:[["duì","对","for"],["wǒ","我","me"],["lái shuō","来说","as far as I'm concerned"],["wùlǐ","物理","physics"],["hěn","很","very"],["nán","难","difficult"]],
+    translation:"For me, physics is very difficult." },
+  { id:6, type:'vocab', audio:null,
+    words:[["nǐ","你","you"],["cháng cháng","常常","often"],["qù","去","go to"],["bié de","别的","other"],["chéngshì","城市","cities"],["ma","吗","?"]],
+    translation:"Do you often go to other cities?" },
+  { id:7, type:'vocab', audio:null,
+    words:[["yǐqián","以前","before"],["yào","要","had to"],["zuò fēi jī","坐飞机","fly"],["qù","去","go to"],["Luòshānjī","洛杉矶","LA"],["bǐsài","比赛","compete"]],
+    translation:"Before, (I) had to fly to Los Angeles for competitions." },
+  { id:8, type:'vocab', audio:null,
+    words:[["fùjìn","附近","nearby"],["de","的","(particle)"],["chéngshì","城市","city"]],
+    translation:"Nearby city" },
+  { id:9, type:'vocab', audio:null,
+    words:[["Luòshānjī","洛杉矶","LA"],["lí","离","from"],["bō shì dùn","波士顿","Boston"],["hěn yuǎn","很远","very far"]],
+    translation:"Los Angeles is very far from Boston." },
+  { id:10, type:'vocab', audio:null,
+    words:[["jiù","就","then / right away (emphasis)"]],
+    translation:"就 — used to emphasize timing or immediacy" },
+  { id:11, type:'vocab', audio:null,
+    words:[["xiànzài","现在","right now"],["jiù","就","already"],["chī fàn","吃饭","eat"],["ma","吗","?"]],
+    translation:"Are we eating right now?" },
+  { id:12, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["liù diǎn","六点","6 o'clock"],["jiù","就","already"],["qǐ chuáng","起床","get up"]],
+    translation:"I get up as early as 6 o'clock." },
+  { id:13, type:'vocab', audio:null,
+    words:[["wǒ","我","my"],["de kè","的课","class"],["bā diǎn","八点","8 o'clock"],["jiù","就","already"],["kāi shǐ le","开始了","started"]],
+    translation:"My class starts as early as 8." },
+  { id:14, type:'vocab', audio:null,
+    words:[["tā","他","he"],["sì shí sān suì","四十三岁","43 years old"],["jiù","就","already"],["sǐ","死","died"],["le","了","(past)"]],
+    translation:"He died at only 43 years old." },
+  { id:15, type:'vocab', audio:null,
+    words:[["wúliáo","无聊","boring"]],
+    translation:"Boring / bored" },
+  { id:16, type:'vocab', audio:null,
+    words:[["sǐ","死","to die; extremely (intensifier)"]],
+    translation:"死 — to die; also used as intensifier (e.g. 无聊死了 = incredibly boring)" },
+  { id:17, type:'vocab', audio:null,
+    words:[["hái méi","还没","not yet"],["sǐ","死","died"]],
+    translation:"Not dead yet / still alive (hasn't died yet)" },
+  { id:18, type:'vocab', audio:null,
+    words:[["yǐjīng","已经","already"]],
+    translation:"Already" },
+  { id:19, type:'vocab', audio:null,
+    words:[["tā","他","he"],["shì","是","is"],["hǎo rén","好人","good person"]],
+    translation:"He is a good person." },
+  { id:20, type:'vocab', audio:null,
+    words:[["huó","活","to live; alive"]],
+    translation:"To live; alive" },
+  { id:21, type:'vocab', audio:null,
+    words:[["Bài dēng","拜登","Biden"],["hái","还","still"],["huó zhe","活着","alive"]],
+    translation:"Biden is still alive." },
+  { id:22, type:'vocab', audio:null,
+    words:[["xiǎoshí","小时","hour (duration)"]],
+    translation:"Hour (duration)" },
+  { id:23, type:'vocab', audio:null,
+    words:[["lí","离","away from, until"]],
+    translation:"离 — to be away from (distance or time)" },
+  { id:24, type:'vocab', audio:null,
+    words:[["xiànzài","现在","now"],["lí","离","until"],["míng tiān","明天","tomorrow"],["hái yǒu","还有","still have"],["sān gè","三个","three"],["xiǎoshí","小时","hours"]],
+    translation:"There are still three hours until tomorrow." },
+  { id:25, type:'vocab', audio:null,
+    words:[["lí","离","until"],["fù huó jié","复活节","Easter"],["hái yǒu","还有","still"],["jǐ tiān","几天","how many days"]],
+    translation:"How many days until Easter?" },
+  { id:26, type:'vocab', audio:null,
+    words:[["xiànzài","现在","now"],["lí","离","until"],["fù huó jié","复活节","Easter"],["hái yǒu","还有","still have"],["yí gè","一个","one"],["xīngqī","星期","week"]],
+    translation:"There is still one week until Easter." },
+  { id:27, type:'vocab', audio:null,
+    words:[["bō shì dùn","波士顿","Boston"],["lí","离","from"],["niǔ yuē","纽约","NYC"],["yuǎn","远","far"],["ma","吗","?"]],
+    translation:"Is Boston far from New York City?" },
+  { id:28, type:'vocab', audio:null,
+    words:[["kāi chē","开车","drive"],["yào","要","takes"],["liù gè","六个","six"],["xiǎoshí","小时","hours"]],
+    translation:"Driving takes six hours." },
+  { id:29, type:'vocab', audio:null,
+    words:[["yǒudiǎnr","有点儿","a bit"],["yuǎn","远","far"]],
+    translation:"A little far." },
+  { id:30, type:'vocab', audio:null,
+    words:[["zuò huǒ chē","坐火车","by train"],["yào","要","takes"],["liǎng gè","两个","two"],["xiǎoshí","小时","hours"]],
+    translation:"Taking the train takes two hours." },
+  { id:31, type:'vocab', audio:null,
+    words:[["bèi tòng","背痛","back pain"]],
+    translation:"Back pain" },
+  { id:32, type:'vocab', audio:null,
+    words:[["wǒ","我","my"],["de","的","(particle)"],["bèi","背","back"],["yǒudiǎnr","有点儿","a bit"],["tòng","痛","painful"]],
+    translation:"My back hurts a little." },
+];
+
+const LESSON2 = {
+  id: "2026-03-30",
+  title: "Lesson 2026-03-30",
+  subtitle: "Adjustable desk, city distances, time expressions with 就 & 离",
+  sourceUrl: "https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-03/Joshua_Pritchard/2026-03-30.html",
+  date: "2026-03-30",
+  vocabCount: LESSON2_VOCAB.length,
+  sentenceCount: LESSON2_SENTENCES.length,
+};
+
+// ── LESSON 3: 2026-04-02 ────────────────────────────────────────────────────
+
+const LESSON3_VOCAB = [
+  ["chūn jià","春假","spring break"],
+  ["yìqǐ","一起","together"],
+  ["fù huó jié","复活节","Easter"],
+  ["jǐ gè","几个","how many; several"],
+  ["xīngqī","星期","week"],
+  ["hòu","后","after, afterwards, later"],
+  ["chūn tiān","春天","spring (season)"],
+  ["wǎnshang","晚上","evening, night"],
+  ["xià yǔ","下雨","to rain"],
+  ["bái tiān","白天","daytime"],
+  ["qíng tiān","晴天","sunny day"],
+  ["biànhuà","变化","change; to change"],
+  ["tiānqì","天气","weather"],
+  ["bèi téng","背疼","backache"],
+  ["zhōumò","周末","weekend"],
+  ["fán zào bù ān","烦躁不安","restless, agitated"],
+  ["xūyào","需要","to need"],
+  ["chī yào","吃药","to take medicine"],
+  ["nǎi chá","奶茶","boba tea, milk tea"],
+  ["xiǎng yào","想要","to want (something)"],
+  ["yī liàng","一辆","(measure word for vehicles)"],
+  ["xīn chē","新车","new car"],
+  ["niǔ yuē","纽约","New York City"],
+  ["duō cháng shí jiān","多长时间","how long (duration)"],
+  ["zuò huǒ chē","坐火车","to travel by train"],
+  ["yī liè","一列","(measure word for trains)"],
+  ["ěrduo","耳朵","ear"],
+  ["shūfu","舒服","comfortable; well"],
+  ["yālì","压力","pressure, stress"],
+  ["qì yā","气压","air pressure"],
+  ["bǐ","比","than; compared to"],
+  ["yǐjīng","已经","already"],
+];
+
+const LESSON3_SENTENCES = [
+  { id:1, type:'vocab', audio:null,
+    words:[["chūn jià","春假","spring break"]],
+    translation:"Spring break" },
+  { id:2, type:'vocab', audio:null,
+    words:[["chūn jià","春假","spring break"],["hé","和","and"],["fù huó jié","复活节","Easter"]],
+    translation:"Spring break and Easter" },
+  { id:3, type:'vocab', audio:null,
+    words:[["jǐ gè","几个","a few"],["xīngqī","星期","weeks"],["hòu","后","from now / later"]],
+    translation:"A few weeks from now" },
+  { id:4, type:'vocab', audio:null,
+    words:[["zài","在","to be at"],["yìqǐ","一起","together"]],
+    translation:"(To be) together" },
+  { id:5, type:'vocab', audio:null,
+    words:[["chūn tiān","春天","spring"]],
+    translation:"Spring (season)" },
+  { id:6, type:'vocab', audio:null,
+    words:[["wǎnshang","晚上","evening"],["xià yǔ","下雨","raining"],["bái tiān","白天","daytime"],["shì","是","is"],["qíng tiān","晴天","sunny"]],
+    translation:"In the evening it rains; during the day it's sunny." },
+  { id:7, type:'vocab', audio:null,
+    words:[["xiànzài","现在","now"],["zài xià yǔ","在下雨","is raining"]],
+    translation:"It's raining now." },
+  { id:8, type:'vocab', audio:null,
+    words:[["tiānqì","天气","weather"],["biànhuà","变化","changes"],["hěn dà","很大","a lot"]],
+    translation:"The weather changes a lot." },
+  { id:9, type:'vocab', audio:null,
+    words:[["wǒ","我","my"],["de","的","(possessive)"],["bèi téng","背疼","back hurts"]],
+    translation:"My back hurts." },
+  { id:10, type:'vocab', audio:null,
+    words:[["zhōumò","周末","weekend"],["hǎo","好","a bit"],["yì diǎn","一点","better"]],
+    translation:"(Feeling) a bit better on the weekend." },
+  { id:11, type:'vocab', audio:null,
+    words:[["fán zào bù ān","烦躁不安","restless"]],
+    translation:"Restless, agitated" },
+  { id:12, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["xūyào","需要","need"],["chī yào","吃药","take medicine"]],
+    translation:"I need to take medicine." },
+  { id:13, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["yào","要","want"],["yì bēi","一杯","one cup of"],["nǎi chá","奶茶","boba tea"]],
+    translation:"I want one boba tea." },
+  { id:14, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["xiǎng yào","想要","want"],["yī liàng","一辆","(one)"],["xīn chē","新车","new car"]],
+    translation:"I want a new car." },
+  { id:15, type:'vocab', audio:null,
+    words:[["cóng","从","from"],["bō shì dùn","波士顿","Boston"],["kāi chē","开车","drive"],["dào","到","to"],["niǔ yuē","纽约","NYC"],["yào","要","takes"],["duō cháng shí jiān","多长时间","how long"]],
+    translation:"How long does it take to drive from Boston to NYC?" },
+  { id:16, type:'vocab', audio:null,
+    words:[["yào","要","takes"],["wǔ gè","五个","five"],["duō","多","more than"],["xiǎoshí","小时","hours"]],
+    translation:"It takes over five hours." },
+  { id:17, type:'vocab', audio:null,
+    words:[["zuò huǒ chē","坐火车","by train"]],
+    translation:"By train" },
+  { id:18, type:'vocab', audio:null,
+    words:[["yī liè","一列","one (train)"],["huǒ chē","火车","train"]],
+    translation:"One train (measure word for trains)" },
+  { id:19, type:'vocab', audio:null,
+    words:[["ěrduo","耳朵","ear"],["bù","不","not"],["shūfu","舒服","comfortable"]],
+    translation:"My ear is uncomfortable." },
+  { id:20, type:'vocab', audio:null,
+    words:[["fēijī","飞机","airplane"],["shàng","上","on"],["qì yā","气压","air pressure"],["hěn dà","很大","very high"]],
+    translation:"Air pressure on the airplane is very high." },
+  { id:21, type:'vocab', audio:null,
+    words:[["zài","在","on"],["fēijī","飞机","airplane"],["shàng","上","(on)"],["qì yā","气压","air pressure"],["hěn dà","很大","very high"],["háizi","孩子","kids"],["bù shūfu","不舒服","uncomfortable"]],
+    translation:"On airplanes, the air pressure is high and kids feel uncomfortable." },
+  { id:22, type:'vocab', audio:null,
+    words:[["yālì","压力","pressure/stress"]],
+    translation:"Pressure, stress" },
+  { id:23, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["bǐ","比","taller than"],["tā","他","him"]],
+    translation:"I am taller than him." },
+  { id:24, type:'vocab', audio:null,
+    words:[["wǒ jiā","我家","my home"],["lí","离","is away from"],["tā jiā","他家","his home"],["hěn yuǎn","很远","very far"]],
+    translation:"My home is very far from his home." },
+  { id:25, type:'vocab', audio:null,
+    words:[["yǐjīng","已经","already"],["shí èr diǎn","十二点","12 o'clock"],["duō le","多了","past"]],
+    translation:"It's already past 12 o'clock." },
+];
+
+const LESSON3 = {
+  id: "2026-04-02",
+  title: "Lesson 2026-04-02",
+  subtitle: "Spring break, weather changes, 比 comparisons & air pressure",
+  sourceUrl: "https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-04/Joshua_Pritchard/2026-04-02.html",
+  date: "2026-04-02",
+  vocabCount: LESSON3_VOCAB.length,
+  sentenceCount: LESSON3_SENTENCES.length,
+};
+
+// ── LESSON 4: 2026-04-30 ────────────────────────────────────────────────────
+
+const LESSON4_VOCAB = [
+  ["lí","离","to be away from, to leave"],
+  ["shòu shāng","受伤","to be injured, wounded"],
+  ["sài jì","赛季","season (sports)"],
+  ["bō shì dùn","波士顿","Boston"],
+  ["niǔ yuē","纽约","New York City"],
+  ["bù","不","no, not"],
+  ["tài","太","too, excessively"],
+  ["yuǎn","远","far, distant"],
+  ["luó dé dǎo","罗德岛","Rhode Island"],
+  ["ma","吗","(yes/no question particle)"],
+  ["nǐ","你","you (singular)"],
+  ["qù guò","去过","ever went to..."],
+  ["cān yì yuán","参议员","senator"],
+  ["fèng huáng chéng","凤凰城","Phoenix (city)"],
+  ["pāi zhào","拍照","to take pictures; photograph"],
+  ["zhàoxiàngjī","照相机","camera"],
+  ["shǒu jī","手机","cell phone"],
+  ["jiāo juǎn","胶卷","film (camera product)"],
+  ["nǐ jiā","你家","your home"],
+  ["jīchǎng","机场","airport"],
+  ["wǒ","我","I, me"],
+  ["zài","在","to be in/on/at"],
+  ["qù","去","to go"],
+  ["shàng bān","上班","to work, to do a job"],
+  ["de","的","(possessive particle)"],
+  ["lù shàng","路上","on the way / on the road"],
+  ["guò","过","to pass/spend (time); ever done"],
+  ["guò shēng rì","过生日","to celebrate a birthday"],
+  ["shèng dàn jié","圣诞节","Christmas"],
+  ["zhōumò","周末","weekend"],
+  ["bà bà mā mā","爸爸妈妈","parents (dad and mom)"],
+  ["jiā","家","family, home"],
+  ["shì","是","to be"],
+  ["zài jiā","在家","at home"],
+  ["shēng rì","生日","birthday"],
+  ["tā","她","she, her"],
+  ["hé","和","and"],
+  ["tā de","她的","her"],
+  ["péngyou","朋友","friend"],
+  ["mài dāng láo","麦当劳","McDonald's"],
+];
+
+const LESSON4_SENTENCES = [
+  { id:1, type:'vocab', audio:null,
+    words:[["lí","离","to be away from, to leave"]],
+    translation:"离 — to be away from, to leave" },
+  { id:2, type:'vocab', audio:null,
+    words:[["shòu shāng","受伤","to be injured"]],
+    translation:"To be injured / wounded" },
+  { id:3, type:'vocab', audio:null,
+    words:[["sài jì","赛季","sports season"]],
+    translation:"(Sports) season" },
+  { id:4, type:'vocab', audio:null,
+    words:[["shòu shāng","受伤","to be injured"]],
+    translation:"To be injured (again)" },
+  { id:5, type:'vocab', audio:null,
+    words:[["bō shì dùn","波士顿","Boston"],["lí","离","from"],["niǔ yuē","纽约","NYC"],["bù","不","not"],["tài","太","too"],["yuǎn","远","far"]],
+    translation:"Boston is not too far from NYC." },
+  { id:6, type:'question', audio:null,
+    words:[["luó dé dǎo","罗德岛","Rhode Island"],["lí","离","from"],["bō shì dùn","波士顿","Boston"],["yuǎn","远","far"],["ma","吗","?"]],
+    translation:"Is Rhode Island far from Boston?" },
+  { id:7, type:'question', audio:null,
+    words:[["nǐ","你","you"],["qù guò","去过","ever went to"],["luó dé dǎo","罗德岛","Rhode Island"],["ma","吗","?"]],
+    translation:"Have you ever been to Rhode Island?" },
+  { id:8, type:'vocab', audio:null,
+    words:[["cān yì yuán","参议员","senator"]],
+    translation:"Senator" },
+  { id:9, type:'vocab', audio:null,
+    words:[["fèng huáng chéng","凤凰城","Phoenix"]],
+    translation:"Phoenix (city)" },
+  { id:10, type:'vocab', audio:null,
+    words:[["pāi zhào","拍照","take pictures"]],
+    translation:"Take pictures / photograph" },
+  { id:11, type:'vocab', audio:null,
+    words:[["zhàoxiàngjī","照相机","camera"]],
+    translation:"Camera" },
+  { id:12, type:'vocab', audio:null,
+    words:[["shǒu jī","手机","cell phone"]],
+    translation:"Cell phone" },
+  { id:13, type:'vocab', audio:null,
+    words:[["jiāo juǎn","胶卷","film"],["zhàoxiàngjī","照相机","camera"]],
+    translation:"Film camera" },
+  { id:14, type:'question', audio:null,
+    words:[["nǐ jiā","你家","your home"],["lí","离","from"],["jīchǎng","机场","airport"],["yuǎn","远","far"],["ma","吗","?"]],
+    translation:"Is your home far from the airport?" },
+  { id:15, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["zài","在","be in"],["qù","去","go"],["shàng bān","上班","work"],["de","的","(particle)"],["lù shàng","路上","on the way"]],
+    translation:"I'm on the way to work." },
+  { id:16, type:'vocab', audio:null,
+    words:[["guò","过","to pass/spend; ever done"]],
+    translation:"过 — to pass (time), to spend (time); ever done" },
+  { id:17, type:'vocab', audio:null,
+    words:[["guò shēng rì","过生日","celebrate birthday"]],
+    translation:"Celebrate a birthday" },
+  { id:18, type:'vocab', audio:null,
+    words:[["guò","过","to spend / celebrate"],["shèng dàn jié","圣诞节","Christmas"]],
+    translation:"Celebrate Christmas" },
+  { id:19, type:'vocab', audio:null,
+    words:[["guò","过","to spend"],["zhōumò","周末","weekend"]],
+    translation:"Spend the weekend" },
+  { id:20, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["zài","在","at"],["bà bà mā mā","爸爸妈妈","parents"],["jiā","家","home"],["guò","过","spend"],["zhōumò","周末","weekend"]],
+    translation:"I spend the weekend at my parents' home." },
+  { id:21, type:'vocab', audio:null,
+    words:[["wǒ","我","I"],["shì","是","is"],["zài jiā","在家","at home"],["guò","过","celebrated"],["de","的","(particle)"],["shēng rì","生日","birthday"]],
+    translation:"I celebrated my birthday at home." },
+  { id:22, type:'vocab', audio:null,
+    words:[["tā","她","she"],["hé","和","and"],["tā de","她的","her"],["péngyou","朋友","friend"],["zài","在","at"],["mài dāng láo","麦当劳","McDonald's"],["guò shēng rì","过生日","celebrate birthday"]],
+    translation:"She and her friend celebrated their birthday at McDonald's." },
+];
+
+const LESSON4 = {
+  id: "2026-04-30",
+  title: "Lesson 2026-04-30",
+  subtitle: "Distance with 离, photography vocab, 过 for spending time & celebrating",
+  sourceUrl: "https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/Joshua_Pritchard-2026-04-30.html",
+  date: "2026-04-30",
+  vocabCount: LESSON4_VOCAB.length,
+  sentenceCount: LESSON4_SENTENCES.length,
+};
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+
+let state = {
+  lessons: {},
+  vocab: {},       // key: "lessonId_index"
+  sentences: {},   // key: "lessonId_index"
+  currentView: 'dashboard',
+  activeLesson: null,
+  fcIndex: 0,
+  fcMode: 'char',
+  fcCards: [],
+  fcFlipped: false,
+  quizType: 'char-to-meaning',
+  quizQuestions: [],
+  quizCurrent: 0,
+  quizScore: 0,
+  sentenceFilter: 'all',
+  showWordMeanings: false,
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('mandarinHub_v4');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state = { ...state, ...parsed };
+    }
+  } catch(e) {}
+  // Always ensure lesson 1 exists
+  if (!state.lessons['2026-03-06']) {
+    state.lessons['2026-03-06'] = INITIAL_LESSON;
+    INITIAL_VOCAB.forEach((v, i) => {
+      state.vocab[`2026-03-06_${i}`] = { lessonId: '2026-03-06', pinyin: v[0], char: v[1], meaning: v[2] };
+    });
+    INITIAL_SENTENCES.forEach((s, i) => {
+      state.sentences[`2026-03-06_${i}`] = { ...s, lessonId: '2026-03-06' };
+    });
+  }
+  // Always ensure lesson 2 exists
+  if (!state.lessons['2026-03-30']) {
+    state.lessons['2026-03-30'] = LESSON2;
+    LESSON2_VOCAB.forEach((v, i) => {
+      state.vocab[`2026-03-30_${i}`] = { lessonId: '2026-03-30', pinyin: v[0], char: v[1], meaning: v[2] };
+    });
+    LESSON2_SENTENCES.forEach((s, i) => {
+      state.sentences[`2026-03-30_${i}`] = { ...s, lessonId: '2026-03-30' };
+    });
+  }
+  if (!state.lessons['2026-04-02']) {
+    state.lessons['2026-04-02'] = LESSON3;
+    LESSON3_VOCAB.forEach((v, i) => {
+      state.vocab[`2026-04-02_${i}`] = { lessonId: '2026-04-02', pinyin: v[0], char: v[1], meaning: v[2] };
+    });
+    LESSON3_SENTENCES.forEach((s, i) => {
+      state.sentences[`2026-04-02_${i}`] = { ...s, lessonId: '2026-04-02' };
+    });
+  }
+  if (!state.lessons['2026-04-30']) {
+    state.lessons['2026-04-30'] = LESSON4;
+    LESSON4_VOCAB.forEach((v, i) => {
+      state.vocab[`2026-04-30_${i}`] = { lessonId: '2026-04-30', pinyin: v[0], char: v[1], meaning: v[2] };
+    });
+    LESSON4_SENTENCES.forEach((s, i) => {
+      state.sentences[`2026-04-30_${i}`] = { ...s, lessonId: '2026-04-30' };
+    });
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('mandarinHub_v4', JSON.stringify({
+      lessons: state.lessons,
+      vocab: state.vocab,
+      sentences: state.sentences,
+    }));
+  } catch(e) {}
+}
+
+function getAllVocab(lessonFilter = 'all') {
+  return Object.values(state.vocab).filter(v =>
+    lessonFilter === 'all' || v.lessonId === lessonFilter
+  );
+}
+
+function getAllSentences(lessonFilter = 'all') {
+  return Object.values(state.sentences).filter(s =>
+    (lessonFilter === 'all' || s.lessonId === lessonFilter)
+  );
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+
+const VIEW_META = {
+  dashboard: { title: 'Dashboard', sub: 'Overview of your Mandarin studies' },
+  vocabulary: { title: 'Vocabulary', sub: 'Browse all words from your lessons' },
+  flashcards: { title: 'Flashcards', sub: 'Practice character recall with flip cards' },
+  quiz: { title: 'Quiz', sub: 'Test your vocabulary knowledge' },
+  sentences: { title: 'Sentences & Dialogues', sub: 'Review lesson sentences word by word' },
+  lessons: { title: 'Lessons', sub: 'Manage and import lesson content' },
+};
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${name}`).classList.add('active');
+  document.getElementById(`nav-${name}`)?.classList.add('active');
+  state.currentView = name;
+  const meta = VIEW_META[name];
+  document.getElementById('topbarTitle').textContent = meta.title;
+  document.getElementById('topbarSub').textContent = meta.sub;
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'vocabulary') renderVocab();
+  if (name === 'flashcards') initFlashcards();
+  if (name === 'sentences') renderSentences();
+  if (name === 'lessons') renderLessonsManager();
+  populateLessonSelects();
+}
+
+// ─────────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────────
+
+function renderDashboard() {
+  const allVocab = getAllVocab();
+  const allSentences = getAllSentences();
+  const lessonCount = Object.keys(state.lessons).length;
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${lessonCount}</div><div class="stat-label">Lessons Loaded</div></div>
+    <div class="stat-card"><div class="stat-num">${allVocab.length}</div><div class="stat-label">Vocabulary Words</div></div>
+    <div class="stat-card"><div class="stat-num">${allSentences.filter(s=>s.type==='dialogue').length}</div><div class="stat-label">Dialogue Lines</div></div>
+    <div class="stat-card"><div class="stat-num">${allSentences.filter(s=>s.type==='question').length}</div><div class="stat-label">Practice Questions</div></div>
+  `;
+
+  const recent = allVocab.slice(0, 20);
+  document.getElementById('recentWords').innerHTML = recent.map(v => `
+    <div class="mini-word-chip" onclick="showView('flashcards')" title="${v.meaning}">
+      <span class="mini-char">${v.char}</span>
+      <span class="mini-pinyin">${v.pinyin}</span>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────
+// VOCABULARY
+// ─────────────────────────────────────────────
+
+let showMeanings = true;
+
+function toggleMeanings() {
+  showMeanings = !showMeanings;
+  renderVocab();
+}
+
+function renderVocab() {
+  const search = document.getElementById('vocabSearch')?.value.toLowerCase() || '';
+  const lesson = document.getElementById('vocabLesson')?.value || 'all';
+  let vocab = getAllVocab(lesson);
+  if (search) {
+    vocab = vocab.filter(v =>
+      v.char.toLowerCase().includes(search) ||
+      v.pinyin.toLowerCase().includes(search) ||
+      v.meaning.toLowerCase().includes(search)
+    );
+  }
+  const grid = document.getElementById('vocabGrid');
+  if (!grid) return;
+  if (vocab.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🔍</div><h3>No words found</h3><p>Try a different search term</p></div>`;
+    return;
+  }
+  grid.innerHTML = vocab.map(v => `
+    <div class="vocab-card" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
+      <div class="vocab-lesson-tag">${v.lessonId}</div>
+      <button class="vocab-audio-btn" onclick="speakChinese('${esc(v.char)}',event)" title="Hear pronunciation">🔊</button>
+      <div class="vocab-char">${v.char}</div>
+      <div class="vocab-pinyin">${v.pinyin}</div>
+      ${showMeanings ? `<div class="vocab-meaning">${v.meaning}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────
+// FLASHCARDS
+// ─────────────────────────────────────────────
+
+function setFCMode(mode) {
+  state.fcMode = mode;
+  document.querySelectorAll('[id^="fcm-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById(`fcm-${mode}`)?.classList.add('active');
+  initFlashcards();
+}
+
+function initFlashcards() {
+  const lesson = document.getElementById('fcLesson')?.value || 'all';
+  let vocab = getAllVocab(lesson);
+  state.fcCards = [...vocab];
+  state.fcIndex = 0;
+  state.fcFlipped = false;
+  renderFlashcard();
+}
+
+function shuffleFlashcards() {
+  for (let i = state.fcCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [state.fcCards[i], state.fcCards[j]] = [state.fcCards[j], state.fcCards[i]];
+  }
+  state.fcIndex = 0;
+  state.fcFlipped = false;
+  renderFlashcard();
+}
+
+function renderFlashcard() {
+  const arena = document.getElementById('flashcardArena');
+  if (!arena) return;
+  const cards = state.fcCards;
+  if (cards.length === 0) {
+    arena.innerHTML = `<div class="fc-empty"><h3>No vocabulary yet</h3><p>Add a lesson to start studying!</p></div>`;
+    return;
+  }
+  const card = cards[state.fcIndex];
+  const total = cards.length;
+  const current = state.fcIndex + 1;
+  const pct = Math.round((current / total) * 100);
+
+  document.getElementById('fcCounter').textContent = `${current} / ${total}`;
+  document.getElementById('fcProgress').style.width = `${pct}%`;
+
+  let frontContent = '';
+  let backContent = '';
+  const mode = state.fcMode;
+
+  if (mode === 'char') {
+    frontContent = `<div class="fc-char" onclick="speakChinese('${esc(card.char)}',event)">${card.char}</div><div class="fc-hint">Tap character to hear · tap card to flip</div>`;
+    backContent = `<div class="fc-back-pinyin">${card.pinyin}</div><div class="fc-back-char">${card.char}</div><div class="fc-back-meaning">${card.meaning}</div><button class="fc-back-play" onclick="speakChinese('${esc(card.char)}',event)" title="Hear pronunciation">🔊</button>`;
+  } else if (mode === 'meaning') {
+    frontContent = `<div class="fc-char" style="font-size:1.5rem;font-family:'DM Sans',sans-serif;font-weight:500">${card.meaning}</div><div class="fc-hint">Tap to reveal character</div>`;
+    backContent = `<div class="fc-back-pinyin">${card.pinyin}</div><div class="fc-back-char">${card.char}</div><div class="fc-back-meaning">${card.meaning}</div><button class="fc-back-play" onclick="speakChinese('${esc(card.char)}',event)" title="Hear pronunciation">🔊</button>`;
+  } else if (mode === 'pinyin') {
+    frontContent = `<div class="fc-char" style="font-size:2rem;font-family:'DM Sans',sans-serif;font-style:italic;color:var(--blue)">${card.pinyin}</div><div class="fc-hint">Tap to reveal character</div>`;
+    backContent = `<div class="fc-back-pinyin">${card.pinyin}</div><div class="fc-back-char">${card.char}</div><div class="fc-back-meaning">${card.meaning}</div><button class="fc-back-play" onclick="speakChinese('${esc(card.char)}',event)" title="Hear pronunciation">🔊</button>`;
+  }
+
+  arena.innerHTML = `
+    <div class="flashcard-wrap" onclick="flipCard()">
+      <div class="flashcard-inner ${state.fcFlipped ? 'flipped' : ''}" id="fcInner">
+        <div class="flashcard-face flashcard-front">${frontContent}</div>
+        <div class="flashcard-face flashcard-back">${backContent}</div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="fcNav(-1)" title="Previous">←</button>
+      <button class="fc-nav-btn wrong-btn" onclick="fcNav(1)" title="Skip">✕</button>
+      <button class="fc-nav-btn correct-btn" onclick="fcNav(1)" title="Got it">✓</button>
+      <button class="fc-nav-btn" onclick="fcNav(1)" title="Next">→</button>
+    </div>
+  `;
+}
+
+function flipCard() {
+  state.fcFlipped = !state.fcFlipped;
+  const inner = document.getElementById('fcInner');
+  if (inner) inner.classList.toggle('flipped', state.fcFlipped);
+}
+
+function fcNav(dir) {
+  state.fcIndex = (state.fcIndex + dir + state.fcCards.length) % state.fcCards.length;
+  state.fcFlipped = false;
+  renderFlashcard();
+}
+
+// ─────────────────────────────────────────────
+// QUIZ
+// ─────────────────────────────────────────────
+
+let currentQuizType = 'char-to-meaning';
+
+function selectQuizType(type, el) {
+  currentQuizType = type;
+  document.querySelectorAll('.quiz-config-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function startQuiz(type) {
+  showView('quiz');
+  currentQuizType = type;
+  startQuizFromSetup();
+}
+
+function startQuizFromSetup() {
+  const lesson = document.getElementById('quizLesson')?.value || 'all';
+  const countVal = document.getElementById('quizCount')?.value || '20';
+  let vocab = getAllVocab(lesson);
+  if (vocab.length < 4) {
+    alert('Need at least 4 vocabulary words to start a quiz!');
+    return;
+  }
+  let count = countVal === 'all' ? vocab.length : Math.min(parseInt(countVal), vocab.length);
+  // Shuffle and take
+  const shuffled = [...vocab].sort(() => Math.random() - 0.5);
+  const pool = shuffled.slice(0, count);
+
+  state.quizQuestions = pool.map(item => {
+    const wrong = vocab.filter(v => v.char !== item.char).sort(() => Math.random() - 0.5).slice(0, 3);
+    const options = [...wrong, item].sort(() => Math.random() - 0.5);
+    return { item, options };
+  });
+
+  state.quizCurrent = 0;
+  state.quizScore = 0;
+  document.getElementById('quizSetup').style.display = 'none';
+  document.getElementById('quizResults').style.display = 'none';
+  document.getElementById('quizPlay').style.display = 'block';
+  document.getElementById('quizTotalDisplay').textContent = pool.length;
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const q = state.quizQuestions[state.quizCurrent];
+  if (!q) { showQuizResults(); return; }
+  const type = currentQuizType;
+  document.getElementById('quizScoreDisplay').textContent = state.quizScore;
+
+  let promptHtml = '';
+  if (type === 'char-to-meaning') {
+    promptHtml = `<div class="quiz-q-char">${q.item.char}</div><div class="quiz-q-pinyin">${q.item.pinyin}</div><div class="quiz-q-prompt">What does this mean?</div>`;
+  } else if (type === 'meaning-to-char') {
+    promptHtml = `<div class="quiz-q-char" style="font-size:1.6rem;font-family:'DM Sans';font-weight:500">${q.item.meaning}</div><div class="quiz-q-prompt">Which character is this?</div>`;
+  } else if (type === 'pinyin-to-char') {
+    promptHtml = `<div class="quiz-q-char" style="font-size:2rem;font-style:italic;font-family:'DM Sans';color:var(--blue)">${q.item.pinyin}</div><div class="quiz-q-prompt">Which character matches?</div>`;
+  } else if (type === 'char-to-pinyin') {
+    promptHtml = `<div class="quiz-q-char">${q.item.char}</div><div class="quiz-q-prompt">What is the pinyin?</div>`;
+  }
+
+  document.getElementById('quizPromptCard').innerHTML = promptHtml;
+
+  let optHtml = q.options.map(opt => {
+    let label = '';
+    if (type === 'char-to-meaning' || type === 'pinyin-to-char') label = `<div style="font-family:'Noto Serif SC',serif;font-size:1.1rem;font-weight:600">${opt.char}</div><div style="font-size:0.72rem;color:var(--ink-muted)">${opt.meaning}</div>`;
+    else if (type === 'meaning-to-char') label = `<div style="font-family:'Noto Serif SC',serif;font-size:1.3rem;font-weight:600">${opt.char}</div>`;
+    else if (type === 'char-to-pinyin') label = `<div style="font-style:italic;color:var(--blue)">${opt.pinyin}</div>`;
+    return `<button class="quiz-option" onclick="checkAnswer(this,'${esc(opt.char)}')">${label}</button>`;
+  }).join('');
+
+  document.getElementById('quizOptions').innerHTML = optHtml;
+  document.getElementById('quizNextBtn').classList.remove('show');
+}
+
+function checkAnswer(btn, charVal) {
+  const q = state.quizQuestions[state.quizCurrent];
+  const correct = charVal === q.item.char;
+  if (correct) state.quizScore++;
+  document.querySelectorAll('.quiz-option').forEach(b => {
+    b.disabled = true;
+    const bChar = b.getAttribute('onclick').match(/'([^']+)'\)/)?.[1];
+    if (bChar === q.item.char) b.classList.add('correct');
+  });
+  if (!correct) btn.classList.add('wrong');
+  document.getElementById('quizScoreDisplay').textContent = state.quizScore;
+  document.getElementById('quizNextBtn').classList.add('show');
+  state.quizCurrent++;
+}
+
+function nextQuestion() {
+  if (state.quizCurrent >= state.quizQuestions.length) showQuizResults();
+  else renderQuizQuestion();
+}
+
+function showQuizResults() {
+  document.getElementById('quizPlay').style.display = 'none';
+  document.getElementById('quizResults').style.display = 'block';
+  const total = state.quizQuestions.length;
+  const score = state.quizScore;
+  const pct = Math.round((score/total)*100);
+  document.getElementById('quizFinalScore').textContent = `${score}/${total}`;
+  const msgs = [
+    [90, '🏆 Excellent! Outstanding work!'],
+    [70, '🎯 Great job! Keep it up!'],
+    [50, '📚 Good effort! Review and try again!'],
+    [0, '💪 Keep studying — you\'ll get there!'],
+  ];
+  const msg = msgs.find(([threshold]) => pct >= threshold)?.[1] || msgs[3][1];
+  document.getElementById('quizResultMsg').textContent = msg;
+}
+
+function resetQuiz() {
+  document.getElementById('quizSetup').style.display = 'block';
+  document.getElementById('quizPlay').style.display = 'none';
+  document.getElementById('quizResults').style.display = 'none';
+}
+
+// ─────────────────────────────────────────────
+// SENTENCES
+// ─────────────────────────────────────────────
+
+function filterSentences(type, btn) {
+  state.sentenceFilter = type;
+  document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSentences();
+}
+
+function toggleWordMeanings(show) {
+  state.showWordMeanings = show;
+  renderSentences();
+}
+
+function renderSentences() {
+  const lesson = document.getElementById('sentenceLesson')?.value || 'all';
+  let sentences = getAllSentences(lesson);
+  if (state.sentenceFilter !== 'all') {
+    sentences = sentences.filter(s => s.type === state.sentenceFilter);
+  }
+  const list = document.getElementById('sentencesList');
+  if (!list) return;
+  if (sentences.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="es-icon">💬</div><h3>No sentences</h3><p>Add a lesson to see sentences here</p></div>`;
+    return;
+  }
+  const typeLabels = { vocab: 'Vocabulary', dialogue: 'Dialogue', question: 'Question' };
+  const typeClasses = { vocab: 'tag-vocab', dialogue: 'tag-dialogue', question: 'tag-question' };
+
+  list.innerHTML = sentences.map(s => {
+    const fullChinese = (s.words || []).map(w => w[0] || '').join('');
+    const wordsHtml = (s.words || []).map(w => `
+      <div class="word-chip" onclick="speakChinese('${esc(w[0]||'')}',event)" onmouseenter="showTooltip(event,'${esc(w[0]||'')}','${esc(w[1]||'')}','${esc(w[2]||'')}')" onmouseleave="hideTooltip()" title="Click to hear">
+        <span class="wc-char">${w[0] || ''}</span>
+        <span class="wc-pinyin">${w[1] || ''}</span>
+        ${state.showWordMeanings ? `<span class="wc-meaning">${w[2] || ''}</span>` : ''}
+      </div>
+    `).join('');
+
+    const audioHtml = `<button class="sentence-audio-btn" onclick="speakChinese('${esc(fullChinese)}',event)" title="Hear full sentence">🔊</button>`;
+
+    return `
+      <div class="sentence-card">
+        <div class="sentence-header">
+          <span class="sentence-num">#${s.id}</span>
+          <span class="sentence-type-tag ${typeClasses[s.type]}">${typeLabels[s.type]}</span>
+          ${audioHtml}
+        </div>
+        <div class="sentence-words">${wordsHtml}</div>
+        ${s.translation ? `<div class="sentence-translation">🇬🇧 ${s.translation}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+let currentAudio = null;
+function playAudio(e, url) {
+  e.stopPropagation();
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (url) {
+    currentAudio = new Audio(url);
+    currentAudio.play().catch(() => {});
+  }
+}
+
+// ── TTS PRONUNCIATION ──────────────────────────
+function speakChinese(text, e) {
+  if (e) e.stopPropagation();
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN';
+  u.rate = 0.85;
+  u.pitch = 1;
+  // Prefer a Mandarin voice if available
+  const voices = window.speechSynthesis.getVoices();
+  const zhVoice = voices.find(v => v.lang.startsWith('zh') && (v.lang.includes('CN') || v.lang.includes('Hans')))
+                || voices.find(v => v.lang.startsWith('zh'));
+  if (zhVoice) u.voice = zhVoice;
+  window.speechSynthesis.speak(u);
+}
+// Pre-load voices (Chrome needs this)
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener('voiceschanged', () => window.speechSynthesis.getVoices());
+}
+
+// ─────────────────────────────────────────────
+// LESSONS MANAGER
+// ─────────────────────────────────────────────
+
+let pasteVisible = false;
+function togglePasteArea() {
+  pasteVisible = !pasteVisible;
+  const pa = document.getElementById('pasteArea');
+  const pp = document.getElementById('pasteParseArea');
+  pa.classList.toggle('show', pasteVisible);
+  pp.style.display = pasteVisible ? 'block' : 'none';
+}
+
+async function fetchLesson() {
+  const url = document.getElementById('lessonUrlInput').value.trim();
+  if (!url) return alert('Please enter a URL');
+  const status = document.getElementById('fetchStatus');
+  status.className = 'fetch-status loading';
+  status.textContent = '⏳ Fetching lesson...';
+
+  try {
+    const res = await fetch(url, { mode: 'cors' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const html = await res.text();
+    const result = parseLessonHtml(html, url);
+    if (result) {
+      addLesson(result);
+      status.className = 'fetch-status success';
+      status.textContent = `✅ Imported "${result.lesson.title}" — ${result.vocab.length} words, ${result.sentences.length} sentences`;
+      renderLessonsManager();
+      populateLessonSelects();
+    } else {
+      status.className = 'fetch-status error';
+      status.textContent = '⚠️ Could not parse lesson. Try pasting the HTML directly.';
+    }
+  } catch(err) {
+    status.className = 'fetch-status error';
+    status.textContent = `❌ Fetch failed (${err.message}). Try pasting the HTML directly below.`;
+  }
+}
+
+function parseHtmlPaste() {
+  const html = document.getElementById('pasteArea').value.trim();
+  const title = document.getElementById('pasteTitle').value.trim() || 'Imported Lesson';
+  if (!html) return alert('Please paste the lesson HTML first');
+  const result = parseLessonHtml(html, null, title);
+  const status = document.getElementById('fetchStatus');
+  if (result) {
+    addLesson(result);
+    status.className = 'fetch-status success';
+    status.style.display = 'block';
+    status.textContent = `✅ Imported "${result.lesson.title}" — ${result.vocab.length} words`;
+    renderLessonsManager();
+    populateLessonSelects();
+  } else {
+    status.className = 'fetch-status error';
+    status.style.display = 'block';
+    status.textContent = '⚠️ Could not parse lesson HTML. The format may not be compatible.';
+  }
+}
+
+function parseLessonHtml(html, sourceUrl, titleOverride) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const title = titleOverride || doc.querySelector('h1,title')?.textContent?.trim() || 'Imported Lesson';
+  const id = sourceUrl ? sourceUrl.split('/').pop().replace('.html','') : title.replace(/\s+/g, '-');
+
+  // Extract vocab words from table cells
+  const vocab = [];
+  const seen = new Set();
+
+  // Try to find word entries - look for elements with pinyin/hanzi structure
+  const allCells = doc.querySelectorAll('td, div, span');
+  // Find pinyin + hanzi pairs
+  const rows = doc.querySelectorAll('tr');
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length >= 2) {
+      // Look for pinyin (has tone marks) and hanzi (has CJK chars)
+      let pinyin = '', hanzi = '', meaning = '';
+      cells.forEach(cell => {
+        const text = cell.textContent.trim();
+        if (/[\u4e00-\u9fff]/.test(text) && !hanzi) hanzi = text;
+        else if (/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(text.toLowerCase()) && !pinyin) pinyin = text;
+        else if (text && !meaning && !/^[\d.]+$/.test(text) && text.length > 1) meaning = text;
+      });
+      if (hanzi && pinyin) {
+        const key = `${hanzi}_${pinyin}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          vocab.push({ pinyin, char: hanzi, meaning });
+        }
+      }
+    }
+  });
+
+  // Extract audio URLs
+  const audioEls = doc.querySelectorAll('audio');
+  const audioUrls = [];
+  audioEls.forEach(a => {
+    const src = a.src || a.querySelector('source')?.src;
+    if (src) audioUrls.push(src);
+  });
+
+  // Build sentence-like structures from numbered items
+  const sentences = [];
+  // Try to detect sentence rows with audio
+  let sentIdx = 0;
+  doc.querySelectorAll('[class*="row"],[class*="item"],[class*="sentence"]').forEach(row => {
+    const text = row.textContent.trim();
+    if (text.length > 3 && /[\u4e00-\u9fff]/.test(text)) {
+      const audioEl = row.querySelector('audio');
+      const audioSrc = audioEl?.src || audioEl?.querySelector('source')?.src || null;
+      sentences.push({
+        id: sentIdx++,
+        type: 'vocab',
+        audio: audioSrc,
+        words: [],
+        translation: '',
+        lessonId: id,
+      });
+    }
+  });
+
+  if (vocab.length === 0 && sentences.length === 0) return null;
+
+  const lesson = {
+    id,
+    title,
+    subtitle: '',
+    sourceUrl: sourceUrl || '',
+    date: id.substring(0, 10),
+    vocabCount: vocab.length,
+    sentenceCount: sentences.length,
+  };
+
+  return { lesson, vocab: vocab.map(v => ({ ...v, lessonId: id })), sentences };
+}
+
+function addLesson(result) {
+  const { lesson, vocab, sentences } = result;
+  if (state.lessons[lesson.id]) {
+    if (!confirm(`Lesson "${lesson.title}" already exists. Replace it?`)) return;
+    // Remove old vocab/sentences for this lesson
+    Object.keys(state.vocab).forEach(k => { if (state.vocab[k].lessonId === lesson.id) delete state.vocab[k]; });
+    Object.keys(state.sentences).forEach(k => { if (state.sentences[k].lessonId === lesson.id) delete state.sentences[k]; });
+  }
+  state.lessons[lesson.id] = lesson;
+  vocab.forEach((v, i) => { state.vocab[`${lesson.id}_${i}`] = v; });
+  sentences.forEach((s, i) => { state.sentences[`${lesson.id}_${i}`] = s; });
+  saveState();
+  renderSidebarLessons();
+}
+
+function deleteLesson(id) {
+  if (id === '2026-03-06') {
+    alert('Cannot delete the initial lesson.');
+    return;
+  }
+  if (!confirm('Delete this lesson and all its vocabulary?')) return;
+  delete state.lessons[id];
+  Object.keys(state.vocab).forEach(k => { if (state.vocab[k].lessonId === id) delete state.vocab[k]; });
+  Object.keys(state.sentences).forEach(k => { if (state.sentences[k].lessonId === id) delete state.sentences[k]; });
+  saveState();
+  renderLessonsManager();
+  populateLessonSelects();
+  renderSidebarLessons();
+}
+
+function renderLessonsManager() {
+  const lessons = Object.values(state.lessons);
+  const table = document.getElementById('lessonListTable');
+  if (!table) return;
+  if (lessons.length === 0) {
+    table.innerHTML = `<div class="empty-state"><div class="es-icon">📋</div><h3>No lessons yet</h3></div>`;
+    return;
+  }
+  table.innerHTML = lessons.map(l => `
+    <div class="lesson-row">
+      <span class="lesson-row-icon">📖</span>
+      <div class="lesson-row-info">
+        <div class="lesson-row-title">${l.title}</div>
+        <div class="lesson-row-meta">${l.vocabCount} words · ${l.sentenceCount} sentences · ${l.date}</div>
+      </div>
+      <a href="${l.sourceUrl}" target="_blank" class="lesson-row-del" title="Open original" style="font-size:0.85rem">🔗</a>
+      <button class="lesson-row-del" onclick="deleteLesson('${l.id}')" title="Delete lesson">✕</button>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────
+// SIDEBAR LESSONS
+// ─────────────────────────────────────────────
+
+function renderSidebarLessons() {
+  const lessons = Object.values(state.lessons).sort((a,b) => a.date.localeCompare(b.date));
+  const el = document.getElementById('sidebarLessons');
+  el.innerHTML = `<h4>My Lessons</h4>
+    <div class="lesson-chip ${!state.activeLesson ? 'active-lesson' : ''}" onclick="setActiveLesson(null)">
+      <div class="lesson-dot" style="background:var(--ink-muted)"></div>
+      <span class="lesson-chip-text">All Lessons</span>
+    </div>` + lessons.map(l => `
+    <div class="lesson-chip ${state.activeLesson === l.id ? 'active-lesson' : ''}" onclick="setActiveLesson('${l.id}')">
+      <div class="lesson-dot"></div>
+      <span class="lesson-chip-text">${l.date}</span>
+      <span style="font-size:0.6rem;color:rgba(255,255,255,0.3);margin-left:auto">${l.vocabCount}w</span>
+    </div>
+  `).join('');
+}
+
+function setActiveLesson(id) {
+  state.activeLesson = id || null;
+  renderSidebarLessons();
+  // Sync all filter dropdowns
+  const val = id || 'all';
+  ['vocabLesson','fcLesson','quizLesson','sentenceLesson'].forEach(selId => {
+    const el = document.getElementById(selId);
+    if (el) el.value = val;
+  });
+  // Re-render current view
+  const v = state.currentView;
+  if (v === 'vocabulary') renderVocab();
+  else if (v === 'flashcards') initFlashcards();
+  else if (v === 'sentences') renderSentences();
+  else if (v === 'dashboard') renderDashboard();
+}
+
+// ─────────────────────────────────────────────
+// LESSON SELECTS
+// ─────────────────────────────────────────────
+
+function populateLessonSelects() {
+  const lessons = Object.values(state.lessons);
+  const opts = `<option value="all">All Lessons</option>` + lessons.map(l =>
+    `<option value="${l.id}">${l.title}</option>`
+  ).join('');
+  ['vocabLesson','fcLesson','quizLesson','sentenceLesson'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opts;
+  });
+}
+
+// ─────────────────────────────────────────────
+// TOOLTIP
+// ─────────────────────────────────────────────
+
+const tooltip = document.getElementById('tooltip');
+function showTooltip(e, char, pinyin, meaning) {
+  document.getElementById('ttChar').textContent = char;
+  document.getElementById('ttPinyin').textContent = pinyin;
+  document.getElementById('ttMeaning').textContent = meaning;
+  tooltip.classList.add('show');
+  moveTooltip(e);
+}
+function hideTooltip() {
+  tooltip.classList.remove('show');
+}
+function moveTooltip(e) {
+  const x = e.clientX + 12;
+  const y = e.clientY - 10;
+  tooltip.style.left = Math.min(x, window.innerWidth - 220) + 'px';
+  tooltip.style.top = Math.min(y, window.innerHeight - 100) + 'px';
+}
+document.addEventListener('mousemove', e => {
+  if (tooltip.classList.contains('show')) moveTooltip(e);
+});
+
+// ─────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────
+
+function esc(str) {
+  return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+
+loadState();
+populateLessonSelects();
+renderSidebarLessons();
+renderDashboard();
+</script>
+</body>
+</html>
