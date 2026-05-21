@@ -1246,11 +1246,6 @@
         <select class="filter-select" id="sentenceLesson" onchange="renderSentences()">
           <option value="all">All Lessons</option>
         </select>
-        <select class="filter-select" id="voicePicker" onchange="onVoicePicked(this.value)" title="Pick a TTS voice">
-          <option value="">Voice: auto</option>
-        </select>
-        <button class="btn btn-ghost" onclick="speakChinese('你好，今天我们一起学中文。')" style="padding:7px 12px;font-size:0.78rem">▶ Test voice</button>
-        <span id="ttsStatus" style="font-size:0.72rem;color:var(--ink-muted)"></span>
       </div>
       <div class="sentences-list" id="sentencesList"></div>
     </div>
@@ -2076,7 +2071,7 @@ function showView(name) {
   if (name === 'dashboard') renderDashboard();
   if (name === 'vocabulary') renderVocab();
   if (name === 'flashcards') initFlashcards();
-  if (name === 'sentences') { renderSentences(); populateVoicePicker(); }
+  if (name === 'sentences') renderSentences();
   if (name === 'lessons') renderLessonsManager();
   populateLessonSelects();
   closeSidebar();
@@ -2403,7 +2398,11 @@ function renderSentences() {
     `;
     }).join('');
 
-    const audioHtml = `<button class="sentence-audio-btn" onclick="speakChinese('${esc(fullChinese)}',event)" title="Hear full sentence">🔊</button>`;
+    const audioOnclick = s.audio
+      ? `playSentenceAudio(event,'${esc(s.audio)}','${esc(fullChinese)}')`
+      : `speakChinese('${esc(fullChinese)}',event)`;
+    const audioTitle = s.audio ? 'Play teacher recording' : 'Hear full sentence (TTS)';
+    const audioHtml = `<button class="sentence-audio-btn" onclick="${audioOnclick}" title="${audioTitle}">🔊</button>`;
 
     return `
       <div class="sentence-card">
@@ -2419,14 +2418,109 @@ function renderSentences() {
   }).join('');
 }
 
-let currentAudio = null;
-function playAudio(e, url) {
-  e.stopPropagation();
-  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-  if (url) {
-    currentAudio = new Audio(url);
-    currentAudio.play().catch(() => {});
+// ── IndexedDB for teacher audio blobs ──────────
+const AUDIO_DB = 'mandarinAudio', AUDIO_STORE = 'audio';
+let _audioDBPromise = null;
+function openAudioDB() {
+  if (_audioDBPromise) return _audioDBPromise;
+  _audioDBPromise = new Promise((resolve, reject) => {
+    const req = indexedDB.open(AUDIO_DB, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(AUDIO_STORE);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  return _audioDBPromise;
+}
+async function audioPut(key, blob) {
+  const db = await openAudioDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUDIO_STORE, 'readwrite');
+    tx.objectStore(AUDIO_STORE).put(blob, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+async function audioGet(key) {
+  const db = await openAudioDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUDIO_STORE, 'readonly');
+    const req = tx.objectStore(AUDIO_STORE).get(key);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function audioDeletePrefix(prefix) {
+  const db = await openAudioDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUDIO_STORE, 'readwrite');
+    const req = tx.objectStore(AUDIO_STORE).openCursor();
+    req.onsuccess = e => {
+      const c = e.target.result;
+      if (c) {
+        if (typeof c.key === 'string' && c.key.startsWith(prefix)) c.delete();
+        c.continue();
+      }
+    };
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function dataUriToBlob(uri) {
+  if (typeof uri !== 'string' || !uri.startsWith('data:')) return null;
+  const comma = uri.indexOf(',');
+  if (comma < 0) return null;
+  const meta = uri.slice(5, comma); // strip "data:"
+  const data = uri.slice(comma + 1);
+  const base64 = meta.includes(';base64');
+  const mime = meta.replace(';base64', '') || 'audio/wav';
+  if (base64) {
+    const bin = atob(data);
+    const len = bin.length;
+    const arr = new Uint8Array(len);
+    for (let i = 0; i < len; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
   }
+  return new Blob([decodeURIComponent(data)], { type: mime });
+}
+
+let currentAudio = null;
+let currentBlobUrl = null;
+function stopPlayback() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = null; }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+async function playSentenceAudio(e, ref, fallbackText) {
+  if (e) e.stopPropagation();
+  stopPlayback();
+  if (!ref) { speakChinese(fallbackText); return; }
+
+  let playUrl = ref;
+  if (ref.startsWith('idb:')) {
+    try {
+      const blob = await audioGet(ref.slice(4));
+      if (!blob) { speakChinese(fallbackText); return; }
+      playUrl = URL.createObjectURL(blob);
+      currentBlobUrl = playUrl;
+    } catch {
+      speakChinese(fallbackText);
+      return;
+    }
+  }
+
+  const a = new Audio(playUrl);
+  currentAudio = a;
+  a.play().catch(() => {
+    if (currentAudio === a) currentAudio = null;
+    if (currentBlobUrl === playUrl) { URL.revokeObjectURL(playUrl); currentBlobUrl = null; }
+    speakChinese(fallbackText);
+  });
+  a.onended = () => {
+    if (currentAudio === a) currentAudio = null;
+    if (currentBlobUrl === playUrl) { URL.revokeObjectURL(playUrl); currentBlobUrl = null; }
+  };
 }
 
 // ── TTS PRONUNCIATION ──────────────────────────
@@ -2459,34 +2553,9 @@ function pickBestChineseVoice() {
   return zh[0];
 }
 
-function populateVoicePicker() {
-  const sel = document.getElementById('voicePicker');
-  if (!sel) return;
-  const zh = getChineseVoices();
-  const saved = localStorage.getItem('ttsVoice') || '';
-  sel.innerHTML = '<option value="">Voice: auto</option>' +
-    zh.map(v => `<option value="${v.name.replace(/"/g,'&quot;')}" ${v.name===saved?'selected':''}>${v.name} (${v.lang})</option>`).join('');
-  if (!zh.length) {
-    sel.innerHTML = '<option value="">No Chinese voices installed</option>';
-    sel.disabled = true;
-  }
-}
-
-function onVoicePicked(name) {
-  if (name) localStorage.setItem('ttsVoice', name);
-  else localStorage.removeItem('ttsVoice');
-  speakChinese('你好，我现在是新声音。');
-}
-
-function setTtsStatus(msg) {
-  const el = document.getElementById('ttsStatus');
-  if (el) el.textContent = msg;
-}
-
 function speakChinese(text, e) {
   if (e) e.stopPropagation();
-  if (!window.speechSynthesis) { setTtsStatus('⚠ speechSynthesis unavailable in this browser/iframe'); return; }
-  if (!text) return;
+  if (!window.speechSynthesis || !text) return;
   const start = () => {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -2496,20 +2565,7 @@ function speakChinese(text, e) {
     u.rate = 0.95;
     u.pitch = 1;
     u.volume = 1;
-    const voiceLabel = voice ? `${voice.name} (${voice.lang})` : 'default';
-    setTtsStatus(`▶ Speaking with: ${voiceLabel}`);
-    u.onend = () => setTtsStatus(`✓ Finished: ${voiceLabel}`);
-    u.onerror = (ev) => setTtsStatus(`⚠ Error (${ev.error || 'unknown'}) — voice: ${voiceLabel}`);
     window.speechSynthesis.speak(u);
-    // Detect silent failure (no events fired)
-    setTimeout(() => {
-      if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
-        const el = document.getElementById('ttsStatus');
-        if (el && el.textContent.startsWith('▶')) {
-          setTtsStatus(`⚠ No audio — iframe likely blocking TTS. Try the deployed site.`);
-        }
-      }
-    }, 600);
   };
   if (!window.speechSynthesis.getVoices().length) {
     const once = () => {
@@ -2526,10 +2582,7 @@ function speakChinese(text, e) {
 // Pre-load voices (Chrome needs this)
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
-  window.speechSynthesis.addEventListener('voiceschanged', () => {
-    window.speechSynthesis.getVoices();
-    populateVoicePicker();
-  });
+  window.speechSynthesis.addEventListener('voiceschanged', () => window.speechSynthesis.getVoices());
 }
 
 // ─────────────────────────────────────────────
@@ -2558,7 +2611,8 @@ async function fetchLesson() {
     const html = await res.text();
     const result = parseLessonHtml(html, url);
     if (result) {
-      addLesson(result);
+      status.textContent = `⏳ Saving audio…`;
+      await addLesson(result);
       status.className = 'fetch-status success';
       status.textContent = `✅ Imported "${result.lesson.title}" — ${result.vocab.length} words, ${result.sentences.length} sentences`;
       renderLessonsManager();
@@ -2573,17 +2627,19 @@ async function fetchLesson() {
   }
 }
 
-function parseHtmlPaste() {
+async function parseHtmlPaste() {
   const html = document.getElementById('pasteArea').value.trim();
   const title = document.getElementById('pasteTitle').value.trim() || 'Imported Lesson';
   if (!html) return alert('Please paste the lesson HTML first');
   const result = parseLessonHtml(html, null, title);
   const status = document.getElementById('fetchStatus');
   if (result) {
-    addLesson(result);
-    status.className = 'fetch-status success';
+    status.className = 'fetch-status loading';
     status.style.display = 'block';
-    status.textContent = `✅ Imported "${result.lesson.title}" — ${result.vocab.length} words`;
+    status.textContent = `⏳ Saving audio…`;
+    await addLesson(result);
+    status.className = 'fetch-status success';
+    status.textContent = `✅ Imported "${result.lesson.title}" — ${result.vocab.length} words, ${result.sentences.length} sentences`;
     renderLessonsManager();
     populateLessonSelects();
   } else {
@@ -2596,16 +2652,50 @@ function parseHtmlPaste() {
 function parseLessonHtml(html, sourceUrl, titleOverride) {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   const title = titleOverride || doc.querySelector('h1,title')?.textContent?.trim() || 'Imported Lesson';
-  const id = sourceUrl ? sourceUrl.split('/').pop().replace('.html','') : title.replace(/\s+/g, '-');
+  const id = sourceUrl
+    ? sourceUrl.split('/').pop().replace(/\.html?$/i, '')
+    : title.replace(/\s+/g, '-');
 
-  // Extract vocab words from table cells
   const vocab = [];
   const seen = new Set();
+  const sentences = [];
 
-  // Try to find word entries - look for elements with pinyin/hanzi structure
-  const allCells = doc.querySelectorAll('td, div, span');
-  // Find pinyin + hanzi pairs
-  const rows = doc.querySelectorAll('tr');
+  // ── Format 1: teacher's structured sentence-card layout ──
+  const cards = doc.querySelectorAll('section.sentence-card');
+  if (cards.length) {
+    cards.forEach((card, i) => {
+      const idxText = card.querySelector('.index')?.textContent?.trim().replace(/[.\s]+$/, '') || String(i + 1);
+      const audioEl = card.querySelector('.audio-slot audio') || card.querySelector('audio');
+      const audioSrc = audioEl?.getAttribute('src') || null;
+
+      const words = [];
+      card.querySelectorAll('.token-block').forEach(t => {
+        if (t.classList.contains('is-empty')) return;
+        const py = t.querySelector('.py')?.textContent?.trim() || '';
+        const hz = t.querySelector('.hz')?.textContent?.trim() || '';
+        const en = t.querySelector('.en')?.textContent?.trim() || '';
+        if (!hz || !/[一-鿿]/.test(hz)) return;
+        words.push([py, hz, en]);
+        const key = `${hz}_${py}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          vocab.push({ pinyin: py, char: hz, meaning: en });
+        }
+      });
+
+      sentences.push({
+        id: parseInt(idxText, 10) || (i + 1),
+        type: 'vocab',
+        audio: audioSrc,
+        words,
+        translation: '',
+        lessonId: id,
+      });
+    });
+  }
+
+  // ── Format 2 (fallback): generic vocab-table layout ──
+  const rows = cards.length ? [] : doc.querySelectorAll('tr');
   rows.forEach(row => {
     const cells = row.querySelectorAll('td');
     if (cells.length >= 2) {
@@ -2627,42 +2717,35 @@ function parseLessonHtml(html, sourceUrl, titleOverride) {
     }
   });
 
-  // Extract audio URLs
-  const audioEls = doc.querySelectorAll('audio');
-  const audioUrls = [];
-  audioEls.forEach(a => {
-    const src = a.src || a.querySelector('source')?.src;
-    if (src) audioUrls.push(src);
-  });
-
-  // Build sentence-like structures from numbered items
-  const sentences = [];
-  // Try to detect sentence rows with audio
-  let sentIdx = 0;
-  doc.querySelectorAll('[class*="row"],[class*="item"],[class*="sentence"]').forEach(row => {
-    const text = row.textContent.trim();
-    if (text.length > 3 && /[\u4e00-\u9fff]/.test(text)) {
-      const audioEl = row.querySelector('audio');
-      const audioSrc = audioEl?.src || audioEl?.querySelector('source')?.src || null;
-      sentences.push({
-        id: sentIdx++,
-        type: 'vocab',
-        audio: audioSrc,
-        words: [],
-        translation: '',
-        lessonId: id,
-      });
-    }
-  });
+  // Fallback sentence detection (only if we didn't already extract structured cards)
+  if (!cards.length) {
+    let sentIdx = 0;
+    doc.querySelectorAll('[class*="row"],[class*="item"],[class*="sentence"]').forEach(row => {
+      const text = row.textContent.trim();
+      if (text.length > 3 && /[\u4e00-\u9fff]/.test(text)) {
+        const audioEl = row.querySelector('audio');
+        const audioSrc = audioEl?.getAttribute('src') || audioEl?.querySelector('source')?.getAttribute('src') || null;
+        sentences.push({
+          id: ++sentIdx,
+          type: 'vocab',
+          audio: audioSrc,
+          words: [],
+          translation: '',
+          lessonId: id,
+        });
+      }
+    });
+  }
 
   if (vocab.length === 0 && sentences.length === 0) return null;
 
+  const dateMatch = id.match(/(\d{4}[-_]\d{2}[-_]\d{2})/);
   const lesson = {
     id,
     title,
     subtitle: '',
     sourceUrl: sourceUrl || '',
-    date: id.substring(0, 10),
+    date: dateMatch ? dateMatch[1].replace(/_/g, '-') : '',
     vocabCount: vocab.length,
     sentenceCount: sentences.length,
   };
@@ -2670,14 +2753,35 @@ function parseLessonHtml(html, sourceUrl, titleOverride) {
   return { lesson, vocab: vocab.map(v => ({ ...v, lessonId: id })), sentences };
 }
 
-function addLesson(result) {
+async function addLesson(result) {
   const { lesson, vocab, sentences } = result;
   if (state.lessons[lesson.id]) {
     if (!confirm(`Lesson "${lesson.title}" already exists. Replace it?`)) return;
-    // Remove old vocab/sentences for this lesson
     Object.keys(state.vocab).forEach(k => { if (state.vocab[k].lessonId === lesson.id) delete state.vocab[k]; });
     Object.keys(state.sentences).forEach(k => { if (state.sentences[k].lessonId === lesson.id) delete state.sentences[k]; });
+    try { await audioDeletePrefix(`${lesson.id}/`); } catch {}
   }
+
+  // Offload large data: audio URIs to IndexedDB; keep only a short reference in state.
+  for (let i = 0; i < sentences.length; i++) {
+    const s = sentences[i];
+    if (typeof s.audio === 'string' && s.audio.startsWith('data:')) {
+      const blob = dataUriToBlob(s.audio);
+      if (blob) {
+        const key = `${lesson.id}/${i}`;
+        try {
+          await audioPut(key, blob);
+          s.audio = `idb:${key}`;
+        } catch (err) {
+          console.warn('Audio store failed for', key, err);
+          s.audio = null; // drop the heavy data URI rather than blow up localStorage
+        }
+      } else {
+        s.audio = null;
+      }
+    }
+  }
+
   state.lessons[lesson.id] = lesson;
   vocab.forEach((v, i) => { state.vocab[`${lesson.id}_${i}`] = v; });
   sentences.forEach((s, i) => { state.sentences[`${lesson.id}_${i}`] = s; });
@@ -2685,7 +2789,7 @@ function addLesson(result) {
   renderSidebarLessons();
 }
 
-function deleteLesson(id) {
+async function deleteLesson(id) {
   if (id === '2026-03-06') {
     alert('Cannot delete the initial lesson.');
     return;
@@ -2694,6 +2798,7 @@ function deleteLesson(id) {
   delete state.lessons[id];
   Object.keys(state.vocab).forEach(k => { if (state.vocab[k].lessonId === id) delete state.vocab[k]; });
   Object.keys(state.sentences).forEach(k => { if (state.sentences[k].lessonId === id) delete state.sentences[k]; });
+  try { await audioDeletePrefix(`${id}/`); } catch {}
   saveState();
   renderLessonsManager();
   populateLessonSelects();
