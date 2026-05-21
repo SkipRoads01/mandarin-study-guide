@@ -1239,13 +1239,18 @@
         <button class="tag-btn" onclick="filterSentences('dialogue', this)">Dialogues</button>
         <button class="tag-btn" onclick="filterSentences('question', this)">Questions</button>
       </div>
-      <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">
+      <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap">
         <label style="font-size:0.8rem;color:var(--ink-muted);display:flex;align-items:center;gap:6px;cursor:pointer">
           <input type="checkbox" id="showMeaningsCheck" onchange="toggleWordMeanings(this.checked)"> Show word meanings
         </label>
         <select class="filter-select" id="sentenceLesson" onchange="renderSentences()">
           <option value="all">All Lessons</option>
         </select>
+        <select class="filter-select" id="voicePicker" onchange="onVoicePicked(this.value)" title="Pick a TTS voice">
+          <option value="">Voice: auto</option>
+        </select>
+        <button class="btn btn-ghost" onclick="speakChinese('你好，今天我们一起学中文。')" style="padding:7px 12px;font-size:0.78rem">▶ Test voice</button>
+        <span id="ttsStatus" style="font-size:0.72rem;color:var(--ink-muted)"></span>
       </div>
       <div class="sentences-list" id="sentencesList"></div>
     </div>
@@ -2071,7 +2076,7 @@ function showView(name) {
   if (name === 'dashboard') renderDashboard();
   if (name === 'vocabulary') renderVocab();
   if (name === 'flashcards') initFlashcards();
-  if (name === 'sentences') renderSentences();
+  if (name === 'sentences') { renderSentences(); populateVoicePicker(); }
   if (name === 'lessons') renderLessonsManager();
   populateLessonSelects();
   closeSidebar();
@@ -2385,14 +2390,18 @@ function renderSentences() {
   const typeClasses = { vocab: 'tag-vocab', dialogue: 'tag-dialogue', question: 'tag-question' };
 
   list.innerHTML = sentences.map(s => {
-    const fullChinese = (s.words || []).map(w => w[0] || '').join('');
-    const wordsHtml = (s.words || []).map(w => `
-      <div class="word-chip" onclick="speakChinese('${esc(w[0]||'')}',event)" onmouseenter="showTooltip(event,'${esc(w[0]||'')}','${esc(w[1]||'')}','${esc(w[2]||'')}')" onmouseleave="hideTooltip()" title="Click to hear">
-        <span class="wc-char">${w[0] || ''}</span>
-        <span class="wc-pinyin">${w[1] || ''}</span>
-        ${state.showWordMeanings ? `<span class="wc-meaning">${w[2] || ''}</span>` : ''}
+    // Word tuples are [pinyin, hanzi, meaning]
+    const fullChinese = (s.words || []).map(w => w[1] || '').join('');
+    const wordsHtml = (s.words || []).map(w => {
+      const pinyin = w[0] || '', hanzi = w[1] || '', meaning = w[2] || '';
+      return `
+      <div class="word-chip" onclick="speakChinese('${esc(hanzi)}',event)" onmouseenter="showTooltip(event,'${esc(hanzi)}','${esc(pinyin)}','${esc(meaning)}')" onmouseleave="hideTooltip()" title="Click to hear">
+        <span class="wc-char">${hanzi}</span>
+        <span class="wc-pinyin">${pinyin}</span>
+        ${state.showWordMeanings ? `<span class="wc-meaning">${meaning}</span>` : ''}
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     const audioHtml = `<button class="sentence-audio-btn" onclick="speakChinese('${esc(fullChinese)}',event)" title="Hear full sentence">🔊</button>`;
 
@@ -2421,25 +2430,106 @@ function playAudio(e, url) {
 }
 
 // ── TTS PRONUNCIATION ──────────────────────────
+function getChineseVoices() {
+  const voices = window.speechSynthesis.getVoices();
+  return voices.filter(v => /^zh(-|_)?(CN|Hans|cmn|TW|HK|Hant)/i.test(v.lang) || v.lang === 'zh');
+}
+
+function pickBestChineseVoice() {
+  const zh = getChineseVoices();
+  if (!zh.length) return null;
+  const chosen = localStorage.getItem('ttsVoice');
+  if (chosen) {
+    const match = zh.find(v => v.name === chosen);
+    if (match) return match;
+  }
+  const score = v => {
+    const n = (v.name || '').toLowerCase();
+    let s = 0;
+    if (n.includes('google')) s += 100;
+    if (n.includes('natural') || n.includes('neural')) s += 80;
+    if (n.includes('premium')) s += 60;
+    if (n.includes('enhanced')) s += 40;
+    if (/(siri|alex|samantha)/.test(n)) s += 20;
+    if (n.includes('tingting') || n.includes('ting-ting')) s -= 5;
+    if (v.localService === false) s += 5;
+    return s;
+  };
+  zh.sort((a, b) => score(b) - score(a));
+  return zh[0];
+}
+
+function populateVoicePicker() {
+  const sel = document.getElementById('voicePicker');
+  if (!sel) return;
+  const zh = getChineseVoices();
+  const saved = localStorage.getItem('ttsVoice') || '';
+  sel.innerHTML = '<option value="">Voice: auto</option>' +
+    zh.map(v => `<option value="${v.name.replace(/"/g,'&quot;')}" ${v.name===saved?'selected':''}>${v.name} (${v.lang})</option>`).join('');
+  if (!zh.length) {
+    sel.innerHTML = '<option value="">No Chinese voices installed</option>';
+    sel.disabled = true;
+  }
+}
+
+function onVoicePicked(name) {
+  if (name) localStorage.setItem('ttsVoice', name);
+  else localStorage.removeItem('ttsVoice');
+  speakChinese('你好，我现在是新声音。');
+}
+
+function setTtsStatus(msg) {
+  const el = document.getElementById('ttsStatus');
+  if (el) el.textContent = msg;
+}
+
 function speakChinese(text, e) {
   if (e) e.stopPropagation();
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'zh-CN';
-  u.rate = 0.85;
-  u.pitch = 1;
-  // Prefer a Mandarin voice if available
-  const voices = window.speechSynthesis.getVoices();
-  const zhVoice = voices.find(v => v.lang.startsWith('zh') && (v.lang.includes('CN') || v.lang.includes('Hans')))
-                || voices.find(v => v.lang.startsWith('zh'));
-  if (zhVoice) u.voice = zhVoice;
-  window.speechSynthesis.speak(u);
+  if (!window.speechSynthesis) { setTtsStatus('⚠ speechSynthesis unavailable in this browser/iframe'); return; }
+  if (!text) return;
+  const start = () => {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const voice = pickBestChineseVoice();
+    u.voice = voice || null;
+    u.lang = voice?.lang || 'zh-CN';
+    u.rate = 0.95;
+    u.pitch = 1;
+    u.volume = 1;
+    const voiceLabel = voice ? `${voice.name} (${voice.lang})` : 'default';
+    setTtsStatus(`▶ Speaking with: ${voiceLabel}`);
+    u.onend = () => setTtsStatus(`✓ Finished: ${voiceLabel}`);
+    u.onerror = (ev) => setTtsStatus(`⚠ Error (${ev.error || 'unknown'}) — voice: ${voiceLabel}`);
+    window.speechSynthesis.speak(u);
+    // Detect silent failure (no events fired)
+    setTimeout(() => {
+      if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+        const el = document.getElementById('ttsStatus');
+        if (el && el.textContent.startsWith('▶')) {
+          setTtsStatus(`⚠ No audio — iframe likely blocking TTS. Try the deployed site.`);
+        }
+      }
+    }, 600);
+  };
+  if (!window.speechSynthesis.getVoices().length) {
+    const once = () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', once);
+      start();
+    };
+    window.speechSynthesis.addEventListener('voiceschanged', once);
+    setTimeout(start, 500);
+  } else {
+    start();
+  }
 }
+
 // Pre-load voices (Chrome needs this)
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
-  window.speechSynthesis.addEventListener('voiceschanged', () => window.speechSynthesis.getVoices());
+  window.speechSynthesis.addEventListener('voiceschanged', () => {
+    window.speechSynthesis.getVoices();
+    populateVoicePicker();
+  });
 }
 
 // ─────────────────────────────────────────────
