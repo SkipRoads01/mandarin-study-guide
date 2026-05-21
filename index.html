@@ -2026,12 +2026,22 @@ function loadState() {
 
 function saveState() {
   try {
-    localStorage.setItem('mandarinHub_v4', JSON.stringify({
+    const payload = JSON.stringify({
       lessons: state.lessons,
       vocab: state.vocab,
       sentences: state.sentences,
-    }));
-  } catch(e) {}
+    });
+    localStorage.setItem('mandarinHub_v4', payload);
+  } catch(e) {
+    console.error('saveState failed:', e);
+    // Loud, visible failure so a lost lesson is never silent again
+    alert(
+      `⚠️ Could not save your lessons (${e.name || 'error'}).\n\n` +
+      `This usually means localStorage is full. Try deleting an old lesson ` +
+      `from the Lessons page, then re-importing.\n\n` +
+      `Details: ${e.message || e}`
+    );
+  }
 }
 
 function getAllVocab(lessonFilter = 'all') {
@@ -2300,9 +2310,17 @@ function renderQuizQuestion() {
 
   let optHtml = q.options.map(opt => {
     let label = '';
-    if (type === 'char-to-meaning' || type === 'pinyin-to-char') label = `<div style="font-family:'Noto Serif SC',serif;font-size:1.1rem;font-weight:600">${opt.char}</div><div style="font-size:0.72rem;color:var(--ink-muted)">${opt.meaning}</div>`;
-    else if (type === 'meaning-to-char') label = `<div style="font-family:'Noto Serif SC',serif;font-size:1.3rem;font-weight:600">${opt.char}</div>`;
-    else if (type === 'char-to-pinyin') label = `<div style="font-style:italic;color:var(--blue)">${opt.pinyin}</div>`;
+    if (type === 'char-to-meaning') {
+      // Show ONLY the meaning — never the character (otherwise it's just a match-the-symbol game)
+      label = `<div style="font-size:0.95rem">${opt.meaning}</div>`;
+    } else if (type === 'pinyin-to-char') {
+      // Show ONLY the character — no meaning hint
+      label = `<div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;font-weight:600">${opt.char}</div>`;
+    } else if (type === 'meaning-to-char') {
+      label = `<div style="font-family:'Noto Serif SC',serif;font-size:1.4rem;font-weight:600">${opt.char}</div>`;
+    } else if (type === 'char-to-pinyin') {
+      label = `<div style="font-style:italic;color:var(--blue)">${opt.pinyin}</div>`;
+    }
     return `<button class="quiz-option" onclick="checkAnswer(this,'${esc(opt.char)}')">${label}</button>`;
   }).join('');
 
