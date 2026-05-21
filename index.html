@@ -929,10 +929,135 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .view.active { animation: fadeIn 0.25s ease; }
 
+    /* ── MOBILE NAV ─────────────────────────── */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      color: var(--ink-light);
+      width: 38px;
+      height: 38px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-right: 12px;
+      padding: 0;
+    }
+    .menu-toggle:hover { border-color: var(--ink-muted); background: var(--surface2); }
+    .topbar-left { display: flex; align-items: center; flex: 1; min-width: 0; }
+    .topbar-text { min-width: 0; }
+
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    body.sidebar-open .sidebar-backdrop { display: block; opacity: 1; }
+
     /* Responsive */
     @media (max-width: 900px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      body { overflow: hidden; }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 260px;
+        z-index: 30;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 0 0 24px rgba(0,0,0,0.35);
+        overflow-y: auto;
+      }
+      body.sidebar-open .sidebar { transform: translateX(0); }
+
+      .main { width: 100%; min-width: 0; }
+      .menu-toggle { display: flex; }
+
+      .topbar { padding: 12px 14px; }
+      .topbar-title { font-size: 1.1rem; }
+      .topbar-sub {
+        font-size: 0.7rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .topbar-actions { gap: 6px; }
+      .btn { padding: 7px 12px; font-size: 0.78rem; }
+
+      .content { padding: 18px 14px; }
+
+      /* Dashboard */
+      .stats-grid { gap: 10px; margin-bottom: 20px; }
+      .stat-card { padding: 14px 10px; }
+      .stat-num { font-size: 1.7rem; }
+      .stat-label { font-size: 0.7rem; }
+      .dash-card { padding: 16px; }
+
+      /* Vocabulary */
+      .vocab-controls { flex-direction: column; align-items: stretch; gap: 10px; }
+      .vocab-controls .search-box,
+      .vocab-controls .filter-select,
+      .vocab-controls .btn { width: 100%; min-width: 0; }
+      .vocab-grid {
+        grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+        gap: 10px;
+      }
+      .vocab-card { padding: 14px 10px; }
+      .vocab-char { font-size: 1.7rem; }
+
+      /* Flashcards */
+      .flashcard-controls { flex-direction: column; align-items: stretch; gap: 10px; }
+      .mode-toggle { width: 100%; }
+      .mode-btn { flex: 1; padding: 8px 6px; font-size: 0.72rem; }
+      .filter-select, .fc-shuffle-btn { width: 100%; }
+      .fc-progress { width: 100%; justify-content: space-between; }
+      .progress-bar { flex: 1; max-width: none; margin-left: 10px; }
+
+      .flashcard-wrap {
+        width: 100%;
+        max-width: 360px;
+        height: 240px;
+      }
+      .fc-char { font-size: 3.5rem; }
+      .fc-back-char { font-size: 2rem; }
+      .fc-back-meaning { font-size: 0.9rem; }
+      .fc-nav-btn { width: 44px; height: 44px; font-size: 1.05rem; }
+
+      /* Quiz */
+      .quiz-setup { padding: 20px 0; }
+      .quiz-setup h2 { font-size: 1.4rem; }
+      .quiz-config-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+      .quiz-config-card { padding: 14px; }
+      .quiz-prompt-card { padding: 22px; min-height: 120px; }
+      .quiz-q-char { font-size: 2.6rem; }
+      .quiz-options { grid-template-columns: 1fr; }
+      .quiz-score-big { font-size: 3.6rem; }
+
+      /* Sentences */
+      .sentences-filter { gap: 6px; }
+      .tag-btn { padding: 5px 10px; font-size: 0.72rem; }
+      .sentence-card { padding: 14px; }
+      .wc-char { font-size: 1rem; }
+
+      /* Lessons */
+      .url-input-row { flex-direction: column; }
+      .url-input-row .btn { width: 100%; }
+      .add-lesson-form { padding: 16px; }
+      .lesson-row { padding: 12px 14px; gap: 10px; }
     }
   </style>
 </head>
@@ -975,9 +1100,12 @@
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div>
-      <div class="topbar-title" id="topbarTitle">Dashboard</div>
-      <div class="topbar-sub" id="topbarSub">Overview of your study progress</div>
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+      <div class="topbar-text">
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-sub" id="topbarSub">Overview of your study progress</div>
+      </div>
     </div>
     <div class="topbar-actions" id="topbarActions"></div>
   </div>
@@ -1146,6 +1274,9 @@
 
   </div>
 </div>
+
+<!-- SIDEBAR BACKDROP (mobile) -->
+<div class="sidebar-backdrop" onclick="closeSidebar()"></div>
 
 <!-- TOOLTIP -->
 <div class="tooltip" id="tooltip">
@@ -1943,7 +2074,11 @@ function showView(name) {
   if (name === 'sentences') renderSentences();
   if (name === 'lessons') renderLessonsManager();
   populateLessonSelects();
+  closeSidebar();
 }
+
+function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
+function closeSidebar() { document.body.classList.remove('sidebar-open'); }
 
 // ─────────────────────────────────────────────
 // DASHBOARD
