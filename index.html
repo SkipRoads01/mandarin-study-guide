@@ -1557,252 +1557,59 @@ box-shadow: 0 12px 40px var(--shadow-md);
 // ─────────────────────────────────────────────
 
 const INITIAL_VOCAB = [
-  ["cháng cháng","常常","often"],
-  ["gēn","跟","with"],
-  ["duì yǒu","队友","teammate"],
-  ["yìqǐ","一起","together"],
-  ["chī fàn","吃饭","to eat a meal"],
-  ["ma","吗","yes/no question particle"],
-  ["tōngcháng","通常","usually"],
-  ["tài","太","too, excessively"],
-  ["lèi le","累了","tired"],
-  ["bù","不","no, not"],
-  ["xiǎng qù","想去","want to go"],
-  ["rúguǒ","如果","if, in case"],
-  ["nǐmen","你们","(plural) you"],
-  ["yíng","赢","to win"],
-  ["le","了","past / change particle"],
-  ["yào","要","to want / going to"],
-  ["zhòng zài cān yù","重在参与","it's more important to participate"],
-  ["bǐsài","比赛","match, competition"],
-  ["hěn wǎn","很晚","very late"],
-  ["huá bīng","滑冰","to skate"],
-  ["shì xùn","试训","tryout (sports)"],
-  ["hē","喝","to drink"],
-  ["yì diǎn","一点","a little"],
-  ["chá","茶","tea"],
-  ["jīchǎng","机场","airport"],
-  ["lí","离","to be away from"],
-  ["wǒ jiā","我家","my home"],
-  ["bù yuǎn","不远","not far"],
-  ["wǒ","我","I, me"],
-  ["lù shàng","路上","on the way / road"],
-  ["xiǎng yī xiǎng","想一想","think about it"],
-  ["sān nián qián","三年前","three years ago"],
-  ["qù nián","去年","last year"],
-  ["yòu","又","again (repeated action)"],
-  ["zài","再","again, once more"],
-  ["dì yuán zhèng zhì","地缘政治","geopolitics"],
-  ["duìhuà","对话","dialogue"],
-  ["jù cān","聚餐","group meal / team dinner"],
-  ["gāngcái","刚才","just now"],
-  ["jīng cǎi","精彩","wonderful, exciting"],
-  ["yīnwèi","因为","because"],
-  ["cái","才","only then"],
-  ["jiéshù","结束","to end, to finish"],
-  ["dàjiā","大家","everyone"],
-  ["zhī","只","only"],
-  ["huí jiā","回家","return home"],
-  ["xiū xi","休息","to rest"],
-  ["qìngzhù","庆祝","to celebrate"],
-  ["yǒu shí hòu","有时候","sometimes"],
-  ["gèng","更","more, to a greater extent"],
-  ["zhòngyào","重要","important"],
-  ["tīngshuō","听说","to hear about, to be told"],
-  ["míng tiān","明天","tomorrow"],
-  ["hái yǒu","还有","also have / moreover"],
-  ["suǒyǐ","所以","so, therefore"],
-  ["xiànzài","现在","now"],
-  ["shuì jiào","睡觉","to sleep"],
-  ["zǎo diǎn","早点","earlier"],
-  ["wèntí","问题","question, problem"],
-  ["wèi shénme","为什么","why"],
-  ["zuì","最","most"],
-  ["ānpái","安排","arrangement, plan"],
-  ["wèi","喂","hey (phone greeting)"],
-  ["dào","到","to arrive, to reach"],
-  ["nǎr","哪儿","where"],
-  ["lǎoshī","老师","teacher"],
-  ["fēijī","飞机","airplane"],
-  ["bié","别","don't"],
-  ["dān xīn","担心","to worry"],
-  ["qǐng","请","(polite) please"],
-  ["màn","慢","slow"],
-  ["ānquán","安全","safe, secure"],
-  ["dì yī","第一","first"],
-  ["fàng xīn","放心","to rest assured"],
-  ["kāi chē","开车","to drive (a car)"],
-  ["bàn gè xiǎoshí","半个小时","half an hour"],
-  ["jiù","就","then, right away"],
-  ["dǔ chē","堵车","traffic jam"],
-  ["xià bān shí jiān","下班时间","rush hour"],
-  ["yuè lái yuè","越来越","more and more"],
-  ["zhèngzài","正在","in the process of"],
-  ["duō cháng shí jiān","多长时间","how long (time)"],
-  ["ràng","让","to let, to allow"],
-  ["jìhuà","计划","plan"],
-  ["zài cì","再次","again, once more"],
-  ["kàn","看","to look at, watch, read"],
-  ["zuìjìn","最近","lately, recently"],
-  ["dìtú","地图","map"],
-  ["lǚyóu","旅游","to travel, take a trip"],
-  ["juéde","觉得","to think, to feel"],
-  ["fēicháng","非常","very, extremely"],
-  ["yǒu yìsi","有意思","interesting, fun"],
-  ["jìde","记得","to remember"],
-  ["suīrán","虽然","although, though"],
-  ["fùzá","复杂","complicated"],
-  ["háishi","还是","still, or"],
-  ["dǎsuàn","打算","to plan, intend"],
-  ["shén me shí hòu","什么时候","when"],
-  ["chū fā","出发","to depart, set off"],
-  ["děng","等","to wait"],
-  ["tiānqì","天气","weather"],
-  ["nuǎn huo","暖和","warm"],
-  ["guójiā","国家","country, nation"],
-  ["tuán duì","团队","team"],
-  ["guānyú","关于","about, regarding"],
-  ["cóng","从","from"],
-  ["jiā","家","home, family"],
-  ["Zhōngguó","中国","China"],
+  ["nǐ","你","(singular) you"], ["cháng cháng","常常","often"], ["gēn","跟","with"], ["duì yǒu","队友","teammate"], ["yìqǐ","一起","together"], ["chī fàn","吃饭","to eat a meal"], ["ma","吗","yes/no"], ["tōngcháng","通常","usually"], ["tài","太","too, excessively"], ["lèi le","累了","tired"], ["bù","不","no, not"], ["xiǎng qù","想去","wanna go"], ["rúguǒ","如果","if, in case"], ["nǐmen","你们","(plural) you"], ["yíng","赢","to win"], ["le","了","past / a change or a new circumstance/done"], ["yào","要","to be going to,to want sth, would like to, need"], ["zhòng zài cān yù","重在参与","it's more important to be part of it"], ["bǐsài","比赛","match, competition"], ["hěn wǎn","很晚","very late"], ["huá bīng","滑冰","to skate"], ["shì xùn","试训","tryout (sports)"], ["hē","喝","to drink"], ["yì diǎn","一点","a little"], ["chá","茶","tea"], ["jīchǎng","机场","airport"], ["lí","离","to be away from"], ["wǒ jiā","我家","my home"], ["bù yuǎn","不远","not far"], ["wǒ","我","I, me"], ["zài qù","在去","to be on the way to"], ["de","的","posessive form"], ["lù shàng","路上","on the way / road"], ["xiǎng yī xiǎng","想一想","think about it"], ["sān nián","三年","three years"], ["qián","前","before, earlier than, ago, front"], ["qù le","去了","went"], ["Zhōngguó","中国","China"], ["qù nián","去年","last year"], ["yòu","又","and, again"], ["xiǎng","想","to want to (do), would like， to think about"], ["zài","再","again, once more"], ["qù Zhōngguó","去中国","go to China"], ["dì yuán","地缘","geo-, geographical (as in 地缘政治)"], ["zhèng zhì","政治","politics"], ["duìhuà","对话","to have a dialogue"], ["yī","一","one"], ["guānyú","关于","about, regarding"], ["hé","和","and"], ["tuán duì","团队","team"], ["jù cān","聚餐","group meal / team dinner"], ["gāngcái","刚才","just now"], ["tài jīng cǎi","太精彩","so brilliant, really spectacular"], ["bù cháng","不常","not often, rarely"], ["qù","去","to go"], ["yīnwèi","因为","because, since"], ["cái","才","only then"], ["jiéshù","结束","to end, to finish"], ["dàjiā","大家","all, everybody"], ["zhī","只","only（only）, solely, measure word for small animals"], ["huí jiā","回家","return home"], ["xiū xi","休息","to have or take a rest"], ["nà","那","that/then"], ["yíng le","赢了","won"], ["qìngzhù","庆祝","to celebrate"], ["yǒu shí hòu","有时候","sometimes"], ["huì qù","会去","will go"], ["dàn","但","but, however"], ["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["lái shuō","来说","as far as … is concerned (对…来说)"], ["gèng","更","more, to a greater extent"], ["zhòngyào","重要","important"], ["tīngshuō","听说","to hear about, to be told"], ["míng tiān","明天","tomorrow"], ["hái yǒu","还有","also have / moreover"], ["yí gè","一个","1"], ["suǒyǐ","所以","so, therefore"], ["xiànzài","现在","now"], ["dé hē","得喝","have to drink"], ["zǎo diǎn","早点","earlier"], ["shuì jiào","睡觉","to sleep"], ["wèntí","问题","question, problem"], ["wèi shénme","为什么","why"], ["zuì","最","most, to the greatest extent"], ["shì","是","to be"], ["shénme","什么","what"], ["yǒu","有","to have, there be"], ["ānpái","安排","to arrange"], ["èr","二","two"], ["wèi","喂","to feed"], ["dào","到","to arrive, to reach"], ["nǎr","哪儿","where"], ["lǎoshī","老师","teacher"], ["fēijī","飞机","airplane"], ["kuài yào","快要","about to, soon going to"], ["dào le","到了","arrived; to have reached"], ["bié","别","don’t"], ["dān xīn","担心","to worry"], ["kāi dé","开得","drives (in such a way) — 开 + 得 complement"], ["tài kuài le","太快了","too fast"], ["qǐng","请","(polite) please ; invite"], ["màn","慢","slow"], ["yìdiǎnr","一点儿","a few, a little"], ["ānquán","安全","safe, secure"], ["dì yī","第一","first"], ["fàng xīn","放心","to ease one's mind, to rest assured"], ["ba","吧","suggestion,   confirmation in a question"], ["kāi chē","开车","drive ( car)"], ["bàn gè","半个","half (of something)"], ["xiǎoshí","小时","hour（duration )"], ["jiù","就","used to indicate a conclusion or resolution"], ["jīn tiān","今天","today"], ["lù yuǎn","路远","the way is far"], ["dǔ chē","堵车","traffic jam"], ["lù","路","road, path, way"], ["xià bān shí jiān","下班时间","rush hour"], ["chē","车","car, vehicle"], ["yuè lái yuè","越来越","more and more"], ["duō le","多了","used after adj as comparative form"], ["zhèngzài","正在","in the process of"], ["zuò","做","to do,to make, to cook"], ["cóng","从","from"], ["jiā","家","family"], ["duō cháng shí jiān","多长时间","how long"], ["ràng","让","to let, to allow"], ["kāi màn","开慢","to drive slowly"], ["sān","三","three"], ["jìhuà","计划","plan; to intend to"], ["zài cì","再次","again, once more"], ["kàn","看","to look at, to watch, to read"], ["zuìjìn","最近","lately, recently；nearest"], ["zài kàn","在看","to be looking at (in progress)"], ["dìtú","地图","map"], ["lǚyóu","旅游","to travel, to take a trip"], ["juéde","觉得","to think, to feel"], ["fēicháng","非常","very, extremely"], ["yǒu yìsi","有意思","interesting, fun"], ["jìde","记得","to remember"], ["yī cì","一次","once, one time"], ["shì de","是的","yes"], ["suīrán","虽然","although, though"], ["yǒudiǎnr","有点儿","a little, a bit"], ["fùzá","复杂","complicated"], ["háishi","还是","or"], ["dǎsuàn","打算","plan; to intend"], ["shén me shí hòu","什么时候","when ？"], ["chū fā","出发","to depart, to set off"], ["děng","等","wait, etc., and so on"], ["tiānqì","天气","weather"], ["nuǎn huo","暖和","warm"], ["něi gè","哪个","which one"], ["guójiā","国家","country, nation"], ["hái/ huán","还","also,passably, fairly, rather; still,/ to return"]
 ];
 
 const INITIAL_SENTENCES = [
-  { id:1, type:'vocab', audio:null,
-    words:[["nǐ","你","you"],["cháng cháng","常常","often"],["gēn","跟","with"],["duì yǒu","队友","teammate"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat a meal"],["ma","吗","?"]],
-    translation:"Do you often eat with your teammates?" },
-  { id:2, type:'vocab', audio:null,
-    words:[["tōngcháng","通常","usually"],["tài","太","too"],["lèi le","累了","tired"],["bù","不","not"],["xiǎng qù","想去","want to go"],["chī fàn","吃饭","eat"]],
-    translation:"Usually too tired, don't want to go eat." },
-  { id:3, type:'vocab', audio:null,
-    words:[["rúguǒ","如果","if"],["nǐmen","你们","you (pl.)"],["yíng","赢","win"],["le","了","(past)"],["nǐmen","你们","you (pl.)"],["yào","要","will"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat"],["ma","吗","?"]],
-    translation:"If you win, will you eat together?" },
-  { id:4, type:'vocab', audio:null,
-    words:[["zhòng zài cān yù","重在参与","more important to participate"]],
-    translation:"It's more important to participate (than to win)." },
-  { id:5, type:'vocab', audio:null,
-    words:[["bǐsài","比赛","competition"],["cháng cháng","常常","often"],["hěn wǎn","很晚","very late"]],
-    translation:"Competitions are often very late." },
-  { id:6, type:'vocab', audio:null,
-    words:[["huá bīng","滑冰","ice skating"]],
-    translation:"Ice skating" },
-  { id:7, type:'vocab', audio:null,
-    words:[["shì xùn","试训","tryout (sports)"]],
-    translation:"Sports tryout" },
-  { id:8, type:'vocab', audio:null,
-    words:[["hē","喝","drink"],["yì diǎn","一点","a little"],["chá","茶","tea"]],
-    translation:"Drink a little tea." },
-  { id:9, type:'vocab', audio:null,
-    words:[["jīchǎng","机场","airport"],["lí","离","away from"],["wǒ jiā","我家","my home"],["bù yuǎn","不远","not far"]],
-    translation:"The airport is not far from my home." },
-  { id:10, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["zài qù","在去","on the way to"],["jīchǎng","机场","airport"],["de","的","(particle)"],["lù shàng","路上","road/way"]],
-    translation:"I'm on the way to the airport." },
-  { id:11, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["yào","要","need to"],["xiǎng yī xiǎng","想一想","think about it"]],
-    translation:"I need to think about it." },
-  { id:12, type:'vocab', audio:null,
-    words:[["sān nián","三年","three years"],["qián","前","ago"],["wǒ","我","I"],["qù le","去了","went to"],["Zhōngguó","中国","China"]],
-    translation:"Three years ago I went to China." },
-  { id:13, type:'vocab', audio:null,
-    words:[["qù nián","去年","last year"],["wǒ","我","I"],["yòu","又","again"],["qù le","去了","went to"],["Zhōngguó","中国","China"]],
-    translation:"Last year I went to China again." },
-  { id:14, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["yòu","又","again"],["xiǎng qù","想去","want to go"],["Zhōngguó","中国","China"]],
-    translation:"I want to go to China again." },
-  { id:15, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["xiǎng","想","want to"],["zài","再","once more"],["qù Zhōngguó","去中国","go to China"]],
-    translation:"I want to go to China once more." },
-  { id:16, type:'vocab', audio:null,
-    words:[["dì yuán","地缘","geo-"],["zhèng zhì","政治","politics"]],
-    translation:"Geopolitics" },
-  // Dialogue 1 - Competition & Team Dinner
-  { id:18, type:'dialogue', audio:null,
-    words:[["gāngcái","刚才","just now"],["de","的","(particle)"],["huá bīng","滑冰","skating"],["bǐsài","比赛","competition"],["tài jīng cǎi","太精彩","so exciting"],["le","了","!"],["nǐ","你","you"],["cháng cháng","常常","often"],["gēn","跟","with"],["duì yǒu","队友","teammates"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat"],["ma","吗","?"]],
-    translation:"That ice skating competition just now was so exciting! Do you often eat with your teammates?" },
-  { id:19, type:'dialogue', audio:null,
-    words:[["bù cháng","不常","not often"],["qù","去","go"],["yīnwèi","因为","because"],["bǐsài","比赛","competitions"],["cháng cháng","常常","often"],["hěn wǎn","很晚","very late"],["cái","才","only then"],["jiéshù","结束","finish"],["dàjiā","大家","everyone"],["tōngcháng","通常","usually"],["tài lèi le","太累了","too tired"],["zhī xiǎng","只想","just want to"],["huí jiā","回家","go home"],["xiū xi","休息","rest"]],
-    translation:"Not often. Because competitions usually end very late, everyone is too tired and just wants to go home and rest." },
-  { id:20, type:'dialogue', audio:null,
-    words:[["nà","那","then"],["rúguǒ","如果","if"],["nǐmen","你们","you (pl.)"],["yíng le","赢了","win"],["nǐmen","你们","you (pl.)"],["yào","要","will"],["yìqǐ","一起","together"],["qù","去","go"],["chī fàn","吃饭","eat"],["qìngzhù","庆祝","celebrate"],["ma","吗","?"]],
-    translation:"Then if you win, will you go eat together to celebrate?" },
-  { id:21, type:'dialogue', audio:null,
-    words:[["yǒu shí hòu","有时候","sometimes"],["huì qù","会去","will go"],["dàn","但","but"],["duì wǒ lái shuō","对我来说","for me"],["zhòng zài cān yù","重在参与","participating is key"],["gèng","更","more"],["zhòngyào","重要","important"]],
-    translation:"Sometimes we will, but for me, participating is more important than winning." },
-  { id:22, type:'dialogue', audio:null,
-    words:[["tīngshuō","听说","heard that"],["nǐ","你","you"],["míng tiān","明天","tomorrow"],["hái yǒu","还有","also have"],["yí gè","一个","one"],["shì xùn","试训","tryout"]],
-    translation:"I heard you have another tryout tomorrow?" },
-  { id:23, type:'dialogue', audio:null,
-    words:[["duì","对","yes"],["suǒyǐ","所以","so"],["wǒ","我","I"],["xiànzài","现在","now"],["dé hē","得喝","need to drink"],["yì diǎn","一点","a little"],["chá","茶","tea"],["zǎo diǎn","早点","earlier"],["shuì jiào","睡觉","sleep"]],
-    translation:"Right, so I need to drink some tea and sleep early tonight." },
-  // Questions for dialogue 1
-  { id:25, type:'question', audio:null,
-    words:[["wèi shénme","为什么","why"],["bù cháng","不常","not often"],["hé","和","and"],["duì yǒu","队友","teammates"],["yìqǐ","一起","together"],["chī fàn","吃饭","eat"]],
-    translation:"Why don't you often eat with your teammates?" },
-  { id:26, type:'question', audio:null,
-    words:[["bǐsài","比赛","competition"],["zuì zhòngyào de","最重要的","most important"],["shì","是","is"],["shénme","什么","what"]],
-    translation:"For [the speaker], what is the most important thing about a competition?" },
-  { id:27, type:'question', audio:null,
-    words:[["míng tiān","明天","tomorrow"],["yǒu","有","have"],["shénme","什么","what"],["ānpái","安排","plans"]],
-    translation:"What are the plans for tomorrow?" },
-  // Dialogue 2 - Airport
-  { id:29, type:'dialogue', audio:null,
-    words:[["wèi","喂","hey"],["nǐ","你","you"],["dào","到","arrived"],["nǎr","哪儿","where"],["le","了","(change)"],["lǎoshī","老师","teacher"],["de","的","'s"],["fēijī","飞机","plane"],["kuài yào","快要","about to"],["dào le","到了","arrive"]],
-    translation:"Hey, where are you? The teacher's plane is about to arrive." },
-  { id:30, type:'dialogue', audio:null,
-    words:[["bié","别","don't"],["dān xīn","担心","worry"],["wǒ","我","I"],["zài qù","在去","on the way to"],["jīchǎng","机场","airport"],["de lù shàng","的路上","on the road"]],
-    translation:"Don't worry, I'm on the way to the airport." },
-  { id:31, type:'dialogue', audio:null,
-    words:[["nǐ kāi dé","你开得","you are driving"],["tài kuài le","太快了","too fast"],["qǐng","请","please"],["màn","慢","slow"],["yìdiǎnr","一点儿","a little"],["ānquán","安全","safety"],["dì yī","第一","first"]],
-    translation:"You're driving too fast, please slow down — safety first!" },
-  { id:32, type:'dialogue', audio:null,
-    words:[["fàng xīn","放心","rest assured"],["ba","吧","(suggestion)"],["jīchǎng","机场","airport"],["lí","离","from"],["wǒ jiā","我家","my home"],["bù yuǎn","不远","not far"],["kāi chē","开车","drive"],["bàn gè xiǎoshí","半个小时","half an hour"],["jiù dào le","就到了","will arrive"]],
-    translation:"Don't worry, the airport isn't far from home — just half an hour by car." },
-  { id:33, type:'dialogue', audio:null,
-    words:[["jīn tiān","今天","today"],["de lù","的路","the road"],["yuǎn","远","far"],["bù yuǎn","不远","not far"],["dǔ chē","堵车","traffic jam"],["ma","吗","?"]],
-    translation:"Is the road far today? Is there traffic?" },
-  { id:34, type:'dialogue', audio:null,
-    words:[["lù","路","road"],["bù yuǎn","不远","not far"],["dàn","但","but"],["xiànzài","现在","now"],["shì","是","is"],["xià bān shí jiān","下班时间","rush hour"],["chē","车","cars"],["yuè lái yuè","越来越","more and more"],["duō le","多了","increased"]],
-    translation:"Not far, but it's rush hour now and there are more and more cars." },
-  // Questions for dialogue 2
-  { id:36, type:'question', audio:null,
-    words:[["xiànzài","现在","now"],["zhèngzài","正在","currently"],["zuò","做","doing"],["shénme","什么","what"]],
-    translation:"What is [the speaker] currently doing?" },
-  { id:37, type:'question', audio:null,
-    words:[["cóng","从","from"],["jiā","家","home"],["dào","到","to"],["jīchǎng","机场","airport"],["kāi chē","开车","drive"],["yào","要","takes"],["duō cháng shí jiān","多长时间","how long"]],
-    translation:"How long does it take to drive from home to the airport?" },
-  { id:38, type:'question', audio:null,
-    words:[["wèi shénme","为什么","why"],["yào","要","should"],["ràng","让","let"],["tā","他/她","him/her"],["kāi màn","开慢","drive slowly"],["yìdiǎnr","一点儿","a bit"]],
-    translation:"Why should [the passenger] ask [the driver] to slow down?" },
-  // Dialogue 3 - China Trip
-  { id:40, type:'dialogue', audio:null,
-    words:[["wǒ kàn","我看","I see"],["nǐ","你","you"],["zuìjìn","最近","recently"],["zài kàn","在看","looking at"],["dìtú","地图","map"],["shì","是","is it"],["xiǎng qù","想去","want to go"],["lǚyóu","旅游","travel"],["ma","吗","?"]],
-    translation:"I see you've been looking at maps lately — do you want to travel?" },
-  { id:41, type:'dialogue', audio:null,
-    words:[["duì","对","yes"],["sān nián qián","三年前","three years ago"],["wǒ","我","I"],["qù le","去了","went to"],["Zhōngguó","中国","China"],["juéde","觉得","felt"],["fēicháng","非常","very"],["yǒu yìsi","有意思","interesting"]],
-    translation:"Yes, three years ago I went to China and found it very interesting." },
-  { id:42, type:'dialogue', audio:null,
-    words:[["wǒ jìde","我记得","I remember"],["nǐ","你","you"],["qù nián","去年","last year"],["yòu","又","again"],["qù le","去了","went"],["yī cì","一次","once"],["duì ma","对吗","right?"]],
-    translation:"I remember you went again last year, right?" },
-  { id:43, type:'dialogue', audio:null,
-    words:[["shì de","是的","yes"],["qù nián","去年","last year"],["wǒ","我","I"],["yòu qù le","又去了","went again"],["Zhōngguó","中国","China"],["suīrán","虽然","although"],["dì yuán zhèng zhì","地缘政治","geopolitics"],["yǒudiǎnr fùzá","有点儿复杂","a bit complicated"],["dàn wǒ háishi xiǎng","但我还是想","I still want to"],["zài qù","再去","go again"]],
-    translation:"Yes, I went to China again last year. Although geopolitics are a bit complicated, I still want to go again." },
-  { id:44, type:'dialogue', audio:null,
-    words:[["nǐ","你","you"],["dǎsuàn","打算","plan to"],["shén me shí hòu","什么时候","when"],["chū fā","出发","depart"]],
-    translation:"When do you plan to depart?" },
-  { id:45, type:'dialogue', audio:null,
-    words:[["wǒ","我","I"],["yào xiǎng yī xiǎng","要想一想","need to think"],["dǎsuàn","打算","plan to"],["děng","等","wait until"],["tiānqì","天气","weather"],["nuǎn huo","暖和","warm"],["yì diǎn","一点","a little"],["zài chū fā","再出发","then depart"]],
-    translation:"I need to think about it. I plan to wait until the weather gets a bit warmer before departing." },
-  // Questions for dialogue 3
-  { id:47, type:'question', audio:null,
-    words:[["qù nián","去年","last year"],["qù le","去了","went to"],["něi gè","哪个","which"],["guójiā","国家","country"]],
-    translation:"Which country did [the speaker] go to last year?" },
-  { id:48, type:'question', audio:null,
-    words:[["wèi shénme","为什么","why"],["hái","还","still"],["xiǎng qù","想去","want to go"],["Zhōngguó","中国","China"]],
-    translation:"Why does [the speaker] still want to go to China?" },
-  { id:49, type:'question', audio:null,
-    words:[["dǎsuàn","打算","planning to"],["shén me shí hòu","什么时候","when"],["qù","去","go"]],
-    translation:"When does [the speaker] plan to go?" },
+  { id:1, type:'vocab', audio:"audio/2026-03-06/0.wav", words:[["nǐ","你","(singular) you"], ["cháng cháng","常常","often"], ["gēn","跟","with"], ["duì yǒu","队友","teammate"], ["yìqǐ","一起","together"], ["chī fàn","吃饭","to eat a meal"], ["ma","吗","yes/no"]], translation:"Do you often eat with your teammates?" },
+  { id:2, type:'vocab', audio:"audio/2026-03-06/1.wav", words:[["tōngcháng","通常","usually"], ["tài","太","too, excessively"], ["lèi le","累了","tired"], ["bù","不","no, not"], ["xiǎng qù","想去","wanna go"], ["chī fàn","吃饭","to eat a meal"]], translation:"Usually too tired, don't want to go eat." },
+  { id:3, type:'vocab', audio:"audio/2026-03-06/2.wav", words:[["rúguǒ","如果","if, in case"], ["nǐmen","你们","(plural) you"], ["yíng","赢","to win"], ["le","了","past / a change or a new circumstance/done"], ["nǐmen","你们","(plural) you"], ["yào","要","to be going to,to want sth, would like to, need"], ["yìqǐ","一起","together"], ["chī fàn","吃饭","to eat a meal"], ["ma","吗","yes/no"]], translation:"If you win, will you eat together?" },
+  { id:4, type:'vocab', audio:"audio/2026-03-06/3.wav", words:[["zhòng zài cān yù","重在参与","it's more important to be part of it"]], translation:"It's more important to participate (than to win)." },
+  { id:5, type:'vocab', audio:"audio/2026-03-06/4.wav", words:[["bǐsài","比赛","match, competition"], ["cháng cháng","常常","often"], ["hěn wǎn","很晚","very late"]], translation:"Competitions are often very late." },
+  { id:6, type:'vocab', audio:"audio/2026-03-06/5.wav", words:[["huá bīng","滑冰","to skate"]], translation:"Ice skating" },
+  { id:7, type:'vocab', audio:"audio/2026-03-06/6.wav", words:[["shì xùn","试训","tryout (sports)"]], translation:"Sports tryout" },
+  { id:8, type:'vocab', audio:"audio/2026-03-06/7.wav", words:[["hē","喝","to drink"], ["yì diǎn","一点","a little"], ["chá","茶","tea"]], translation:"Drink a little tea." },
+  { id:9, type:'vocab', audio:"audio/2026-03-06/8.wav", words:[["jīchǎng","机场","airport"], ["lí","离","to be away from"], ["wǒ jiā","我家","my home"], ["bù yuǎn","不远","not far"]], translation:"The airport is not far from my home." },
+  { id:10, type:'vocab', audio:"audio/2026-03-06/9.wav", words:[["wǒ","我","I, me"], ["zài qù","在去","to be on the way to"], ["jīchǎng","机场","airport"], ["de","的","posessive form"], ["lù shàng","路上","on the way / road"]], translation:"I'm on the way to the airport." },
+  { id:11, type:'vocab', audio:"audio/2026-03-06/10.wav", words:[["wǒ","我","I, me"], ["yào","要","to be going to,to want sth, would like to, need"], ["xiǎng yī xiǎng","想一想","think about it"]], translation:"I need to think about it." },
+  { id:12, type:'vocab', audio:"audio/2026-03-06/11.wav", words:[["sān nián","三年","three years"], ["qián","前","before, earlier than, ago, front"], ["wǒ","我","I, me"], ["qù le","去了","went"], ["Zhōngguó","中国","China"]], translation:"Three years ago I went to China." },
+  { id:13, type:'vocab', audio:"audio/2026-03-06/12.wav", words:[["qù nián","去年","last year"], ["wǒ","我","I, me"], ["yòu","又","and, again"], ["qù le","去了","went"], ["Zhōngguó","中国","China"]], translation:"Last year I went to China again." },
+  { id:14, type:'vocab', audio:"audio/2026-03-06/13.wav", words:[["wǒ","我","I, me"], ["yòu","又","and, again"], ["xiǎng qù","想去","wanna go"], ["Zhōngguó","中国","China"]], translation:"I want to go to China again." },
+  { id:15, type:'vocab', audio:"audio/2026-03-06/14.wav", words:[["wǒ","我","I, me"], ["xiǎng","想","to want to (do), would like， to think about"], ["zài","再","again, once more"], ["qù Zhōngguó","去中国","go to China"]], translation:"I want to go to China once more." },
+  { id:16, type:'vocab', audio:"audio/2026-03-06/15.wav", words:[["dì yuán","地缘","geo-, geographical (as in 地缘政治)"], ["zhèng zhì","政治","politics"]], translation:"Geopolitics" },
+  { id:17, type:'dialogue', audio:"audio/2026-03-06/16.wav", words:[["duìhuà","对话","to have a dialogue"], ["yī","一","one"], ["guānyú","关于","about, regarding"], ["bǐsài","比赛","match, competition"], ["hé","和","and"], ["tuán duì","团队","team"], ["jù cān","聚餐","group meal / team dinner"]], translation:"Dialogue 1: About the game and the team dinner." },
+  { id:18, type:'dialogue', audio:"audio/2026-03-06/17.wav", words:[["gāngcái","刚才","just now"], ["de","的","posessive form"], ["huá bīng","滑冰","to skate"], ["bǐsài","比赛","match, competition"], ["tài jīng cǎi","太精彩","so brilliant, really spectacular"], ["le","了","past / a change or a new circumstance/done"], ["nǐ","你","(singular) you"], ["cháng cháng","常常","often"], ["gēn","跟","with"], ["duì yǒu","队友","teammate"], ["yìqǐ","一起","together"], ["chī fàn","吃饭","to eat a meal"], ["ma","吗","yes/no"]], translation:"That ice skating competition just now was so exciting! Do you often eat with your teammates?" },
+  { id:19, type:'dialogue', audio:"audio/2026-03-06/18.wav", words:[["bù cháng","不常","not often, rarely"], ["qù","去","to go"], ["yīnwèi","因为","because, since"], ["bǐsài","比赛","match, competition"], ["cháng cháng","常常","often"], ["hěn wǎn","很晚","very late"], ["cái","才","only then"], ["jiéshù","结束","to end, to finish"], ["dàjiā","大家","all, everybody"], ["tōngcháng","通常","usually"], ["tài","太","too, excessively"], ["lèi le","累了","tired"], ["zhī","只","only（only）, solely, measure word for small animals"], ["xiǎng","想","to want to (do), would like， to think about"], ["huí jiā","回家","return home"], ["xiū xi","休息","to have or take a rest"]], translation:"Not often. Because competitions usually end very late, everyone is too tired and just wants to go home and rest." },
+  { id:20, type:'dialogue', audio:"audio/2026-03-06/19.wav", words:[["nà","那","that/then"], ["rúguǒ","如果","if, in case"], ["nǐmen","你们","(plural) you"], ["yíng le","赢了","won"], ["nǐmen","你们","(plural) you"], ["yào","要","to be going to,to want sth, would like to, need"], ["yìqǐ","一起","together"], ["qù","去","to go"], ["chī fàn","吃饭","to eat a meal"], ["qìngzhù","庆祝","to celebrate"], ["ma","吗","yes/no"]], translation:"Then if you win, will you go eat together to celebrate?" },
+  { id:21, type:'dialogue', audio:"audio/2026-03-06/20.wav", words:[["yǒu shí hòu","有时候","sometimes"], ["huì qù","会去","will go"], ["dàn","但","but, however"], ["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["wǒ","我","I, me"], ["lái shuō","来说","as far as … is concerned (对…来说)"], ["zhòng zài cān yù","重在参与","it's more important to be part of it"], ["gèng","更","more, to a greater extent"], ["zhòngyào","重要","important"]], translation:"Sometimes we will, but for me, participating is more important than winning." },
+  { id:22, type:'dialogue', audio:"audio/2026-03-06/21.wav", words:[["tīngshuō","听说","to hear about, to be told"], ["nǐ","你","(singular) you"], ["míng tiān","明天","tomorrow"], ["hái yǒu","还有","also have / moreover"], ["yí gè","一个","1"], ["shì xùn","试训","tryout (sports)"]], translation:"I heard you have another tryout tomorrow?" },
+  { id:23, type:'dialogue', audio:"audio/2026-03-06/22.wav", words:[["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["suǒyǐ","所以","so, therefore"], ["wǒ","我","I, me"], ["xiànzài","现在","now"], ["dé hē","得喝","have to drink"], ["yì diǎn","一点","a little"], ["chá","茶","tea"], ["zǎo diǎn","早点","earlier"], ["shuì jiào","睡觉","to sleep"]], translation:"Right, so I need to drink some tea and sleep early tonight." },
+  { id:24, type:'question', audio:"audio/2026-03-06/23.wav", words:[["wèntí","问题","question, problem"]], translation:"Questions:" },
+  { id:25, type:'question', audio:"audio/2026-03-06/24.wav", words:[["wèi shénme","为什么","why"], ["bù cháng","不常","not often, rarely"], ["hé","和","and"], ["duì yǒu","队友","teammate"], ["yìqǐ","一起","together"], ["chī fàn","吃饭","to eat a meal"]], translation:"Why don't you often eat with your teammates?" },
+  { id:26, type:'question', audio:"audio/2026-03-06/25.wav", words:[["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["lái shuō","来说","as far as … is concerned (对…来说)"], ["bǐsài","比赛","match, competition"], ["zuì","最","most, to the greatest extent"], ["zhòngyào","重要","important"], ["de","的","posessive form"], ["shì","是","to be"], ["shénme","什么","what"]], translation:"For [the speaker], what is the most important thing about a competition?" },
+  { id:27, type:'question', audio:"audio/2026-03-06/26.wav", words:[["míng tiān","明天","tomorrow"], ["yǒu","有","to have, there be"], ["shénme","什么","what"], ["ānpái","安排","to arrange"]], translation:"What are the plans for tomorrow?" },
+  { id:28, type:'dialogue', audio:"audio/2026-03-06/27.wav", words:[["duìhuà","对话","to have a dialogue"], ["èr","二","two"], ["qù","去","to go"], ["jīchǎng","机场","airport"], ["de","的","posessive form"], ["lù shàng","路上","on the way / road"]], translation:"Dialogue 2: On the way to the airport." },
+  { id:29, type:'dialogue', audio:"audio/2026-03-06/28.wav", words:[["wèi","喂","to feed"], ["nǐ","你","(singular) you"], ["dào","到","to arrive, to reach"], ["nǎr","哪儿","where"], ["le","了","past / a change or a new circumstance/done"], ["lǎoshī","老师","teacher"], ["de","的","posessive form"], ["fēijī","飞机","airplane"], ["kuài yào","快要","about to, soon going to"], ["dào le","到了","arrived; to have reached"]], translation:"Hey, where are you? The teacher's plane is about to arrive." },
+  { id:30, type:'dialogue', audio:"audio/2026-03-06/29.wav", words:[["bié","别","don’t"], ["dān xīn","担心","to worry"], ["wǒ","我","I, me"], ["zài qù","在去","to be on the way to"], ["jīchǎng","机场","airport"], ["de","的","posessive form"], ["lù shàng","路上","on the way / road"]], translation:"Don't worry, I'm on the way to the airport." },
+  { id:31, type:'dialogue', audio:"audio/2026-03-06/30.wav", words:[["nǐ","你","(singular) you"], ["kāi dé","开得","drives (in such a way) — 开 + 得 complement"], ["tài kuài le","太快了","too fast"], ["qǐng","请","(polite) please ; invite"], ["màn","慢","slow"], ["yìdiǎnr","一点儿","a few, a little"], ["ānquán","安全","safe, secure"], ["dì yī","第一","first"]], translation:"You're driving too fast, please slow down — safety first!" },
+  { id:32, type:'dialogue', audio:"audio/2026-03-06/31.wav", words:[["fàng xīn","放心","to ease one's mind, to rest assured"], ["ba","吧","suggestion,   confirmation in a question"], ["jīchǎng","机场","airport"], ["lí","离","to be away from"], ["wǒ jiā","我家","my home"], ["bù yuǎn","不远","not far"], ["kāi chē","开车","drive ( car)"], ["bàn gè","半个","half (of something)"], ["xiǎoshí","小时","hour（duration )"], ["jiù","就","used to indicate a conclusion or resolution"], ["dào le","到了","arrived; to have reached"]], translation:"Don't worry, the airport isn't far from home — just half an hour by car." },
+  { id:33, type:'dialogue', audio:"audio/2026-03-06/32.wav", words:[["jīn tiān","今天","today"], ["de","的","posessive form"], ["lù yuǎn","路远","the way is far"], ["bù yuǎn","不远","not far"], ["dǔ chē","堵车","traffic jam"], ["ma","吗","yes/no"]], translation:"Is the road far today? Is there traffic?" },
+  { id:34, type:'dialogue', audio:"audio/2026-03-06/33.wav", words:[["lù","路","road, path, way"], ["bù yuǎn","不远","not far"], ["dàn","但","but, however"], ["xiànzài","现在","now"], ["shì","是","to be"], ["xià bān shí jiān","下班时间","rush hour"], ["chē","车","car, vehicle"], ["yuè lái yuè","越来越","more and more"], ["duō le","多了","used after adj as comparative form"]], translation:"Not far, but it's rush hour now and there are more and more cars." },
+  { id:35, type:'question', audio:"audio/2026-03-06/34.wav", words:[["wèntí","问题","question, problem"]], translation:"Questions:" },
+  { id:36, type:'question', audio:"audio/2026-03-06/35.wav", words:[["xiànzài","现在","now"], ["zhèngzài","正在","in the process of"], ["zuò","做","to do,to make, to cook"], ["shénme","什么","what"]], translation:"What is [the speaker] currently doing?" },
+  { id:37, type:'question', audio:"audio/2026-03-06/36.wav", words:[["cóng","从","from"], ["jiā","家","family"], ["dào","到","to arrive, to reach"], ["jīchǎng","机场","airport"], ["kāi chē","开车","drive ( car)"], ["yào","要","to be going to,to want sth, would like to, need"], ["duō cháng shí jiān","多长时间","how long"]], translation:"How long does it take to drive from home to the airport?" },
+  { id:38, type:'question', audio:"audio/2026-03-06/37.wav", words:[["wèi shénme","为什么","why"], ["yào","要","to be going to,to want sth, would like to, need"], ["ràng","让","to let, to allow"], ["kāi màn","开慢","to drive slowly"], ["yìdiǎnr","一点儿","a few, a little"]], translation:"Why should [the passenger] ask [the driver] to slow down?" },
+  { id:39, type:'dialogue', audio:"audio/2026-03-06/38.wav", words:[["duìhuà","对话","to have a dialogue"], ["sān","三","three"], ["jìhuà","计划","plan; to intend to"], ["zài cì","再次","again, once more"], ["qù Zhōngguó","去中国","go to China"]], translation:"Dialogue 3: Planning another trip to China." },
+  { id:40, type:'dialogue', audio:"audio/2026-03-06/39.wav", words:[["wǒ","我","I, me"], ["kàn","看","to look at, to watch, to read"], ["nǐ","你","(singular) you"], ["zuìjìn","最近","lately, recently；nearest"], ["zài kàn","在看","to be looking at (in progress)"], ["dìtú","地图","map"], ["shì","是","to be"], ["xiǎng qù","想去","wanna go"], ["lǚyóu","旅游","to travel, to take a trip"], ["ma","吗","yes/no"]], translation:"I see you've been looking at maps lately — do you want to travel?" },
+  { id:41, type:'dialogue', audio:"audio/2026-03-06/40.wav", words:[["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["sān nián","三年","three years"], ["qián","前","before, earlier than, ago, front"], ["wǒ","我","I, me"], ["qù le","去了","went"], ["Zhōngguó","中国","China"], ["juéde","觉得","to think, to feel"], ["fēicháng","非常","very, extremely"], ["yǒu yìsi","有意思","interesting, fun"]], translation:"Yes, three years ago I went to China and found it very interesting." },
+  { id:42, type:'dialogue', audio:"audio/2026-03-06/41.wav", words:[["wǒ","我","I, me"], ["jìde","记得","to remember"], ["nǐ","你","(singular) you"], ["qù nián","去年","last year"], ["yòu","又","and, again"], ["qù le","去了","went"], ["yī cì","一次","once, one time"], ["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["ma","吗","yes/no"]], translation:"I remember you went again last year, right?" },
+  { id:43, type:'dialogue', audio:"audio/2026-03-06/42.wav", words:[["shì de","是的","yes"], ["qù nián","去年","last year"], ["wǒ","我","I, me"], ["yòu","又","and, again"], ["qù le","去了","went"], ["Zhōngguó","中国","China"], ["suīrán","虽然","although, though"], ["xiànzài","现在","now"], ["de","的","posessive form"], ["dì yuán","地缘","geo-, geographical (as in 地缘政治)"], ["zhèng zhì","政治","politics"], ["yǒudiǎnr","有点儿","a little, a bit"], ["fùzá","复杂","complicated"], ["dàn","但","but, however"], ["wǒ","我","I, me"], ["háishi","还是","or"], ["xiǎng","想","to want to (do), would like， to think about"], ["zài","再","again, once more"], ["qù Zhōngguó","去中国","go to China"]], translation:"Yes, I went to China again last year. Although the geopolitics right now are a bit complicated, I still want to go to China again." },
+  { id:44, type:'dialogue', audio:"audio/2026-03-06/43.wav", words:[["nǐ","你","(singular) you"], ["dǎsuàn","打算","plan; to intend"], ["shén me shí hòu","什么时候","when ？"], ["chū fā","出发","to depart, to set off"]], translation:"When do you plan to depart?" },
+  { id:45, type:'dialogue', audio:"audio/2026-03-06/44.wav", words:[["wǒ","我","I, me"], ["yào","要","to be going to,to want sth, would like to, need"], ["xiǎng yī xiǎng","想一想","think about it"], ["wǒ","我","I, me"], ["dǎsuàn","打算","plan; to intend"], ["děng","等","wait, etc., and so on"], ["tiānqì","天气","weather"], ["nuǎn huo","暖和","warm"], ["yì diǎn","一点","a little"], ["zài","再","again, once more"], ["chū fā","出发","to depart, to set off"]], translation:"I need to think about it. I plan to wait until the weather gets a bit warmer before setting off." },
+  { id:46, type:'question', audio:"audio/2026-03-06/45.wav", words:[["wèntí","问题","question, problem"]], translation:"Questions:" },
+  { id:47, type:'question', audio:"audio/2026-03-06/46.wav", words:[["qù nián","去年","last year"], ["qù le","去了","went"], ["něi gè","哪个","which one"], ["guójiā","国家","country, nation"]], translation:"Which country did [the speaker] go to last year?" },
+  { id:48, type:'question', audio:"audio/2026-03-06/47.wav", words:[["wèi shénme","为什么","why"], ["hái/ huán","还","also,passably, fairly, rather; still,/ to return"], ["xiǎng qù","想去","wanna go"], ["Zhōngguó","中国","China"]], translation:"Why does [the speaker] still want to go to China?" },
+  { id:49, type:'question', audio:"audio/2026-03-06/48.wav", words:[["dǎsuàn","打算","plan; to intend"], ["shén me shí hòu","什么时候","when ？"], ["qù","去","to go"]], translation:"When does [the speaker] plan to go?" },
 ];
 
 const INITIAL_LESSON = {
@@ -1814,6 +1621,7 @@ const INITIAL_LESSON = {
   vocabCount: INITIAL_VOCAB.length,
   sentenceCount: INITIAL_SENTENCES.length,
   images: [],
+  rev: 1,
 };
 
 // ── LESSON 2: 2026-03-30 ────────────────────────────────────────────────────
@@ -1971,121 +1779,56 @@ const LESSON2 = {
   vocabCount: LESSON2_VOCAB.length,
   sentenceCount: LESSON2_SENTENCES.length,
   images: [],
+  rev: 1,
 };
 
 // ── LESSON 3: 2026-04-02 ────────────────────────────────────────────────────
 
 const LESSON3_VOCAB = [
-  ["chūn jià","春假","spring break"],
-  ["yìqǐ","一起","together"],
-  ["fù huó jié","复活节","Easter"],
-  ["jǐ gè","几个","how many; several"],
-  ["xīngqī","星期","week"],
-  ["hòu","后","after, afterwards, later"],
-  ["chūn tiān","春天","spring (season)"],
-  ["wǎnshang","晚上","evening, night"],
-  ["xià yǔ","下雨","to rain"],
-  ["bái tiān","白天","daytime"],
-  ["qíng tiān","晴天","sunny day"],
-  ["biànhuà","变化","change; to change"],
-  ["tiānqì","天气","weather"],
-  ["bèi téng","背疼","backache"],
-  ["zhōumò","周末","weekend"],
-  ["fán zào bù ān","烦躁不安","restless, agitated"],
-  ["xūyào","需要","to need"],
-  ["chī yào","吃药","to take medicine"],
-  ["nǎi chá","奶茶","boba tea, milk tea"],
-  ["xiǎng yào","想要","to want (something)"],
-  ["yī liàng","一辆","(measure word for vehicles)"],
-  ["xīn chē","新车","new car"],
-  ["niǔ yuē","纽约","New York City"],
-  ["duō cháng shí jiān","多长时间","how long (duration)"],
-  ["zuò huǒ chē","坐火车","to travel by train"],
-  ["yī liè","一列","(measure word for trains)"],
-  ["ěrduo","耳朵","ear"],
-  ["shūfu","舒服","comfortable; well"],
-  ["yālì","压力","pressure, stress"],
-  ["qì yā","气压","air pressure"],
-  ["bǐ","比","than; compared to"],
-  ["yǐjīng","已经","already"],
+  ["chūn jià","春假","spring break"], ["zài","在","to be in/on/at"], ["yìqǐ","一起","together"], ["hé","和","and"], ["fù huó jié","复活节","Easter"], ["jǐ gè","几个","how many ；serveral ..."], ["xīngqī","星期","week"], ["hòu","后","after, afterwards, later"], ["chūn tiān","春天","spring"], ["wǎnshang","晚上","evening, night"], ["xià yǔ","下雨","to rain"], ["bái tiān","白天","daytime"], ["shì","是","to be"], ["qíng tiān","晴天","sunny day"], ["xiànzài","现在","now"], ["zài xià yǔ","在下雨","it's raining (right now)"], ["biànhuà","变化","to change"], ["tiānqì","天气","weather"], ["biàn huà hěn dà","变化很大","changes a lot"], ["wǒ","我","I, me"], ["de","的","posessive form"], ["bèi téng","背疼","backache"], ["zhōumò","周末","weekend"], ["hǎo","好","good, fine，  so (colloquial)"], ["yì diǎn","一点","a little"], ["fán zào bù ān","烦躁不安","restless"], ["xūyào","需要","to need"], ["chī yào","吃药","take the medicine"], ["yào","要","to be going to,to want sth, would like to, need"], ["yì bēi","一杯","1 cup of..."], ["nǎi chá","奶茶","boba tea"], ["xiǎng yào","想要","want (something)"], ["yī liàng","一辆","(measure word for vehicles)"], ["xīn chē","新车","new car"], ["cóng","从","from"], ["bō shì dùn","波士顿","Boston"], ["kāi chē","开车","drive ( car)"], ["dào","到","to arrive, to reach"], ["niǔ yuē","纽约","NYC"], ["duō cháng shí jiān","多长时间","how long"], ["wǔ gè","五个","five (+ measure word)"], ["duō","多","much; many; more (adv  extent ); how (question)"], ["xiǎoshí","小时","hour（duration )"], ["zuò huǒ chē","坐火车","by train"], ["yī liè","一列","(measure word for trains)"], ["ěrduo","耳朵","ear"], ["bù","不","no, not"], ["shūfu","舒服","comfortable，well"], ["fēijī","飞机","airplane"], ["shàng","上","to go up, to ascend"], ["yālì","压力","pressure, stress"], ["qì yā","气压","air pressure"], ["hěn dà","很大","very big, very great"], ["háizi","孩子","child, kid"], ["bǐ","比","than, (superior or inferior) to"], ["tā","他","he, him"], ["Gāo","高","tall, high,Gao, a Chinese family name"], ["wǒ jiā","我家","my home"], ["lí","离","to be away from, to leave"], ["tā jiā","他家","his home, her home"], ["hěn yuǎn","很远","very far"], ["yǐjīng","已经","already"], ["shí èr diǎn","十二点","12 o'clock"], ["duō le","多了","used after adj as comparative form"], ["guò","过","to pass (time), to spend (time) ; ever done"], ["guò shēng rì","过生日","celebrate birthday"], ["liǎng gè","两个","two (+ measure word)"], ["yuè","月","month；moon"], ["jiù","就","used to indicate a conclusion or resolution"], ["qù Zhōngguó","去中国","go to China"], ["zǒu","走","to walk；leave"], ["zǒu dào","走到","to walk to, to walk as far as"], ["gōngyuán","公园","park"], ["nǐ","你","(singular) you"], ["dào le","到了","arrived; to have reached"], ["ma","吗","yes/no"], ["jiā","家","family,home"], ["le","了","past / a change or a new circumstance/done"], ["huí jiā","回家","return home"], ["zěnme","怎么","how"], ["hē jiǔ le","喝酒了","drinking alcohol (with 了 — a change of state)"], ["yǒudiǎnr","有点儿","a little, a bit"], ["gōngzuò","工作","to work; job"], ["zuò","做","to do,to make, to cook"]
 ];
 
 const LESSON3_SENTENCES = [
-  { id:1, type:'vocab', audio:null,
-    words:[["chūn jià","春假","spring break"]],
-    translation:"Spring break" },
-  { id:2, type:'vocab', audio:null,
-    words:[["chūn jià","春假","spring break"],["hé","和","and"],["fù huó jié","复活节","Easter"]],
-    translation:"Spring break and Easter" },
-  { id:3, type:'vocab', audio:null,
-    words:[["jǐ gè","几个","a few"],["xīngqī","星期","weeks"],["hòu","后","from now / later"]],
-    translation:"A few weeks from now" },
-  { id:4, type:'vocab', audio:null,
-    words:[["zài","在","to be at"],["yìqǐ","一起","together"]],
-    translation:"(To be) together" },
-  { id:5, type:'vocab', audio:null,
-    words:[["chūn tiān","春天","spring"]],
-    translation:"Spring (season)" },
-  { id:6, type:'vocab', audio:null,
-    words:[["wǎnshang","晚上","evening"],["xià yǔ","下雨","raining"],["bái tiān","白天","daytime"],["shì","是","is"],["qíng tiān","晴天","sunny"]],
-    translation:"In the evening it rains; during the day it's sunny." },
-  { id:7, type:'vocab', audio:null,
-    words:[["xiànzài","现在","now"],["zài xià yǔ","在下雨","is raining"]],
-    translation:"It's raining now." },
-  { id:8, type:'vocab', audio:null,
-    words:[["tiānqì","天气","weather"],["biànhuà","变化","changes"],["hěn dà","很大","a lot"]],
-    translation:"The weather changes a lot." },
-  { id:9, type:'vocab', audio:null,
-    words:[["wǒ","我","my"],["de","的","(possessive)"],["bèi téng","背疼","back hurts"]],
-    translation:"My back hurts." },
-  { id:10, type:'vocab', audio:null,
-    words:[["zhōumò","周末","weekend"],["hǎo","好","a bit"],["yì diǎn","一点","better"]],
-    translation:"(Feeling) a bit better on the weekend." },
-  { id:11, type:'vocab', audio:null,
-    words:[["fán zào bù ān","烦躁不安","restless"]],
-    translation:"Restless, agitated" },
-  { id:12, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["xūyào","需要","need"],["chī yào","吃药","take medicine"]],
-    translation:"I need to take medicine." },
-  { id:13, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["yào","要","want"],["yì bēi","一杯","one cup of"],["nǎi chá","奶茶","boba tea"]],
-    translation:"I want one boba tea." },
-  { id:14, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["xiǎng yào","想要","want"],["yī liàng","一辆","(one)"],["xīn chē","新车","new car"]],
-    translation:"I want a new car." },
-  { id:15, type:'vocab', audio:null,
-    words:[["cóng","从","from"],["bō shì dùn","波士顿","Boston"],["kāi chē","开车","drive"],["dào","到","to"],["niǔ yuē","纽约","NYC"],["yào","要","takes"],["duō cháng shí jiān","多长时间","how long"]],
-    translation:"How long does it take to drive from Boston to NYC?" },
-  { id:16, type:'vocab', audio:null,
-    words:[["yào","要","takes"],["wǔ gè","五个","five"],["duō","多","more than"],["xiǎoshí","小时","hours"]],
-    translation:"It takes over five hours." },
-  { id:17, type:'vocab', audio:null,
-    words:[["zuò huǒ chē","坐火车","by train"]],
-    translation:"By train" },
-  { id:18, type:'vocab', audio:null,
-    words:[["yī liè","一列","one (train)"],["huǒ chē","火车","train"]],
-    translation:"One train (measure word for trains)" },
-  { id:19, type:'vocab', audio:null,
-    words:[["ěrduo","耳朵","ear"],["bù","不","not"],["shūfu","舒服","comfortable"]],
-    translation:"My ear is uncomfortable." },
-  { id:20, type:'vocab', audio:null,
-    words:[["fēijī","飞机","airplane"],["shàng","上","on"],["qì yā","气压","air pressure"],["hěn dà","很大","very high"]],
-    translation:"Air pressure on the airplane is very high." },
-  { id:21, type:'vocab', audio:null,
-    words:[["zài","在","on"],["fēijī","飞机","airplane"],["shàng","上","(on)"],["qì yā","气压","air pressure"],["hěn dà","很大","very high"],["háizi","孩子","kids"],["bù shūfu","不舒服","uncomfortable"]],
-    translation:"On airplanes, the air pressure is high and kids feel uncomfortable." },
-  { id:22, type:'vocab', audio:null,
-    words:[["yālì","压力","pressure/stress"]],
-    translation:"Pressure, stress" },
-  { id:23, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["bǐ","比","taller than"],["tā","他","him"]],
-    translation:"I am taller than him." },
-  { id:24, type:'vocab', audio:null,
-    words:[["wǒ jiā","我家","my home"],["lí","离","is away from"],["tā jiā","他家","his home"],["hěn yuǎn","很远","very far"]],
-    translation:"My home is very far from his home." },
-  { id:25, type:'vocab', audio:null,
-    words:[["yǐjīng","已经","already"],["shí èr diǎn","十二点","12 o'clock"],["duō le","多了","past"]],
-    translation:"It's already past 12 o'clock." },
+  { id:1, type:'vocab', audio:"audio/2026-04-02/0.wav", words:[["chūn jià","春假","spring break"]], translation:"Spring break" },
+  { id:2, type:'vocab', audio:"audio/2026-04-02/1.wav", words:[["zài","在","to be in/on/at"], ["yìqǐ","一起","together"]], translation:"(To be) together" },
+  { id:3, type:'vocab', audio:"audio/2026-04-02/2.wav", words:[["chūn jià","春假","spring break"], ["hé","和","and"], ["fù huó jié","复活节","Easter"]], translation:"Spring break and Easter" },
+  { id:4, type:'vocab', audio:"audio/2026-04-02/3.wav", words:[["jǐ gè","几个","how many ；serveral ..."], ["xīngqī","星期","week"], ["hòu","后","after, afterwards, later"]], translation:"A few weeks from now" },
+  { id:5, type:'vocab', audio:"audio/2026-04-02/4.wav", words:[["chūn tiān","春天","spring"]], translation:"Spring (season)" },
+  { id:6, type:'vocab', audio:"audio/2026-04-02/5.wav", words:[["wǎnshang","晚上","evening, night"], ["xià yǔ","下雨","to rain"], ["bái tiān","白天","daytime"], ["shì","是","to be"], ["qíng tiān","晴天","sunny day"]], translation:"In the evening it rains; during the day it's sunny." },
+  { id:7, type:'vocab', audio:"audio/2026-04-02/6.wav", words:[["xiànzài","现在","now"], ["zài xià yǔ","在下雨","it's raining (right now)"]], translation:"It's raining now." },
+  { id:8, type:'vocab', audio:"audio/2026-04-02/7.wav", words:[["biànhuà","变化","to change"]], translation:"Change; to change" },
+  { id:9, type:'vocab', audio:"audio/2026-04-02/8.wav", words:[["tiānqì","天气","weather"], ["biàn huà hěn dà","变化很大","changes a lot"]], translation:"The weather changes a lot." },
+  { id:10, type:'vocab', audio:"audio/2026-04-02/9.wav", words:[["wǒ","我","I, me"], ["de","的","posessive form"], ["bèi téng","背疼","backache"]], translation:"My back hurts." },
+  { id:11, type:'vocab', audio:"audio/2026-04-02/10.wav", words:[["zhōumò","周末","weekend"]], translation:"Weekend" },
+  { id:12, type:'vocab', audio:"audio/2026-04-02/11.wav", words:[["hǎo","好","good, fine，  so (colloquial)"], ["yì diǎn","一点","a little"]], translation:"A bit better" },
+  { id:13, type:'vocab', audio:"audio/2026-04-02/12.wav", words:[["fán zào bù ān","烦躁不安","restless"]], translation:"Restless, agitated" },
+  { id:14, type:'vocab', audio:"audio/2026-04-02/13.wav", words:[["wǒ","我","I, me"], ["xūyào","需要","to need"], ["chī yào","吃药","take the medicine"]], translation:"I need to take medicine." },
+  { id:15, type:'vocab', audio:"audio/2026-04-02/14.wav", words:[["wǒ","我","I, me"], ["yào","要","to be going to,to want sth, would like to, need"], ["yì bēi","一杯","1 cup of..."], ["nǎi chá","奶茶","boba tea"]], translation:"I want one boba tea." },
+  { id:16, type:'vocab', audio:"audio/2026-04-02/15.wav", words:[["wǒ","我","I, me"], ["xiǎng yào","想要","want (something)"], ["yī liàng","一辆","(measure word for vehicles)"], ["xīn chē","新车","new car"]], translation:"I want a new car." },
+  { id:17, type:'question', audio:"audio/2026-04-02/16.wav", words:[["cóng","从","from"], ["bō shì dùn","波士顿","Boston"], ["kāi chē","开车","drive ( car)"], ["dào","到","to arrive, to reach"], ["niǔ yuē","纽约","NYC"], ["yào","要","to be going to,to want sth, would like to, need"], ["duō cháng shí jiān","多长时间","how long"]], translation:"How long does it take to drive from Boston to NYC?" },
+  { id:18, type:'vocab', audio:"audio/2026-04-02/17.wav", words:[["yào","要","to be going to,to want sth, would like to, need"], ["wǔ gè","五个","five (+ measure word)"], ["duō","多","much; many; more (adv  extent ); how (question)"], ["xiǎoshí","小时","hour（duration )"]], translation:"It takes over five hours." },
+  { id:19, type:'vocab', audio:"audio/2026-04-02/18.wav", words:[["zuò huǒ chē","坐火车","by train"]], translation:"By train" },
+  { id:20, type:'vocab', audio:"audio/2026-04-02/19.wav", words:[["yī liè","一列","(measure word for trains)"]], translation:"One (measure word for trains)" },
+  { id:21, type:'vocab', audio:"audio/2026-04-02/20.wav", words:[["ěrduo","耳朵","ear"]], translation:"Ear" },
+  { id:22, type:'vocab', audio:"audio/2026-04-02/21.wav", words:[["bù","不","no, not"], ["shūfu","舒服","comfortable，well"]], translation:"Uncomfortable, unwell" },
+  { id:23, type:'vocab', audio:"audio/2026-04-02/22.wav", words:[["fēijī","飞机","airplane"], ["shàng","上","to go up, to ascend"]], translation:"On the plane" },
+  { id:24, type:'vocab', audio:"audio/2026-04-02/23.wav", words:[["yālì","压力","pressure, stress"]], translation:"Pressure, stress" },
+  { id:25, type:'vocab', audio:"audio/2026-04-02/24.wav", words:[["qì yā","气压","air pressure"]], translation:"Air pressure" },
+  { id:26, type:'vocab', audio:"audio/2026-04-02/25.wav", words:[["zài","在","to be in/on/at"], ["fēijī","飞机","airplane"], ["shàng","上","to go up, to ascend"], ["qì yā","气压","air pressure"], ["hěn dà","很大","very big, very great"], ["háizi","孩子","child, kid"], ["bù","不","no, not"], ["shūfu","舒服","comfortable，well"]], translation:"On airplanes, the air pressure is high and kids feel uncomfortable." },
+  { id:27, type:'vocab', audio:"audio/2026-04-02/26.wav", words:[["bǐ","比","than, (superior or inferior) to"]], translation:"Than — 比, the comparison marker" },
+  { id:28, type:'vocab', audio:"audio/2026-04-02/27.wav", words:[["wǒ","我","I, me"], ["bǐ","比","than, (superior or inferior) to"], ["tā","他","he, him"], ["Gāo","高","tall, high,Gao, a Chinese family name"]], translation:"I am taller than him." },
+  { id:29, type:'vocab', audio:"audio/2026-04-02/28.wav", words:[["wǒ jiā","我家","my home"], ["lí","离","to be away from, to leave"], ["tā jiā","他家","his home, her home"], ["hěn yuǎn","很远","very far"]], translation:"My home is very far from his home." },
+  { id:30, type:'vocab', audio:"audio/2026-04-02/29.wav", words:[["yǐjīng","已经","already"], ["shí èr diǎn","十二点","12 o'clock"], ["duō le","多了","used after adj as comparative form"]], translation:"It's already past 12 o'clock." },
+  { id:31, type:'vocab', audio:"audio/2026-04-02/30.wav", words:[["guò","过","to pass (time), to spend (time) ; ever done"]], translation:"To pass; to spend (time); to celebrate" },
+  { id:32, type:'vocab', audio:"audio/2026-04-02/31.wav", words:[["guò shēng rì","过生日","celebrate birthday"]], translation:"To celebrate a birthday" },
+  { id:33, type:'vocab', audio:"audio/2026-04-02/32.wav", words:[["guò","过","to pass (time), to spend (time) ; ever done"], ["liǎng gè","两个","two (+ measure word)"], ["yuè","月","month；moon"], ["wǒ","我","I, me"], ["jiù","就","used to indicate a conclusion or resolution"], ["qù Zhōngguó","去中国","go to China"]], translation:"In two months I'm going to China." },
+  { id:34, type:'vocab', audio:"audio/2026-04-02/33.wav", words:[["zǒu","走","to walk；leave"]], translation:"To walk; to go" },
+  { id:35, type:'vocab', audio:"audio/2026-04-02/34.wav", words:[["wǒ","我","I, me"], ["zǒu dào","走到","to walk to, to walk as far as"], ["gōngyuán","公园","park"]], translation:"I walked to the park." },
+  { id:36, type:'question', audio:"audio/2026-04-02/35.wav", words:[["nǐ","你","(singular) you"], ["dào le","到了","arrived; to have reached"], ["ma","吗","yes/no"]], translation:"Have you arrived?" },
+  { id:37, type:'question', audio:"audio/2026-04-02/36.wav", words:[["nǐ","你","(singular) you"], ["dào","到","to arrive, to reach"], ["jiā","家","family,home"], ["le","了","past / a change or a new circumstance/done"], ["ma","吗","yes/no"]], translation:"Have you got home?" },
+  { id:38, type:'question', audio:"audio/2026-04-02/37.wav", words:[["nǐ","你","(singular) you"], ["huí jiā","回家","return home"], ["le","了","past / a change or a new circumstance/done"], ["ma","吗","yes/no"]], translation:"Have you gone home?" },
+  { id:39, type:'question', audio:"audio/2026-04-02/38.wav", words:[["zěnme","怎么","how"], ["bù","不","no, not"], ["hē jiǔ le","喝酒了","drinking alcohol (with 了 — a change of state)"]], translation:"How come you've stopped drinking?" },
+  { id:40, type:'vocab', audio:"audio/2026-04-02/39.wav", words:[["yǒudiǎnr","有点儿","a little, a bit"], ["gōngzuò","工作","to work; job"], ["yào","要","to be going to,to want sth, would like to, need"], ["zuò","做","to do,to make, to cook"]], translation:"I have a bit of work to do." },
 ];
 
 const LESSON3 = {
@@ -2096,121 +1839,39 @@ const LESSON3 = {
   date: "2026-04-02",
   vocabCount: LESSON3_VOCAB.length,
   sentenceCount: LESSON3_SENTENCES.length,
-  images: [],
+  images: ['images/2026-04-02/0.png'],
+  rev: 1,
 };
 
 // ── LESSON 4: 2026-04-30 ────────────────────────────────────────────────────
 
 const LESSON4_VOCAB = [
-  ["lí","离","to be away from, to leave"],
-  ["shòu shāng","受伤","to be injured, wounded"],
-  ["sài jì","赛季","season (sports)"],
-  ["bō shì dùn","波士顿","Boston"],
-  ["niǔ yuē","纽约","New York City"],
-  ["bù","不","no, not"],
-  ["tài","太","too, excessively"],
-  ["yuǎn","远","far, distant"],
-  ["luó dé dǎo","罗德岛","Rhode Island"],
-  ["ma","吗","(yes/no question particle)"],
-  ["nǐ","你","you (singular)"],
-  ["qù guò","去过","ever went to..."],
-  ["cān yì yuán","参议员","senator"],
-  ["fèng huáng chéng","凤凰城","Phoenix (city)"],
-  ["pāi zhào","拍照","to take pictures; photograph"],
-  ["zhàoxiàngjī","照相机","camera"],
-  ["shǒu jī","手机","cell phone"],
-  ["jiāo juǎn","胶卷","film (camera product)"],
-  ["nǐ jiā","你家","your home"],
-  ["jīchǎng","机场","airport"],
-  ["wǒ","我","I, me"],
-  ["zài","在","to be in/on/at"],
-  ["qù","去","to go"],
-  ["shàng bān","上班","to work, to do a job"],
-  ["de","的","(possessive particle)"],
-  ["lù shàng","路上","on the way / on the road"],
-  ["guò","过","to pass/spend (time); ever done"],
-  ["guò shēng rì","过生日","to celebrate a birthday"],
-  ["shèng dàn jié","圣诞节","Christmas"],
-  ["zhōumò","周末","weekend"],
-  ["bà bà mā mā","爸爸妈妈","parents (dad and mom)"],
-  ["jiā","家","family, home"],
-  ["shì","是","to be"],
-  ["zài jiā","在家","at home"],
-  ["shēng rì","生日","birthday"],
-  ["tā","她","she, her"],
-  ["hé","和","and"],
-  ["tā de","她的","her"],
-  ["péngyou","朋友","friend"],
-  ["mài dāng láo","麦当劳","McDonald's"],
+  ["lí","离","to be away from, to leave"], ["shòu shāng","受伤","to be injured, wounded"], ["sài jì","赛季","season (sports)"], ["bō shì dùn","波士顿","Boston"], ["niǔ yuē","纽约","NYC"], ["bù","不","no, not"], ["tài","太","too, excessively"], ["yuǎn","远","far, distant"], ["luó dé dǎo","罗德岛","Rhode Island"], ["ma","吗","yes/no"], ["nǐ","你","(singular) you"], ["qù guò","去过","ever went to..."], ["cān yì yuán","参议员","senator"], ["fèng huáng","凤凰","phoenix"], ["chéng","城","city, town"], ["pāi zhào","拍照","taking pictures ; photograph"], ["zhàoxiàngjī","照相机","camera"], ["shǒu jī","手机","cell phone"], ["jiāo juǎn","胶卷","film (products )"], ["nǐ jiā","你家","your home"], ["jīchǎng","机场","airport"], ["wǒ","我","I, me"], ["zài","在","to be in/on/at"], ["qù","去","to go"], ["shàng bān","上班","to work, to do a job"], ["de","的","posessive form"], ["lù shàng","路上","on the way / road"], ["guò","过","to pass (time), to spend (time) ; ever done"], ["guò shēng rì","过生日","celebrate birthday"], ["shèng dàn jié","圣诞节","Xmas"], ["zhōumò","周末","weekend"], ["bà bà mā mā","爸爸妈妈","parents (dad and mom)"], ["jiā","家","family,home"], ["shì","是","to be"], ["zài jiā","在家","at home"], ["shēng rì","生日","birthday"], ["tā","她","she, her"], ["hé","和","and"], ["tā de","她的","her"], ["péngyou","朋友","friend"], ["mài dāng láo","麦当劳","Mcdonald's"]
 ];
 
 const LESSON4_SENTENCES = [
-  { id:1, type:'vocab', audio:null,
-    words:[["lí","离","to be away from, to leave"]],
-    translation:"离 — to be away from, to leave" },
-  { id:2, type:'vocab', audio:null,
-    words:[["shòu shāng","受伤","to be injured"]],
-    translation:"To be injured / wounded" },
-  { id:3, type:'vocab', audio:null,
-    words:[["sài jì","赛季","sports season"]],
-    translation:"(Sports) season" },
-  { id:4, type:'vocab', audio:null,
-    words:[["shòu shāng","受伤","to be injured"]],
-    translation:"To be injured (again)" },
-  { id:5, type:'vocab', audio:null,
-    words:[["bō shì dùn","波士顿","Boston"],["lí","离","from"],["niǔ yuē","纽约","NYC"],["bù","不","not"],["tài","太","too"],["yuǎn","远","far"]],
-    translation:"Boston is not too far from NYC." },
-  { id:6, type:'question', audio:null,
-    words:[["luó dé dǎo","罗德岛","Rhode Island"],["lí","离","from"],["bō shì dùn","波士顿","Boston"],["yuǎn","远","far"],["ma","吗","?"]],
-    translation:"Is Rhode Island far from Boston?" },
-  { id:7, type:'question', audio:null,
-    words:[["nǐ","你","you"],["qù guò","去过","ever went to"],["luó dé dǎo","罗德岛","Rhode Island"],["ma","吗","?"]],
-    translation:"Have you ever been to Rhode Island?" },
-  { id:8, type:'vocab', audio:null,
-    words:[["cān yì yuán","参议员","senator"]],
-    translation:"Senator" },
-  { id:9, type:'vocab', audio:null,
-    words:[["fèng huáng chéng","凤凰城","Phoenix"]],
-    translation:"Phoenix (city)" },
-  { id:10, type:'vocab', audio:null,
-    words:[["pāi zhào","拍照","take pictures"]],
-    translation:"Take pictures / photograph" },
-  { id:11, type:'vocab', audio:null,
-    words:[["zhàoxiàngjī","照相机","camera"]],
-    translation:"Camera" },
-  { id:12, type:'vocab', audio:null,
-    words:[["shǒu jī","手机","cell phone"]],
-    translation:"Cell phone" },
-  { id:13, type:'vocab', audio:null,
-    words:[["jiāo juǎn","胶卷","film"],["zhàoxiàngjī","照相机","camera"]],
-    translation:"Film camera" },
-  { id:14, type:'question', audio:null,
-    words:[["nǐ jiā","你家","your home"],["lí","离","from"],["jīchǎng","机场","airport"],["yuǎn","远","far"],["ma","吗","?"]],
-    translation:"Is your home far from the airport?" },
-  { id:15, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["zài","在","be in"],["qù","去","go"],["shàng bān","上班","work"],["de","的","(particle)"],["lù shàng","路上","on the way"]],
-    translation:"I'm on the way to work." },
-  { id:16, type:'vocab', audio:null,
-    words:[["guò","过","to pass/spend; ever done"]],
-    translation:"过 — to pass (time), to spend (time); ever done" },
-  { id:17, type:'vocab', audio:null,
-    words:[["guò shēng rì","过生日","celebrate birthday"]],
-    translation:"Celebrate a birthday" },
-  { id:18, type:'vocab', audio:null,
-    words:[["guò","过","to spend / celebrate"],["shèng dàn jié","圣诞节","Christmas"]],
-    translation:"Celebrate Christmas" },
-  { id:19, type:'vocab', audio:null,
-    words:[["guò","过","to spend"],["zhōumò","周末","weekend"]],
-    translation:"Spend the weekend" },
-  { id:20, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["zài","在","at"],["bà bà mā mā","爸爸妈妈","parents"],["jiā","家","home"],["guò","过","spend"],["zhōumò","周末","weekend"]],
-    translation:"I spend the weekend at my parents' home." },
-  { id:21, type:'vocab', audio:null,
-    words:[["wǒ","我","I"],["shì","是","is"],["zài jiā","在家","at home"],["guò","过","celebrated"],["de","的","(particle)"],["shēng rì","生日","birthday"]],
-    translation:"I celebrated my birthday at home." },
-  { id:22, type:'vocab', audio:null,
-    words:[["tā","她","she"],["hé","和","and"],["tā de","她的","her"],["péngyou","朋友","friend"],["zài","在","at"],["mài dāng láo","麦当劳","McDonald's"],["guò shēng rì","过生日","celebrate birthday"]],
-    translation:"She and her friend celebrated their birthday at McDonald's." },
+  { id:1, type:'vocab', audio:"audio/2026-04-30/0.wav", words:[["lí","离","to be away from, to leave"]], translation:"离 — to be away from, to leave" },
+  { id:2, type:'vocab', audio:"audio/2026-04-30/1.wav", words:[["shòu shāng","受伤","to be injured, wounded"]], translation:"To be injured (again)" },
+  { id:3, type:'vocab', audio:"audio/2026-04-30/2.wav", words:[["sài jì","赛季","season (sports)"]], translation:"(Sports) season" },
+  { id:4, type:'vocab', audio:"audio/2026-04-30/3.wav", words:[["shòu shāng","受伤","to be injured, wounded"]], translation:"To be injured (again)" },
+  { id:5, type:'vocab', audio:"audio/2026-04-30/4.wav", words:[["bō shì dùn","波士顿","Boston"], ["lí","离","to be away from, to leave"], ["niǔ yuē","纽约","NYC"], ["bù","不","no, not"], ["tài","太","too, excessively"], ["yuǎn","远","far, distant"]], translation:"Boston is not too far from NYC." },
+  { id:6, type:'question', audio:"audio/2026-04-30/5.wav", words:[["luó dé dǎo","罗德岛","Rhode Island"], ["lí","离","to be away from, to leave"], ["bō shì dùn","波士顿","Boston"], ["yuǎn","远","far, distant"], ["ma","吗","yes/no"]], translation:"Is Rhode Island far from Boston?" },
+  { id:7, type:'question', audio:"audio/2026-04-30/6.wav", words:[["nǐ","你","(singular) you"], ["qù guò","去过","ever went to..."], ["luó dé dǎo","罗德岛","Rhode Island"], ["ma","吗","yes/no"]], translation:"Have you ever been to Rhode Island?" },
+  { id:8, type:'vocab', audio:"audio/2026-04-30/7.wav", words:[["cān yì yuán","参议员","senator"]], translation:"Senator" },
+  { id:9, type:'vocab', audio:"audio/2026-04-30/8.wav", words:[["fèng huáng","凤凰","phoenix"], ["chéng","城","city, town"]], translation:"Phoenix (city)" },
+  { id:10, type:'vocab', audio:"audio/2026-04-30/9.wav", words:[["pāi zhào","拍照","taking pictures ; photograph"]], translation:"Take pictures / photograph" },
+  { id:11, type:'vocab', audio:"audio/2026-04-30/10.wav", words:[["zhàoxiàngjī","照相机","camera"]], translation:"Camera" },
+  { id:12, type:'vocab', audio:"audio/2026-04-30/11.wav", words:[["shǒu jī","手机","cell phone"]], translation:"Cell phone" },
+  { id:13, type:'vocab', audio:"audio/2026-04-30/12.wav", words:[["jiāo juǎn","胶卷","film (products )"], ["zhàoxiàngjī","照相机","camera"]], translation:"Film camera" },
+  { id:14, type:'question', audio:"audio/2026-04-30/13.wav", words:[["nǐ jiā","你家","your home"], ["lí","离","to be away from, to leave"], ["jīchǎng","机场","airport"], ["yuǎn","远","far, distant"], ["ma","吗","yes/no"]], translation:"Is your home far from the airport?" },
+  { id:15, type:'vocab', audio:"audio/2026-04-30/14.wav", words:[["wǒ","我","I, me"], ["zài","在","to be in/on/at"], ["qù","去","to go"], ["shàng bān","上班","to work, to do a job"], ["de","的","posessive form"], ["lù shàng","路上","on the way / road"]], translation:"I'm on the way to work." },
+  { id:16, type:'vocab', audio:"audio/2026-04-30/15.wav", words:[["guò","过","to pass (time), to spend (time) ; ever done"]], translation:"过 — to pass (time), to spend (time); ever done" },
+  { id:17, type:'vocab', audio:"audio/2026-04-30/16.wav", words:[["guò shēng rì","过生日","celebrate birthday"]], translation:"Celebrate a birthday" },
+  { id:18, type:'vocab', audio:"audio/2026-04-30/17.wav", words:[["guò","过","to pass (time), to spend (time) ; ever done"], ["shèng dàn jié","圣诞节","Xmas"]], translation:"Celebrate Christmas" },
+  { id:19, type:'vocab', audio:"audio/2026-04-30/18.wav", words:[["guò","过","to pass (time), to spend (time) ; ever done"], ["zhōumò","周末","weekend"]], translation:"Spend the weekend" },
+  { id:20, type:'vocab', audio:"audio/2026-04-30/19.wav", words:[["wǒ","我","I, me"], ["zài","在","to be in/on/at"], ["bà bà mā mā","爸爸妈妈","parents (dad and mom)"], ["jiā","家","family,home"], ["guò","过","to pass (time), to spend (time) ; ever done"], ["zhōumò","周末","weekend"]], translation:"I spend the weekend at my parents' home." },
+  { id:21, type:'vocab', audio:"audio/2026-04-30/20.wav", words:[["wǒ","我","I, me"], ["shì","是","to be"], ["zài jiā","在家","at home"], ["guò","过","to pass (time), to spend (time) ; ever done"], ["de","的","posessive form"], ["shēng rì","生日","birthday"]], translation:"I celebrated my birthday at home." },
+  { id:22, type:'vocab', audio:"audio/2026-04-30/21.wav", words:[["tā","她","she, her"], ["hé","和","and"], ["tā de","她的","her"], ["péngyou","朋友","friend"], ["zài","在","to be in/on/at"], ["mài dāng láo","麦当劳","Mcdonald's"], ["guò shēng rì","过生日","celebrate birthday"]], translation:"She and her friend celebrated their birthday at McDonald's." },
 ];
 
 const LESSON4 = {
@@ -2222,6 +1883,7 @@ const LESSON4 = {
   vocabCount: LESSON4_VOCAB.length,
   sentenceCount: LESSON4_SENTENCES.length,
   images: ['images/2026-04-30/0.png'],
+  rev: 1,
 };
 
 
@@ -2329,6 +1991,7 @@ const LESSON5 = {
   sentenceCount: LESSON5_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/Joshua_Pritchard-2026-05-21.html',
   images: ['images/Joshua_Pritchard-2026-05-21/0.png', 'images/Joshua_Pritchard-2026-05-21/1.png', 'images/Joshua_Pritchard-2026-05-21/2.png', 'images/Joshua_Pritchard-2026-05-21/3.png', 'images/Joshua_Pritchard-2026-05-21/4.png', 'images/Joshua_Pritchard-2026-05-21/5.png'],
+  rev: 1,
 };
 
 // ─── LESSON 6: 2026-06-24 (auto-extracted from teacher HTML) ───
@@ -2454,6 +2117,7 @@ const LESSON6 = {
   sentenceCount: LESSON6_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-06-24-Joshua_Pritchard.html',
   images: ['images/Joshua_Pritchard-2026-06-24/0.png', 'images/Joshua_Pritchard-2026-06-24/1.png', 'images/Joshua_Pritchard-2026-06-24/2.png'],
+  rev: 1,
 };
 
 // ─── LESSON 7: 2026-07-15 (auto-extracted from teacher HTML) ───
@@ -2552,6 +2216,7 @@ const LESSON7 = {
   sentenceCount: LESSON7_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-07-15-Joshua_Pritchard.html',
   images: ['images/Joshua_Pritchard-2026-07-15/0.png', 'images/Joshua_Pritchard-2026-07-15/1.png'],
+  rev: 1,
 };
 
 const LESSON8_VOCAB = [
@@ -2606,6 +2271,7 @@ const LESSON8 = {
   sentenceCount: LESSON8_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-07-24-Joshua_Pritchard.html',
   images: ['images/Joshua_Pritchard-2026-07-24/0.png', 'images/Joshua_Pritchard-2026-07-24/1.png'],
+  rev: 1,
 };
 
 const LESSON9_VOCAB = [
@@ -2655,6 +2321,7 @@ const LESSON9 = {
   sentenceCount: LESSON9_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-08-13-Joshua_Pritchard-2026.08.13.html',
   images: [],
+  rev: 1,
 };
 
 const LESSON10_VOCAB = [
@@ -2694,6 +2361,7 @@ const LESSON10 = {
   sentenceCount: LESSON10_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-08-27-Joshua_Pritchard-2026.08.27.html',
   images: ['images/Joshua_Pritchard-2026-08-27/0.png', 'images/Joshua_Pritchard-2026-08-27/1.png', 'images/Joshua_Pritchard-2026-08-27/2.png'],
+  rev: 1,
 };
 
 // The three February lessons were imported later than the rest, so they sit at the
@@ -2747,6 +2415,7 @@ const LESSON_FEB06 = {
   vocabCount: LESSON_FEB06_VOCAB.length,
   sentenceCount: LESSON_FEB06_SENTENCES.length,
   images: ["images/Joshua_Pritchard-2026-02-06/0.png", "images/Joshua_Pritchard-2026-02-06/1.png"],
+  rev: 1,
 };
 
 const LESSON_FEB13_VOCAB = [
@@ -2808,6 +2477,7 @@ const LESSON_FEB13 = {
   vocabCount: LESSON_FEB13_VOCAB.length,
   sentenceCount: LESSON_FEB13_SENTENCES.length,
   images: [],
+  rev: 1,
 };
 
 const LESSON_FEB20_VOCAB = [
@@ -2866,6 +2536,7 @@ const LESSON_FEB20 = {
   vocabCount: LESSON_FEB20_VOCAB.length,
   sentenceCount: LESSON_FEB20_SENTENCES.length,
   images: ["images/Joshua_Pritchard-2026-02-20/0.png", "images/Joshua_Pritchard-2026-02-20/1.png"],
+  rev: 1,
 };
 
 // ─────────────────────────────────────────────
@@ -2891,10 +2562,51 @@ let state = {
   showWordMeanings: true,
 };
 
+// Every lesson that ships with the app, newest data always winning.
+//
+// Each lesson object carries a `rev`. Bump it whenever that lesson's vocab,
+// sentences, audio or images change, and saved copies get rebuilt from the seed
+// on the next load instead of quietly keeping stale data — which is how a
+// corrected character or a newly attached audio clip actually reaches someone
+// who has used the app before. Study progress lives under its own localStorage
+// keys (mandarinHub_fcLearned, mandarin_lessons_done), so a re-seed costs
+// nothing. Lessons the user imported themselves are not in this table and are
+// never touched.
 const ALL_SEED_LESSONS = [
-  LESSON_FEB06, LESSON_FEB13, LESSON_FEB20, INITIAL_LESSON, LESSON2, LESSON3, LESSON4,
-  LESSON5, LESSON6, LESSON7, LESSON8, LESSON9, LESSON10,
+  [LESSON_FEB06,   LESSON_FEB06_VOCAB, LESSON_FEB06_SENTENCES],
+  [LESSON_FEB13,   LESSON_FEB13_VOCAB, LESSON_FEB13_SENTENCES],
+  [LESSON_FEB20,   LESSON_FEB20_VOCAB, LESSON_FEB20_SENTENCES],
+  [INITIAL_LESSON, INITIAL_VOCAB,      INITIAL_SENTENCES],
+  [LESSON2,        LESSON2_VOCAB,      LESSON2_SENTENCES],
+  [LESSON3,        LESSON3_VOCAB,      LESSON3_SENTENCES],
+  [LESSON4,        LESSON4_VOCAB,      LESSON4_SENTENCES],
+  [LESSON5,        LESSON5_VOCAB,      LESSON5_SENTENCES],
+  [LESSON6,        LESSON6_VOCAB,      LESSON6_SENTENCES],
+  [LESSON7,        LESSON7_VOCAB,      LESSON7_SENTENCES],
+  [LESSON8,        LESSON8_VOCAB,      LESSON8_SENTENCES],
+  [LESSON9,        LESSON9_VOCAB,      LESSON9_SENTENCES],
+  [LESSON10,       LESSON10_VOCAB,     LESSON10_SENTENCES],
 ];
+
+function seedLessons() {
+  ALL_SEED_LESSONS.forEach(([lesson, vocab, sentences]) => {
+    const saved = state.lessons[lesson.id];
+    if (saved && (saved.rev || 0) >= lesson.rev) return;
+    Object.keys(state.vocab).forEach(k => {
+      if (state.vocab[k].lessonId === lesson.id) delete state.vocab[k];
+    });
+    Object.keys(state.sentences).forEach(k => {
+      if (state.sentences[k].lessonId === lesson.id) delete state.sentences[k];
+    });
+    state.lessons[lesson.id] = { ...lesson };
+    vocab.forEach((v, i) => {
+      state.vocab[`${lesson.id}_${i}`] = { lessonId: lesson.id, pinyin: v[0], char: v[1], meaning: v[2] };
+    });
+    sentences.forEach((s, i) => {
+      state.sentences[`${lesson.id}_${i}`] = { ...s, lessonId: lesson.id };
+    });
+  });
+}
 
 function loadState() {
   try {
@@ -2904,130 +2616,7 @@ function loadState() {
       state = { ...state, ...parsed };
     }
   } catch(e) {}
-  // Always ensure lesson 1 exists
-  if (!state.lessons['2026-03-06']) {
-    state.lessons['2026-03-06'] = INITIAL_LESSON;
-    INITIAL_VOCAB.forEach((v, i) => {
-      state.vocab[`2026-03-06_${i}`] = { lessonId: '2026-03-06', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    INITIAL_SENTENCES.forEach((s, i) => {
-      state.sentences[`2026-03-06_${i}`] = { ...s, lessonId: '2026-03-06' };
-    });
-  }
-  // Always ensure lesson 2 exists
-  if (!state.lessons['2026-03-30']) {
-    state.lessons['2026-03-30'] = LESSON2;
-    LESSON2_VOCAB.forEach((v, i) => {
-      state.vocab[`2026-03-30_${i}`] = { lessonId: '2026-03-30', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON2_SENTENCES.forEach((s, i) => {
-      state.sentences[`2026-03-30_${i}`] = { ...s, lessonId: '2026-03-30' };
-    });
-  }
-  if (!state.lessons['2026-04-02']) {
-    state.lessons['2026-04-02'] = LESSON3;
-    LESSON3_VOCAB.forEach((v, i) => {
-      state.vocab[`2026-04-02_${i}`] = { lessonId: '2026-04-02', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON3_SENTENCES.forEach((s, i) => {
-      state.sentences[`2026-04-02_${i}`] = { ...s, lessonId: '2026-04-02' };
-    });
-  }
-  if (!state.lessons['2026-04-30']) {
-    state.lessons['2026-04-30'] = LESSON4;
-    LESSON4_VOCAB.forEach((v, i) => {
-      state.vocab[`2026-04-30_${i}`] = { lessonId: '2026-04-30', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON4_SENTENCES.forEach((s, i) => {
-      state.sentences[`2026-04-30_${i}`] = { ...s, lessonId: '2026-04-30' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-05-21']) {
-    state.lessons['Joshua_Pritchard-2026-05-21'] = LESSON5;
-    LESSON5_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-05-21_${i}`] = { lessonId: 'Joshua_Pritchard-2026-05-21', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON5_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-05-21_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-05-21' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-06-24']) {
-    state.lessons['Joshua_Pritchard-2026-06-24'] = LESSON6;
-    LESSON6_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-06-24_${i}`] = { lessonId: 'Joshua_Pritchard-2026-06-24', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON6_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-06-24_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-06-24' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-07-15']) {
-    state.lessons['Joshua_Pritchard-2026-07-15'] = LESSON7;
-    LESSON7_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-07-15_${i}`] = { lessonId: 'Joshua_Pritchard-2026-07-15', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON7_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-07-15_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-07-15' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-07-24']) {
-    state.lessons['Joshua_Pritchard-2026-07-24'] = LESSON8;
-    LESSON8_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-07-24_${i}`] = { lessonId: 'Joshua_Pritchard-2026-07-24', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON8_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-07-24_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-07-24' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-08-13']) {
-    state.lessons['Joshua_Pritchard-2026-08-13'] = LESSON9;
-    LESSON9_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-08-13_${i}`] = { lessonId: 'Joshua_Pritchard-2026-08-13', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON9_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-08-13_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-08-13' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-08-27']) {
-    state.lessons['Joshua_Pritchard-2026-08-27'] = LESSON10;
-    LESSON10_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-08-27_${i}`] = { lessonId: 'Joshua_Pritchard-2026-08-27', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON10_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-08-27_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-08-27' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-02-06']) {
-    state.lessons['Joshua_Pritchard-2026-02-06'] = LESSON_FEB06;
-    LESSON_FEB06_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-02-06_${i}`] = { lessonId: 'Joshua_Pritchard-2026-02-06', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON_FEB06_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-02-06_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-02-06' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-02-13']) {
-    state.lessons['Joshua_Pritchard-2026-02-13'] = LESSON_FEB13;
-    LESSON_FEB13_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-02-13_${i}`] = { lessonId: 'Joshua_Pritchard-2026-02-13', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON_FEB13_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-02-13_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-02-13' };
-    });
-  }
-  if (!state.lessons['Joshua_Pritchard-2026-02-20']) {
-    state.lessons['Joshua_Pritchard-2026-02-20'] = LESSON_FEB20;
-    LESSON_FEB20_VOCAB.forEach((v, i) => {
-      state.vocab[`Joshua_Pritchard-2026-02-20_${i}`] = { lessonId: 'Joshua_Pritchard-2026-02-20', pinyin: v[0], char: v[1], meaning: v[2] };
-    });
-    LESSON_FEB20_SENTENCES.forEach((s, i) => {
-      state.sentences[`Joshua_Pritchard-2026-02-20_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-02-20' };
-    });
-  }
-  // Lesson materials are archived in this repo, so keep saved copies in step with the seed data
-  ALL_SEED_LESSONS.forEach(seed => {
-    const l = state.lessons[seed.id];
-    if (l) l.images = seed.images || [];
-  });
+  seedLessons();
   // Normalize lesson titles to one consistent date-based format (no names)
   Object.values(state.lessons).forEach(l => {
     if (l.date) l.title = `Lesson ${l.date}`;
