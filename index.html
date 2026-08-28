@@ -733,6 +733,62 @@
 
     .sentences-list { display: flex; flex-direction: column; gap: 14px; }
 
+    /* ── LESSON MATERIALS (scans & photos saved from the lesson page) ── */
+    .lesson-materials {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      /* Without this, flex stretches each thumbnail to the tallest in the row. */
+      align-items: flex-start;
+      margin-bottom: 18px;
+      padding: 14px;
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--r);
+    }
+    .lesson-materials:empty { display: none; }
+    .lm-label {
+      width: 100%;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .lesson-materials img {
+      height: 96px;
+      width: auto;
+      /* Scans run very wide; cap them so six of them stay a strip, not a wall. */
+      max-width: min(200px, 100%);
+      object-fit: contain;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--r-sm);
+      background: #fff;
+      cursor: zoom-in;
+      transition: border-color 0.15s;
+    }
+    .lesson-materials img:hover { border-color: var(--red); }
+
+    .img-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(28,13,0,0.82);
+      cursor: zoom-out;
+    }
+    .img-lightbox.open { display: flex; }
+    .img-lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: var(--r-sm);
+      background: #fff;
+box-shadow: 0 12px 40px var(--shadow-md);
+    }
+
     .sentence-card {
       background: var(--surface);
       border: 1.5px solid var(--border-light);
@@ -1397,6 +1453,7 @@
           <option value="all">All Lessons</option>
         </select>
       </div>
+      <div class="lesson-materials" id="lessonMaterials"></div>
       <div class="sentences-list" id="sentencesList"></div>
     </div>
 
@@ -1756,6 +1813,7 @@ const INITIAL_LESSON = {
   date: "2026-03-06",
   vocabCount: INITIAL_VOCAB.length,
   sentenceCount: INITIAL_SENTENCES.length,
+  images: [],
 };
 
 // ── LESSON 2: 2026-03-30 ────────────────────────────────────────────────────
@@ -1912,6 +1970,7 @@ const LESSON2 = {
   date: "2026-03-30",
   vocabCount: LESSON2_VOCAB.length,
   sentenceCount: LESSON2_SENTENCES.length,
+  images: [],
 };
 
 // ── LESSON 3: 2026-04-02 ────────────────────────────────────────────────────
@@ -2037,6 +2096,7 @@ const LESSON3 = {
   date: "2026-04-02",
   vocabCount: LESSON3_VOCAB.length,
   sentenceCount: LESSON3_SENTENCES.length,
+  images: [],
 };
 
 // ── LESSON 4: 2026-04-30 ────────────────────────────────────────────────────
@@ -2161,6 +2221,7 @@ const LESSON4 = {
   date: "2026-04-30",
   vocabCount: LESSON4_VOCAB.length,
   sentenceCount: LESSON4_SENTENCES.length,
+  images: ['images/2026-04-30/0.png'],
 };
 
 
@@ -2267,6 +2328,7 @@ const LESSON5 = {
   vocabCount: LESSON5_VOCAB.length,
   sentenceCount: LESSON5_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/Joshua_Pritchard-2026-05-21.html',
+  images: ['images/Joshua_Pritchard-2026-05-21/0.png', 'images/Joshua_Pritchard-2026-05-21/1.png', 'images/Joshua_Pritchard-2026-05-21/2.png', 'images/Joshua_Pritchard-2026-05-21/3.png', 'images/Joshua_Pritchard-2026-05-21/4.png', 'images/Joshua_Pritchard-2026-05-21/5.png'],
 };
 
 // ─── LESSON 6: 2026-06-24 (auto-extracted from teacher HTML) ───
@@ -2391,6 +2453,7 @@ const LESSON6 = {
   vocabCount: LESSON6_VOCAB.length,
   sentenceCount: LESSON6_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-06-24-Joshua_Pritchard.html',
+  images: ['images/Joshua_Pritchard-2026-06-24/0.png', 'images/Joshua_Pritchard-2026-06-24/1.png', 'images/Joshua_Pritchard-2026-06-24/2.png'],
 };
 
 // ─── LESSON 7: 2026-07-15 (auto-extracted from teacher HTML) ───
@@ -2488,6 +2551,7 @@ const LESSON7 = {
   vocabCount: LESSON7_VOCAB.length,
   sentenceCount: LESSON7_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-07-15-Joshua_Pritchard.html',
+  images: ['images/Joshua_Pritchard-2026-07-15/0.png', 'images/Joshua_Pritchard-2026-07-15/1.png'],
 };
 
 const LESSON8_VOCAB = [
@@ -2541,6 +2605,7 @@ const LESSON8 = {
   vocabCount: LESSON8_VOCAB.length,
   sentenceCount: LESSON8_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-07-24-Joshua_Pritchard.html',
+  images: ['images/Joshua_Pritchard-2026-07-24/0.png', 'images/Joshua_Pritchard-2026-07-24/1.png'],
 };
 
 const LESSON9_VOCAB = [
@@ -2589,6 +2654,7 @@ const LESSON9 = {
   vocabCount: LESSON9_VOCAB.length,
   sentenceCount: LESSON9_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-08-13-Joshua_Pritchard-2026.08.13.html',
+  images: [],
 };
 
 const LESSON10_VOCAB = [
@@ -2627,6 +2693,179 @@ const LESSON10 = {
   vocabCount: LESSON10_VOCAB.length,
   sentenceCount: LESSON10_SENTENCES.length,
   sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-08-27-Joshua_Pritchard-2026.08.27.html',
+  images: ['images/Joshua_Pritchard-2026-08-27/0.png', 'images/Joshua_Pritchard-2026-08-27/1.png', 'images/Joshua_Pritchard-2026-08-27/2.png'],
+};
+
+// The three February lessons were imported later than the rest, so they sit at the
+// end of this file even though they are the earliest lessons chronologically.
+// Their source pages are gone from the bucket; everything here came from the
+// downloaded review packages.
+const LESSON_FEB06_VOCAB = [
+  ["chāo jí wǎn","超级碗","super bowl"], ["jīnnián","今年","this year"], ["shì","是","to be"], ["nǎ","哪","which"], ["liǎng gè","两个","two (of something)"], ["duì","队","team"], ["juésài","决赛","final, final match"], ["guǎnggào","广告","advertisement"], ["Zhōngguó","中国","China"], ["xīnnián","新年","New Year"], ["měi guó","美国","the United States of America"], ["chūn wǎn","春晚","Spring festival gala"], ["nǐ","你","(singular) you"], ["zuìjìn","最近","lately, recently；nearest"], ["máng","忙","busy"], ["ma","吗","yes/no"], ["xià gè xīng qī","下个星期","next week"], ["mài ā mì","迈阿密","Miami"], ["lǚyóu","旅游","to travel, to take a trip"], ["ruì lì","瑞丽","Ruili (city in Yunnan, on the Myanmar border)"], ["yǐjīng","已经","already"], ["de","的","posessive form"], ["háizi","孩子","child, kid"], ["qù","去","to go"], ["xuéxiào","学校","school"], ["le","了","past / a change or a new circumstance/done"], ["jiàoshì","教室","classroom"], ["zhǔnbèi","准备","to intend, to plan, to prepare"], ["jīntiān","今天","today"], ["xià kè hòu","下课后","after class"], ["zuò","做","to make, to do"], ["shénme","什么","what"], ["duàn liàn","锻炼","to do physical exercise"], ["shēntǐ","身体","body；health"], ["tā","她","she, her"], ["yǒu","有","to have, there be"], ["yì xiē","一些","some"], ["kǎoshì","考试","test, exam"], ["dōng ào huì","冬奥会","winter olympics"], ["māma","妈妈","mother"], ["hěn","很","very, quite"], ["cōngming","聪明","clever, smart"], ["bù","不","no, not"], ["tài","太","too, excessively"], ["gāoxing","高兴","glad, happy"], ["ào yùn huì","奥运会","the Olympic Games"], ["hǎo hǎo","好好","properly, thoroughly, all out"], ["hǎo hǎo xué xí","好好学习","to study hard"], ["shàng bān","上班","to work, to do a job"], ["gōngzuò","工作","to work; job"], ["liǎng diǎn","两点","two o'clock"], ["duō","多","much; many; more (adv  extent ); how (question)"], ["wǎnshang","晚上","evening, night"], ["shí diǎn","十点","10 o'clock"], ["xià kè","下课","class ends"], ["yì diǎn duō","一点多","a little after one o'clock"], ["làngfèi","浪费","to waste"], ["shíjiān","时间","time"], ["ài guó zhě","爱国者","Patriots"]
+];
+
+const LESSON_FEB06_SENTENCES = [
+  { id:1, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/0.wav", words:[["chāo jí wǎn","超级碗","super bowl"]], translation:"The Super Bowl." },
+  { id:2, type:'question', audio:"audio/Joshua_Pritchard-2026-02-06/1.wav", words:[["jīnnián","今年","this year"], ["shì","是","to be"], ["nǎ","哪","which"], ["liǎng gè","两个","two (of something)"], ["duì","队","team"]], translation:"Which two teams are in it this year?" },
+  { id:3, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/2.wav", words:[["juésài","决赛","final, final match"]], translation:"Final / championship game." },
+  { id:4, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/3.wav", words:[["guǎnggào","广告","advertisement"]], translation:"Advertisement." },
+  { id:5, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/4.wav", words:[["Zhōngguó","中国","China"], ["xīnnián","新年","New Year"]], translation:"Chinese New Year." },
+  { id:6, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/5.wav", words:[["měi guó","美国","the United States of America"], ["chūn wǎn","春晚","Spring festival gala"]], translation:"The American Spring Festival Gala (i.e. the Super Bowl halftime show)." },
+  { id:7, type:'question', audio:"audio/Joshua_Pritchard-2026-02-06/6.wav", words:[["nǐ","你","(singular) you"], ["zuìjìn","最近","lately, recently；nearest"], ["máng","忙","busy"], ["ma","吗","yes/no"]], translation:"Have you been busy lately?" },
+  { id:8, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/7.wav", words:[["xià gè xīng qī","下个星期","next week"]], translation:"Next week." },
+  { id:9, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/8.wav", words:[["mài ā mì","迈阿密","Miami"]], translation:"Miami." },
+  { id:10, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/9.wav", words:[["lǚyóu","旅游","to travel, to take a trip"]], translation:"To travel / tourism." },
+  { id:11, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/10.wav", words:[["ruì lì","瑞丽","Ruili (city in Yunnan, on the Myanmar border)"]], translation:"Ruili (a city in Yunnan)." },
+  { id:12, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/11.wav", words:[["yǐjīng","已经","already"]], translation:"Already." },
+  { id:13, type:'question', audio:"audio/Joshua_Pritchard-2026-02-06/12.wav", words:[["nǐ","你","(singular) you"], ["de","的","posessive form"], ["háizi","孩子","child, kid"], ["yǐjīng","已经","already"], ["qù","去","to go"], ["xuéxiào","学校","school"], ["le","了","past / a change or a new circumstance/done"], ["ma","吗","yes/no"]], translation:"Have your kids already gone to school?" },
+  { id:14, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/13.wav", words:[["jiàoshì","教室","classroom"]], translation:"Classroom." },
+  { id:15, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/14.wav", words:[["zhǔnbèi","准备","to intend, to plan, to prepare"]], translation:"To prepare; to plan to." },
+  { id:16, type:'question', audio:"audio/Joshua_Pritchard-2026-02-06/15.wav", words:[["jīntiān","今天","today"], ["xià kè hòu","下课后","after class"], ["nǐ","你","(singular) you"], ["zhǔnbèi","准备","to intend, to plan, to prepare"], ["zuò","做","to make, to do"], ["shénme","什么","what"]], translation:"What are you planning to do after class today?" },
+  { id:17, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/16.wav", words:[["duàn liàn","锻炼","to do physical exercise"], ["shēntǐ","身体","body；health"]], translation:"To exercise, to work out." },
+  { id:18, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/17.wav", words:[["tā","她","she, her"], ["yǒu","有","to have, there be"], ["yì xiē","一些","some"], ["kǎoshì","考试","test, exam"]], translation:"She has some exams." },
+  { id:19, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/18.wav", words:[["dōng ào huì","冬奥会","winter olympics"]], translation:"The Winter Olympics." },
+  { id:20, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/19.wav", words:[["tā","她","she, her"], ["māma","妈妈","mother"], ["hěn","很","very, quite"], ["cōngming","聪明","clever, smart"]], translation:"Her mother is very smart." },
+  { id:21, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/20.wav", words:[["bù","不","no, not"], ["tài","太","too, excessively"], ["gāoxing","高兴","glad, happy"]], translation:"Not very happy." },
+  { id:22, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/21.wav", words:[["ào yùn huì","奥运会","the Olympic Games"]], translation:"The Olympic Games." },
+  { id:23, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/22.wav", words:[["jiàoshì","教室","classroom"]], translation:"Classroom." },
+  { id:24, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/23.wav", words:[["hǎo hǎo","好好","properly, thoroughly, all out"], ["zhǔnbèi","准备","to intend, to plan, to prepare"]], translation:"To prepare properly." },
+  { id:25, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/24.wav", words:[["hǎo hǎo xué xí","好好学习","to study hard"]], translation:"To study hard." },
+  { id:26, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/25.wav", words:[["shàng bān","上班","to work, to do a job"]], translation:"To go to work." },
+  { id:27, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/26.wav", words:[["gōngzuò","工作","to work; job"]], translation:"Work, job." },
+  { id:28, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/27.wav", words:[["liǎng diǎn","两点","two o'clock"], ["duō","多","much; many; more (adv  extent ); how (question)"]], translation:"A little after two o'clock." },
+  { id:29, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/28.wav", words:[["wǎnshang","晚上","evening, night"], ["shí diǎn","十点","10 o'clock"], ["duō","多","much; many; more (adv  extent ); how (question)"], ["xià kè","下课","class ends"]], translation:"Class gets out a little after ten at night." },
+  { id:30, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/29.wav", words:[["yì diǎn duō","一点多","a little after one o'clock"], ["xià kè","下课","class ends"]], translation:"Class gets out a little after one." },
+  { id:31, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/30.wav", words:[["làngfèi","浪费","to waste"], ["shíjiān","时间","time"]], translation:"To waste time." },
+  { id:32, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-06/31.wav", words:[["ài guó zhě","爱国者","Patriots"]], translation:"Patriots (the New England Patriots)." },
+];
+
+const LESSON_FEB06 = {
+  id: 'Joshua_Pritchard-2026-02-06',
+  title: 'Joshua Pritchard - 2026.02.06',
+  subtitle: 'Super Bowl, Chinese New Year, school & work schedules',
+  date: '2026-02-06',
+  vocabCount: LESSON_FEB06_VOCAB.length,
+  sentenceCount: LESSON_FEB06_SENTENCES.length,
+  images: ["images/Joshua_Pritchard-2026-02-06/0.png", "images/Joshua_Pritchard-2026-02-06/1.png"],
+};
+
+const LESSON_FEB13_VOCAB = [
+  ["fèifǎ","非法","illegal"], ["de","的","posessive form"], ["yě zhū","野猪","boar"], ["zài","在","to be in/on/at; in/on/at"], ["chéng dū","成都","Chengdu"], ["chī","吃","to eat"], ["ròu","肉","meat, flesh"], ["shì","是","to be"], ["zhòngyào","重要","important"], ["nóngcūn","农村","countryside"], ["hěn","很","very, quite"], ["hǎo wán","好玩","fun; interesting"], ["dǎ","打","to hit"], ["bù","不","no, not"], ["zhuàn qián","赚钱","earn money"], ["hěn xiǎo","很小","very small"], ["bān","班","class, grade, team"], ["zuì xiǎo","最小","youngest, smallest"], ["nǚ'ér","女儿","daughter"], ["sān","三","three"], ["niánjí","年级","grade"], ["zài dú","在读","to be studying (in a grade), currently enrolled"], ["dà","大","(of age) old/ big"], ["sī lì","私立","private"], ["xuéxiào","学校","school"], ["gōng lì","公立","public"], ["xiǎo zhèn","小镇","small town"], ["yí gè","一个","1"], ["jiàoshì","教室","classroom"], ["shí duō gè","十多个","more than ten"], ["xuésheng","学生","student"], ["xiànzài","现在","now"], ["bǐ","比","than, (superior or inferior) to"], ["yǐqián","以前","before, ago，in the past"], ["hǎo","好","good, fine，  so (colloquial)"], ["duō le","多了","used after adj as comparative form"], ["nǐ","你","(singular) you"], ["yào","要","to want to, would like to, to be going to, need"], ["zěnme","怎么","how"], ["zhǔnbèi","准备","to intend, to plan, to prepare"], ["míngtiān","明天","tomorrow"], ["wǒ","我","I, me"], ["qù","去","to go"], ["huá bīng","滑冰","to skate"], ["dǎsuàn","打算","plan; to intend"], ["hǎo hāo","好好","properly, thoroughly, all out"], ["xiūxī","休息","to have or take a rest"], ["kǎoshì","考试","test, exam"], ["juéde","觉得","to think, to feel"], ["shénme","什么","what"], ["zuì","最","most, to the greatest extent"], ["nán","难","difficult"], ["dì yī cì","第一次","the first time"], ["méiyǒu","没有","there is not"], ["tōngguò","通过","through, by means of；to pass ( test)"], ["cài shì chǎng","菜市场","vegetable market"], ["wēixiǎn","危险","dangerous"], ["diàn dòng chē","电动车","e-scooter"], ["diàn chē","电车","EV"], ["diàn dòng qì chē","电动汽车","EV"], ["sòng","送","to send, to deliver"], ["wài mài","外卖","takeouts"], ["wǔ bǎi duō","五百多","over five hundred"], ["gōnglǐ","公里","kilometer"], ["chōng diàn","充电","recharge"], ["bǐjiào","比较","fairly, rather"], ["ān jìng","安静","quiet"], ["hái","还","passably, fairly, rather; still,also"], ["chī le","吃了","ate, have eaten"], ["píngguǒ","苹果","apple"], ["hái yào","还要","still want to, also need to"], ["xiǎng","想","to want to (do), would like， to think about"], ["xiāngjiāo","香蕉","banana"], ["méi","没","didn't haven't"], ["chī fàn","吃饭","to eat a meal"], ["yǎo","咬","to bite"], ["gǒu","狗","dog"], ["dōngxi","东西","thing, stuff"], ["kāishǐ","开始","to begin, to start"], ["jǐ diǎn","几点","what time"], ["shàng bān","上班","to work, to do a job"], ["qīdài","期待","to look forward to"], ["zhè","这","this"], ["duàn","段","used for sections or periods"], ["shíjiān","时间","time"], ["gōngzuò","工作","to work; job"], ["máng","忙","busy"], ["gǎnjué","感觉","feeling"], ["yǒu diǎn lèi","有点累","a bit tired"], ["suǒyǐ","所以","so, therefore"], ["yíxià","一下","used after a verb, indicating an act or an attempt"], ["suīrán","虽然","although, though"], ["yǒu shí hòu","有时候","sometimes"], ["lèi","累","tired"], ["dàn","但","but, however"], ["zhīdào","知道","to know"], ["hòu","后","after, afterwards, later"], ["jiù","就","used to indicate a conclusion or resolution"], ["néng","能","can, may"], ["chóngxīn","重新","again, once more"], ["huīfù","恢复","to recover, to regain"], ["jīng lì","精力","energy"], ["rúguǒ","如果","if, in case"], ["yě","也","also, too"], ["kěyǐ","可以","may, can, to be allowed to"], ["xiàng","像","to be like"], ["yíyàng","一样","same, as...as..."], ["ānpái","安排","to arrange"], ["yì xiē","一些","some"], ["fàngsǒng","放松","to relax"], ["dú","读","to read out loud, to pronounce"], ["tā","她","she, her"], ["shàng","上","to go up, to ascend"], ["lǐ","里","inner, inside, interior"], ["yǒu","有","to have, there be"], ["tā de","她的","her"], ["měi tiān","每天","every day"], ["dōu","都","both, all"], ["hěn máng","很忙","very busy"], ["háishi","还是","or"], ["xihuan","喜欢","to like, to be fond of"], ["hé","和","and"], ["qítā","其他","the rest"], ["tóngxué","同学","classmate"], ["yìqǐ","一起","together"], ["wán","玩","to play"], ["shàng xué","上学","to go to school, to attend school"], ["fàng xué","放学","to finish school for the day"], ["wǒmen","我们","we, us"], ["yī jiā rén","一家人","a family"], ["mǎi","买","to buy, to purchase"]
+];
+
+const LESSON_FEB13_SENTENCES = [
+  { id:1, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/0.wav", words:[["fèifǎ","非法","illegal"], ["de","的","posessive form"]], translation:"Illegal." },
+  { id:2, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/1.wav", words:[["yě zhū","野猪","boar"]], translation:"Wild boar." },
+  { id:3, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/2.wav", words:[["zài","在","to be in/on/at; in/on/at"], ["chéng dū","成都","Chengdu"], ["chī","吃","to eat"], ["yě zhū","野猪","boar"], ["ròu","肉","meat, flesh"], ["shì","是","to be"], ["fèifǎ","非法","illegal"], ["de","的","posessive form"]], translation:"Eating wild boar meat is illegal in Chengdu." },
+  { id:4, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/3.wav", words:[["zhòngyào","重要","important"]], translation:"Important." },
+  { id:5, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/4.wav", words:[["nóngcūn","农村","countryside"]], translation:"The countryside, a rural area." },
+  { id:6, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/5.wav", words:[["hěn","很","very, quite"], ["hǎo wán","好玩","fun; interesting"]], translation:"Really fun." },
+  { id:7, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/6.wav", words:[["dǎ","打","to hit"], ["yě zhū","野猪","boar"], ["hěn","很","very, quite"], ["hǎo wán","好玩","fun; interesting"]], translation:"Hunting wild boar is a lot of fun." },
+  { id:8, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/7.wav", words:[["bù","不","no, not"], ["zhuàn qián","赚钱","earn money"]], translation:"Doesn't make money / not profitable." },
+  { id:9, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/8.wav", words:[["hěn xiǎo","很小","very small"], ["de","的","posessive form"], ["bān","班","class, grade, team"]], translation:"A very small class." },
+  { id:10, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/9.wav", words:[["zuì xiǎo","最小","youngest, smallest"], ["de","的","posessive form"], ["nǚ'ér","女儿","daughter"]], translation:"The youngest daughter." },
+  { id:11, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/10.wav", words:[["sān","三","three"], ["niánjí","年级","grade"]], translation:"Third grade." },
+  { id:12, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/11.wav", words:[["zuì xiǎo","最小","youngest, smallest"], ["de","的","posessive form"], ["nǚ'ér","女儿","daughter"], ["zài dú","在读","to be studying (in a grade), currently enrolled"], ["sān","三","three"], ["niánjí","年级","grade"]], translation:"My youngest daughter is in third grade." },
+  { id:13, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/12.wav", words:[["dà","大","(of age) old/ big"], ["nǚ'ér","女儿","daughter"]], translation:"The oldest daughter." },
+  { id:14, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/13.wav", words:[["sī lì","私立","private"], ["xuéxiào","学校","school"]], translation:"Private school." },
+  { id:15, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/14.wav", words:[["gōng lì","公立","public"], ["xuéxiào","学校","school"]], translation:"Public school." },
+  { id:16, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/15.wav", words:[["xiǎo zhèn","小镇","small town"]], translation:"Small town." },
+  { id:17, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/16.wav", words:[["yí gè","一个","1"], ["jiàoshì","教室","classroom"], ["shí duō gè","十多个","more than ten"], ["xuésheng","学生","student"]], translation:"Just over ten students in one classroom." },
+  { id:18, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/17.wav", words:[["xiànzài","现在","now"], ["bǐ","比","than, (superior or inferior) to"], ["yǐqián","以前","before, ago，in the past"], ["hǎo","好","good, fine，  so (colloquial)"], ["duō le","多了","used after adj as comparative form"]], translation:"It's much better now than it used to be." },
+  { id:19, type:'question', audio:"audio/Joshua_Pritchard-2026-02-13/18.wav", words:[["nǐ","你","(singular) you"], ["yào","要","to want to, would like to, to be going to, need"], ["zěnme","怎么","how"], ["zhǔnbèi","准备","to intend, to plan, to prepare"]], translation:"How are you going to prepare?" },
+  { id:20, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/19.wav", words:[["míngtiān","明天","tomorrow"], ["wǒ","我","I, me"], ["yào","要","to want to, would like to, to be going to, need"], ["qù","去","to go"], ["huá bīng","滑冰","to skate"]], translation:"I'm going ice skating tomorrow." },
+  { id:21, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/20.wav", words:[["wǒ","我","I, me"], ["dǎsuàn","打算","plan; to intend"], ["hǎo hāo","好好","properly, thoroughly, all out"], ["xiūxī","休息","to have or take a rest"]], translation:"I plan to get a proper rest." },
+  { id:22, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/21.wav", words:[["kǎoshì","考试","test, exam"]], translation:"Exam, test." },
+  { id:23, type:'question', audio:"audio/Joshua_Pritchard-2026-02-13/22.wav", words:[["nǐ","你","(singular) you"], ["juéde","觉得","to think, to feel"], ["shénme","什么","what"], ["kǎoshì","考试","test, exam"], ["zuì","最","most, to the greatest extent"], ["nán","难","difficult"]], translation:"Which exam do you think is the hardest?" },
+  { id:24, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/23.wav", words:[["dì yī cì","第一次","the first time"], ["méiyǒu","没有","there is not"], ["tōngguò","通过","through, by means of；to pass ( test)"]], translation:"I didn't pass the first time." },
+  { id:25, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/24.wav", words:[["zuì","最","most, to the greatest extent"], ["nán","难","difficult"]], translation:"The hardest." },
+  { id:26, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/25.wav", words:[["cài shì chǎng","菜市场","vegetable market"]], translation:"Food market, wet market." },
+  { id:27, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/26.wav", words:[["wēixiǎn","危险","dangerous"]], translation:"Dangerous." },
+  { id:28, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/27.wav", words:[["diàn dòng chē","电动车","e-scooter"]], translation:"Electric scooter, e-bike." },
+  { id:29, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/28.wav", words:[["diàn chē","电车","EV"]], translation:"Tram, trolley." },
+  { id:30, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/29.wav", words:[["diàn dòng qì chē","电动汽车","EV"]], translation:"Electric car." },
+  { id:31, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/30.wav", words:[["sòng","送","to send, to deliver"], ["wài mài","外卖","takeouts"], ["de","的","posessive form"]], translation:"A delivery driver (food delivery)." },
+  { id:32, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/31.wav", words:[["wǔ bǎi duō","五百多","over five hundred"], ["gōnglǐ","公里","kilometer"]], translation:"Over five hundred kilometers." },
+  { id:33, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/32.wav", words:[["chōng diàn","充电","recharge"]], translation:"To charge (a battery)." },
+  { id:34, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/33.wav", words:[["bǐjiào","比较","fairly, rather"], ["ān jìng","安静","quiet"]], translation:"Relatively quiet." },
+  { id:35, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/34.wav", words:[["hái","还","passably, fairly, rather; still,also"]], translation:"Still, also, in addition (还)." },
+  { id:36, type:'question', audio:"audio/Joshua_Pritchard-2026-02-13/35.wav", words:[["nǐ","你","(singular) you"], ["chī le","吃了","ate, have eaten"], ["píngguǒ","苹果","apple"], ["hái yào","还要","still want to, also need to"], ["chī","吃","to eat"], ["shénme","什么","what"]], translation:"You've eaten an apple — what else do you want to eat?" },
+  { id:37, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/36.wav", words:[["wǒ","我","I, me"], ["hái","还","passably, fairly, rather; still,also"], ["xiǎng","想","to want to (do), would like， to think about"], ["chī","吃","to eat"], ["xiāngjiāo","香蕉","banana"]], translation:"I'd also like to eat a banana." },
+  { id:38, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/37.wav", words:[["wǒ","我","I, me"], ["hái","还","passably, fairly, rather; still,also"], ["méi","没","didn't haven't"], ["chī fàn","吃饭","to eat a meal"]], translation:"I haven't eaten yet." },
+  { id:39, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/38.wav", words:[["yǎo","咬","to bite"]], translation:"To bite." },
+  { id:40, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/39.wav", words:[["wǒ","我","I, me"], ["de","的","posessive form"], ["gǒu","狗","dog"], ["zài","在","to be in/on/at; in/on/at"], ["yǎo","咬","to bite"], ["dōngxi","东西","thing, stuff"]], translation:"My dog is chewing on something." },
+  { id:41, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-13/40.wav", words:[["kāishǐ","开始","to begin, to start"]], translation:"To begin, to start." },
+  { id:42, type:'question', audio:"audio/Joshua_Pritchard-2026-02-13/41.wav", words:[["nǐ","你","(singular) you"], ["jǐ diǎn","几点","what time"], ["kāishǐ","开始","to begin, to start"], ["shàng bān","上班","to work, to do a job"]], translation:"What time do you start work?" },
+  { id:43, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-13/43.wav", words:[["míngtiān","明天","tomorrow"], ["wǒ","我","I, me"], ["yào","要","to want to, would like to, to be going to, need"], ["qù","去","to go"], ["huá bīng","滑冰","to skate"], ["wǒ","我","I, me"], ["hěn","很","very, quite"], ["qīdài","期待","to look forward to"], ["zhè","这","this"], ["duàn","段","used for sections or periods"], ["shíjiān","时间","time"], ["gōngzuò","工作","to work; job"], ["hěn","很","very, quite"], ["máng","忙","busy"], ["gǎnjué","感觉","feeling"], ["yǒu diǎn lèi","有点累","a bit tired"], ["suǒyǐ","所以","so, therefore"], ["dǎsuàn","打算","plan; to intend"], ["hǎo hāo","好好","properly, thoroughly, all out"], ["xiūxī","休息","to have or take a rest"], ["yíxià","一下","used after a verb, indicating an act or an attempt"], ["suīrán","虽然","although, though"], ["yǒu shí hòu","有时候","sometimes"], ["juéde","觉得","to think, to feel"], ["hěn","很","very, quite"], ["lèi","累","tired"], ["dàn","但","but, however"], ["wǒ","我","I, me"], ["zhīdào","知道","to know"], ["xiūxī","休息","to have or take a rest"], ["hòu","后","after, afterwards, later"], ["jiù","就","used to indicate a conclusion or resolution"], ["néng","能","can, may"], ["chóngxīn","重新","again, once more"], ["huīfù","恢复","to recover, to regain"], ["jīng lì","精力","energy"], ["rúguǒ","如果","if, in case"], ["nǐ","你","(singular) you"], ["yě","也","also, too"], ["xiǎng","想","to want to (do), would like， to think about"], ["qù","去","to go"], ["xiūxī","休息","to have or take a rest"], ["kěyǐ","可以","may, can, to be allowed to"], ["xiàng","像","to be like"], ["wǒ","我","I, me"], ["yíyàng","一样","same, as...as..."], ["ānpái","安排","to arrange"], ["yì xiē","一些","some"], ["fàngsǒng","放松","to relax"], ["de","的","posessive form"], ["shíjiān","时间","time"]], translation:"Tomorrow I'm going ice skating and I'm really looking forward to it. Work has been very busy lately and I feel a bit tired, so I plan to get a good rest. Even though I sometimes feel worn out, I know that after a rest I can get my energy back. If you'd like a break too, you can set aside some time to relax the way I do." },
+  { id:44, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-13/44.wav", words:[["wǒ","我","I, me"], ["de","的","posessive form"], ["zuì xiǎo","最小","youngest, smallest"], ["de","的","posessive form"], ["nǚ'ér","女儿","daughter"], ["zài","在","to be in/on/at; in/on/at"], ["dú","读","to read out loud, to pronounce"], ["sān","三","three"], ["niánjí","年级","grade"], ["tā","她","she, her"], ["shàng","上","to go up, to ascend"], ["de","的","posessive form"], ["shì","是","to be"], ["gōng lì","公立","public"], ["xuéxiào","学校","school"], ["zài","在","to be in/on/at; in/on/at"], ["yí gè","一个","1"], ["jiàoshì","教室","classroom"], ["lǐ","里","inner, inside, interior"], ["yǒu","有","to have, there be"], ["shí duō gè","十多个","more than ten"], ["xuésheng","学生","student"], ["tā de","她的","her"], ["xuéxiào","学校","school"], ["bǐ","比","than, (superior or inferior) to"], ["wǒ","我","I, me"], ["yǐqián","以前","before, ago，in the past"], ["de","的","posessive form"], ["hǎo","好","good, fine，  so (colloquial)"], ["duō le","多了","used after adj as comparative form"], ["suīrán","虽然","although, though"], ["tā","她","she, her"], ["měi tiān","每天","every day"], ["dōu","都","both, all"], ["hěn máng","很忙","very busy"], ["dàn","但","but, however"], ["tā","她","she, her"], ["háishi","还是","or"], ["hěn","很","very, quite"], ["xihuan","喜欢","to like, to be fond of"], ["hé","和","and"], ["qítā","其他","the rest"], ["tóngxué","同学","classmate"], ["yìqǐ","一起","together"], ["wán","玩","to play"], ["wǒ","我","I, me"], ["de","的","posessive form"], ["dà","大","(of age) old/ big"], ["nǚ'ér","女儿","daughter"], ["zài","在","to be in/on/at; in/on/at"], ["sī lì","私立","private"], ["xuéxiào","学校","school"], ["shàng xué","上学","to go to school, to attend school"], ["měi tiān","每天","every day"], ["dōu","都","both, all"], ["hěn máng","很忙","very busy"], ["měi tiān","每天","every day"], ["fàng xué","放学","to finish school for the day"], ["hòu","后","after, afterwards, later"], ["wǒmen","我们","we, us"], ["yī jiā rén","一家人","a family"], ["dōu","都","both, all"], ["xihuan","喜欢","to like, to be fond of"], ["yìqǐ","一起","together"], ["qù","去","to go"], ["cài shì chǎng","菜市场","vegetable market"], ["mǎi","买","to buy, to purchase"], ["dōngxi","东西","thing, stuff"]], translation:"My youngest daughter is in third grade. She goes to a public school, with just over ten students in a classroom. Her school is much better than mine was. Although she's busy every day, she still really likes playing with her classmates. My oldest daughter goes to a private school and is busy every day too. After school each day our whole family likes to go to the food market together to buy things." },
+];
+
+const LESSON_FEB13 = {
+  id: 'Joshua_Pritchard-2026-02-13',
+  title: 'Joshua Pritchard - 2026.02.13',
+  subtitle: 'Wild boar, village schools, electric vehicles, 还',
+  date: '2026-02-13',
+  vocabCount: LESSON_FEB13_VOCAB.length,
+  sentenceCount: LESSON_FEB13_SENTENCES.length,
+  images: [],
+};
+
+const LESSON_FEB20_VOCAB = [
+  ["tā","她","she, her"], ["zhǔnbèi","准备","to intend, to plan, to prepare, to be ready"], ["hǎo","好","good, fine，  so (colloquial)"], ["le","了","past / a change or a new circumstance/done"], ["ma","吗","yes/no"], ["xià kè hòu","下课后","after class"], ["wǒ","我","I, me"], ["hē","喝","to drink"], ["diǎn","点","o'clock；point"], ["chá","茶","tea"], ["yì diǎn","一点","a little"], ["jiàoshì","教室","classroom"], ["zhè","这","this"], ["shì","是","to be"], ["shénme","什么","what"], ["dìfang","地方","place"], ["jīchǎng","机场","airport"], ["qù","去","to go"], ["de","的","posessive form"], ["lù","路","road, path, way"], ["zài","在","to be in/on/at; in/on/at"], ["lù shàng","路上","on the way, en route"], ["zài qù","在去","to be on the way to"], ["huí jiā","回家","return home"], ["jiù","就","used to indicate a conclusion or resolution"], ["nǐ jiā","你家","your home"], ["fùjìn","附近","nearby, vicinity"], ["yǒu","有","to have, there be"], ["shāngdiàn","商店","shop, store"], ["cái","才","only then, not until"], ["hái yǒu","还有","there is still, and also"], ["liǎng gè","两个","two (of something)"], ["xiǎoshí","小时","hour（duration )"], ["dào","到","to arrive, to reach"], ["nǐ","你","(singular) you"], ["chī le","吃了","ate, have eaten"], ["píngguǒ","苹果","apple"], ["hái","还","passably, fairly, rather; still,also"], ["xiǎng","想","to want to (do), would like， to think about"], ["chī","吃","to eat"], ["shuǐguǒ","水果","fruit"], ["shàng","上","to go up, to ascend"], ["fēijī","飞机","airplane"], ["xià","下","(of rain, snow, etc.) to fall， down"], ["māma","妈妈","mother"], ["qí mǎ","骑马","to ride a horse"], ["mǎ màn","马慢","the horse is slow"], ["mà","骂","to curse, to call names"], ["Mǎ","马","a Chinese family name"], ["péng yǒu jiā","朋友家","a friend's house"], ["wán","玩","to play"], ["lìng yí gè","另一个","the other one"], ["dà nǚ'ér","大女儿","older daughter"], ["xiǎo nǚ ér","小女儿","younger daughter"], ["guò yíhuìr","过一会儿","later, after a short while"], ["gòngtóng","共同","common, shared"], ["péngyou","朋友","friend"], ["pǔtōng","普通","common, ordinary"], ["gòng jì huì","共济会","Freemasonry, the Masons"], ["gòng hé dǎng","共和党","republican party"], ["mín zhǔ dǎng","民主党","the Democratic Party"], ["gòng chǎn dǎng","共产党","communist party"], ["gùshì","故事","story"], ["yī","一","one"], ["xiàwǔ","下午","afternoon"], ["lǐ","里","inner, inside, interior"], ["yǐjīng","已经","already"], ["méiyǒu","没有","there is not"], ["duōshao","多少","how many, how much"], ["rén","人","human, person"], ["zhī","只","only, solely"], ["hē le","喝了","drank, have drunk"], ["yīnwèi","因为","because, since"], ["hái yào","还要","still want to, also need to"], ["kàn dào","看到","to see, to catch sight of"], ["yī jiā","一家","a (shop, business) — measure word 家"], ["wǒ jiā","我家","my home, my place"], ["jìn qù","进去","to go in, to enter"], ["mǎi le","买了","bought"], ["lǎobǎn","老板","boss, employer"], ["wèn","问","to ask"], ["xiǎng le","想了","thought (about it)"], ["yòu","又","and, again"], ["yí gè","一个","1"], ["chéng zi","橙子","orange (the fruit)"], ["huí dào","回到","to return to, to get back to"], ["jiā","家","family"], ["yǐ hòu","以后","after, afterwards, later"], ["mèimei","妹妹","younger sister"], ["hǎo le ma","好了吗","…yet? (asking whether something is ready)"], ["wǒmen","我们","we, us"], ["dǎsuàn","打算","plan; to intend"], ["wǎnshang","晚上","evening, night"], ["yìqǐ","一起","together"], ["kàn","看","to look at, to watch, to read"], ["diànyǐng","电影","film, movie"], ["èr","二","two"], ["jīntiān","今天","today"], ["yào","要","to be going to,to want to, would like to, need"], ["lǚxing","旅行","to travel, to tour"], ["xiànzài","现在","now"], ["zhèngzài","正在","in the process of"], ["bàba","爸爸","father"], ["shuō","说","to speak, to say"], ["bù yòng","不用","no need to, don't have to"], ["zháojí","着急","worried, anxious"], ["dào le","到了","to have arrived, upon reaching"], ["xiào","笑","to smile, to laugh"], ["zhe","着","used to indicate a state"], ["dāngrán","当然","of course"], ["a","啊","used at the end of a sentence to indicate confirmation or defense"], ["zhī qián","之前","before, prior to"], ["yǒu yì diǎn","有一点","a little+ adj"], ["jǐn zhāng","紧张","nervous"], ["kěshì","可是","but, however"], ["fāxiàn","发现","to discover"], ["qíshí","其实","actually"], ["hěn","很","very, quite"], ["qīng sōng","轻松","relaxed, effortless"], ["yě","也","also, too"], ["kāixīn","开心","happy, glad"], ["sān","三","three"], ["zhōumò","周末","weekend"], ["nǚ'ér","女儿","daughter"], ["lái le","来了","came, has arrived"], ["dàjiā","大家","all, everybody"], ["liáo tiān","聊天","to chat"], ["chī fàn","吃饭","to eat a meal"], ["rènao","热闹","busy, bustling"], ["yuàn zi","院子","yard, courtyard"], ["zǒu","走","to walk；leave"], ["dé","得","connect verb and adv      must（dei3）, have to;"], ["hěn màn","很慢","very slow"], ["yǒu diǎn","有点","a little + adj"], ["kāi wánxiào","开玩笑","to be kidding"], ["dì","地","used to connect an adverbial modifier and the verb it modifies"], ["dōu","都","both, all, even"], ["xiào le","笑了","laughed"]
+];
+
+const LESSON_FEB20_SENTENCES = [
+  { id:1, type:'question', audio:"audio/Joshua_Pritchard-2026-02-20/0.wav", words:[["tā","她","she, her"], ["zhǔnbèi","准备","to intend, to plan, to prepare, to be ready"], ["hǎo","好","good, fine，  so (colloquial)"], ["le","了","past / a change or a new circumstance/done"], ["ma","吗","yes/no"]], translation:"Is she ready yet?" },
+  { id:2, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/1.wav", words:[["xià kè hòu","下课后","after class"], ["wǒ","我","I, me"], ["zhǔnbèi","准备","to intend, to plan, to prepare, to be ready"], ["hē","喝","to drink"], ["diǎn","点","o'clock；point"], ["chá","茶","tea"]], translation:"After class I plan to drink some tea." },
+  { id:3, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/2.wav", words:[["yì diǎn","一点","a little"]], translation:"A little bit; one o'clock." },
+  { id:4, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/3.wav", words:[["jiàoshì","教室","classroom"]], translation:"Classroom." },
+  { id:5, type:'question', audio:"audio/Joshua_Pritchard-2026-02-20/4.wav", words:[["zhè","这","this"], ["shì","是","to be"], ["shénme","什么","what"], ["dìfang","地方","place"]], translation:"What is this place?" },
+  { id:6, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/5.wav", words:[["jīchǎng","机场","airport"]], translation:"Airport." },
+  { id:7, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/6.wav", words:[["qù","去","to go"], ["jīchǎng","机场","airport"], ["de","的","posessive form"], ["lù","路","road, path, way"]], translation:"The road to the airport." },
+  { id:8, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/7.wav", words:[["zài","在","to be in/on/at; in/on/at"], ["lù shàng","路上","on the way, en route"]], translation:"On the way." },
+  { id:9, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/8.wav", words:[["zài qù","在去","to be on the way to"], ["jīchǎng","机场","airport"], ["de","的","posessive form"], ["lù shàng","路上","on the way, en route"]], translation:"On the way to the airport." },
+  { id:10, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/9.wav", words:[["zài","在","to be in/on/at; in/on/at"], ["huí jiā","回家","return home"], ["de","的","posessive form"], ["lù shàng","路上","on the way, en route"]], translation:"On the way home." },
+  { id:11, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/10.wav", words:[["jiù","就","used to indicate a conclusion or resolution"], ["zài","在","to be in/on/at; in/on/at"], ["nǐ jiā","你家","your home"], ["fùjìn","附近","nearby, vicinity"]], translation:"Right near your house." },
+  { id:12, type:'question', audio:"audio/Joshua_Pritchard-2026-02-20/11.wav", words:[["nǐ jiā","你家","your home"], ["fùjìn","附近","nearby, vicinity"], ["yǒu","有","to have, there be"], ["shāngdiàn","商店","shop, store"], ["ma","吗","yes/no"]], translation:"Is there a shop near your house?" },
+  { id:13, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/12.wav", words:[["cái","才","only then, not until"]], translation:"Only then, not until (才)." },
+  { id:14, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/13.wav", words:[["hái yǒu","还有","there is still, and also"], ["liǎng gè","两个","two (of something)"], ["xiǎoshí","小时","hour（duration )"], ["cái","才","only then, not until"], ["dào","到","to arrive, to reach"]], translation:"It's another two hours before we get there." },
+  { id:15, type:'question', audio:"audio/Joshua_Pritchard-2026-02-20/14.wav", words:[["nǐ","你","(singular) you"], ["chī le","吃了","ate, have eaten"], ["píngguǒ","苹果","apple"], ["hái","还","passably, fairly, rather; still,also"], ["xiǎng","想","to want to (do), would like， to think about"], ["chī","吃","to eat"], ["shénme","什么","what"], ["shuǐguǒ","水果","fruit"]], translation:"You've eaten an apple — what other fruit do you want?" },
+  { id:16, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/15.wav", words:[["shàng","上","to go up, to ascend"], ["fēijī","飞机","airplane"]], translation:"To board the plane." },
+  { id:17, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/16.wav", words:[["xià","下","(of rain, snow, etc.) to fall， down"], ["fēijī","飞机","airplane"]], translation:"To get off the plane." },
+  { id:18, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/17.wav", words:[["māma","妈妈","mother"], ["qí mǎ","骑马","to ride a horse"], ["mǎ màn","马慢","the horse is slow"], ["māma","妈妈","mother"], ["mà","骂","to curse, to call names"], ["Mǎ","马","a Chinese family name"]], translation:"Mom rides the horse, the horse is slow, Mom scolds the horse. (a tone tongue-twister)" },
+  { id:19, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/18.wav", words:[["qù","去","to go"], ["péng yǒu jiā","朋友家","a friend's house"], ["wán","玩","to play"]], translation:"To go hang out at a friend's house." },
+  { id:20, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/19.wav", words:[["lìng yí gè","另一个","the other one"]], translation:"The other one." },
+  { id:21, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/20.wav", words:[["dà nǚ'ér","大女儿","older daughter"]], translation:"The oldest daughter." },
+  { id:22, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/21.wav", words:[["xiǎo nǚ ér","小女儿","younger daughter"]], translation:"The youngest daughter." },
+  { id:23, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/22.wav", words:[["guò yíhuìr","过一会儿","later, after a short while"]], translation:"After a little while." },
+  { id:24, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/23.wav", words:[["gòngtóng","共同","common, shared"], ["de","的","posessive form"], ["péngyou","朋友","friend"]], translation:"A mutual friend." },
+  { id:25, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/24.wav", words:[["pǔtōng","普通","common, ordinary"]], translation:"Ordinary, common." },
+  { id:26, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/25.wav", words:[["gòng jì huì","共济会","Freemasonry, the Masons"]], translation:"Freemasonry, the Masons." },
+  { id:27, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/26.wav", words:[["gòng hé dǎng","共和党","republican party"]], translation:"The Republican Party." },
+  { id:28, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/27.wav", words:[["mín zhǔ dǎng","民主党","the Democratic Party"]], translation:"The Democratic Party." },
+  { id:29, type:'vocab', audio:"audio/Joshua_Pritchard-2026-02-20/28.wav", words:[["gòng chǎn dǎng","共产党","communist party"]], translation:"The Communist Party." },
+  { id:30, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/30.wav", words:[["gùshì","故事","story"], ["yī","一","one"], ["xià kè hòu","下课后","after class"], ["de","的","posessive form"], ["xiàwǔ","下午","afternoon"]], translation:"Story 1: The afternoon after class." },
+  { id:31, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/31.wav", words:[["xià kè hòu","下课后","after class"], ["wǒ","我","I, me"], ["zhǔnbèi","准备","to intend, to plan, to prepare, to be ready"], ["hē","喝","to drink"], ["diǎn","点","o'clock；point"], ["chá","茶","tea"], ["jiàoshì","教室","classroom"], ["lǐ","里","inner, inside, interior"], ["yǐjīng","已经","already"], ["méiyǒu","没有","there is not"], ["duōshao","多少","how many, how much"], ["rén","人","human, person"], ["le","了","past / a change or a new circumstance/done"], ["wǒ","我","I, me"], ["zhī","只","only, solely"], ["hē le","喝了","drank, have drunk"], ["yì diǎn","一点","a little"], ["yīnwèi","因为","because, since"], ["guò yíhuìr","过一会儿","later, after a short while"], ["hái yào","还要","still want to, also need to"], ["huí jiā","回家","return home"]], translation:"After class I planned to drink some tea. There weren't many people left in the classroom. I only drank a little, because I had to head home in a while." },
+  { id:32, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/32.wav", words:[["zài","在","to be in/on/at; in/on/at"], ["huí jiā","回家","return home"], ["de","的","posessive form"], ["lù shàng","路上","on the way, en route"], ["wǒ","我","I, me"], ["kàn dào","看到","to see, to catch sight of"], ["yī jiā","一家","a (shop, business) — measure word 家"], ["shāngdiàn","商店","shop, store"], ["jiù","就","used to indicate a conclusion or resolution"], ["zài","在","to be in/on/at; in/on/at"], ["wǒ jiā","我家","my home, my place"], ["fùjìn","附近","nearby, vicinity"], ["wǒ","我","I, me"], ["jìn qù","进去","to go in, to enter"], ["mǎi le","买了","bought"], ["yì diǎn","一点","a little"], ["shuǐguǒ","水果","fruit"], ["lǎobǎn","老板","boss, employer"], ["wèn","问","to ask"], ["wǒ","我","I, me"], ["nǐ","你","(singular) you"], ["chī le","吃了","ate, have eaten"], ["píngguǒ","苹果","apple"], ["hái","还","passably, fairly, rather; still,also"], ["xiǎng","想","to want to (do), would like， to think about"], ["chī","吃","to eat"], ["shénme","什么","what"], ["shuǐguǒ","水果","fruit"], ["wǒ","我","I, me"], ["xiǎng le","想了","thought (about it)"], ["xiǎng","想","to want to (do), would like， to think about"], ["yòu","又","and, again"], ["mǎi le","买了","bought"], ["yí gè","一个","1"], ["chéng zi","橙子","orange (the fruit)"]], translation:"On the way home I saw a shop right near my house. I went in and bought some fruit. The owner asked me, “You've eaten an apple — what other fruit would you like?” I thought about it and bought an orange as well." },
+  { id:33, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/33.wav", words:[["huí dào","回到","to return to, to get back to"], ["jiā","家","family"], ["yǐ hòu","以后","after, afterwards, later"], ["wǒ","我","I, me"], ["wèn","问","to ask"], ["mèimei","妹妹","younger sister"], ["tā","她","she, her"], ["zhǔnbèi","准备","to intend, to plan, to prepare, to be ready"], ["hǎo le ma","好了吗","…yet? (asking whether something is ready)"], ["wǒmen","我们","we, us"], ["dǎsuàn","打算","plan; to intend"], ["wǎnshang","晚上","evening, night"], ["yìqǐ","一起","together"], ["qù","去","to go"], ["kàn","看","to look at, to watch, to read"], ["diànyǐng","电影","film, movie"]], translation:"After I got home I asked my sister whether she was ready. We were planning to go see a movie together that evening." },
+  { id:34, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/34.wav", words:[["gùshì","故事","story"], ["èr","二","two"], ["qù","去","to go"], ["jīchǎng","机场","airport"], ["de","的","posessive form"], ["lù shàng","路上","on the way, en route"]], translation:"Story 2: On the way to the airport." },
+  { id:35, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/35.wav", words:[["jīntiān","今天","today"], ["wǒmen","我们","we, us"], ["yào","要","to be going to,to want to, would like to, need"], ["qù","去","to go"], ["lǚxing","旅行","to travel, to tour"], ["xiànzài","现在","now"], ["zhèngzài","正在","in the process of"], ["qù","去","to go"], ["jīchǎng","机场","airport"], ["de","的","posessive form"], ["lù shàng","路上","on the way, en route"], ["bàba","爸爸","father"], ["shuō","说","to speak, to say"], ["hái yǒu","还有","there is still, and also"], ["liǎng gè","两个","two (of something)"], ["xiǎoshí","小时","hour（duration )"], ["cái","才","only then, not until"], ["dào","到","to arrive, to reach"], ["jīchǎng","机场","airport"], ["bù yòng","不用","no need to, don't have to"], ["zháojí","着急","worried, anxious"]], translation:"Today we're going on a trip and we're on the way to the airport right now. Dad says it's another two hours before we get there, so there's no need to rush." },
+  { id:36, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/36.wav", words:[["dào le","到了","to have arrived, upon reaching"], ["jīchǎng","机场","airport"], ["yǐ hòu","以后","after, afterwards, later"], ["wǒ","我","I, me"], ["wèn","问","to ask"], ["māma","妈妈","mother"], ["zhè","这","this"], ["shì","是","to be"], ["shénme","什么","what"], ["dìfang","地方","place"], ["mèimei","妹妹","younger sister"], ["xiào","笑","to smile, to laugh"], ["zhe","着","used to indicate a state"], ["shuō","说","to speak, to say"], ["dāngrán","当然","of course"], ["shì","是","to be"], ["jīchǎng","机场","airport"], ["a","啊","used at the end of a sentence to indicate confirmation or defense"]], translation:"After we got to the airport I asked Mom what this place was. My sister laughed and said, “It's the airport, obviously.”" },
+  { id:37, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/37.wav", words:[["shàng","上","to go up, to ascend"], ["fēijī","飞机","airplane"], ["zhī qián","之前","before, prior to"], ["wǒ","我","I, me"], ["yǒu yì diǎn","有一点","a little+ adj"], ["jǐn zhāng","紧张","nervous"], ["kěshì","可是","but, however"], ["xià","下","(of rain, snow, etc.) to fall， down"], ["fēijī","飞机","airplane"], ["yǐ hòu","以后","after, afterwards, later"], ["wǒ","我","I, me"], ["fāxiàn","发现","to discover"], ["lǚxing","旅行","to travel, to tour"], ["qíshí","其实","actually"], ["hěn","很","very, quite"], ["qīng sōng","轻松","relaxed, effortless"], ["yě","也","also, too"], ["hěn","很","very, quite"], ["kāixīn","开心","happy, glad"]], translation:"Before boarding the plane I was a little nervous, but after getting off I found that travelling is actually quite relaxing and a lot of fun." },
+  { id:38, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/38.wav", words:[["gùshì","故事","story"], ["sān","三","three"], ["qù","去","to go"], ["péng yǒu jiā","朋友家","a friend's house"], ["wán","玩","to play"]], translation:"Story 3: Visiting a friend's house." },
+  { id:39, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/39.wav", words:[["zhōumò","周末","weekend"], ["wǒmen","我们","we, us"], ["qù","去","to go"], ["péng yǒu jiā","朋友家","a friend's house"], ["wán","玩","to play"], ["péngyou","朋友","friend"], ["yǒu","有","to have, there be"], ["liǎng gè","两个","two (of something)"], ["nǚ'ér","女儿","daughter"], ["yí gè","一个","1"], ["shì","是","to be"], ["dà nǚ'ér","大女儿","older daughter"], ["lìng yí gè","另一个","the other one"], ["shì","是","to be"], ["xiǎo nǚ ér","小女儿","younger daughter"]], translation:"On the weekend we went to a friend's house. My friend has two daughters — one is the older daughter and the other is the younger." },
+  { id:40, type:'dialogue', audio:"audio/Joshua_Pritchard-2026-02-20/40.wav", words:[["guò yíhuìr","过一会儿","later, after a short while"], ["wǒmen","我们","we, us"], ["de","的","posessive form"], ["gòngtóng","共同","common, shared"], ["de","的","posessive form"], ["péngyou","朋友","friend"], ["yě","也","also, too"], ["lái le","来了","came, has arrived"], ["dàjiā","大家","all, everybody"], ["yìqǐ","一起","together"], ["liáo tiān","聊天","to chat"], ["chī fàn","吃饭","to eat a meal"], ["hěn","很","very, quite"], ["rènao","热闹","busy, bustling"]], translation:"After a while our mutual friend came over too. Everyone chatted and ate together; it was very lively." },
+  { id:41, type:'dialogue', audio:null, words:[["māma","妈妈","mother"], ["zài","在","to be in/on/at; in/on/at"], ["yuàn zi","院子","yard, courtyard"], ["lǐ","里","inner, inside, interior"], ["qí mǎ","骑马","to ride a horse"], ["Mǎ","马","a Chinese family name"], ["zǒu","走","to walk；leave"], ["dé","得","connect verb and adv      must（dei3）, have to;"], ["hěn màn","很慢","very slow"], ["māma","妈妈","mother"], ["yǒu diǎn","有点","a little + adj"], ["zháojí","着急","worried, anxious"], ["hái","还","passably, fairly, rather; still,also"], ["kāi wánxiào","开玩笑","to be kidding"], ["dì","地","used to connect an adverbial modifier and the verb it modifies"], ["mà","骂","to curse, to call names"], ["Mǎ","马","a Chinese family name"], ["dàjiā","大家","all, everybody"], ["dōu","都","both, all, even"], ["xiào le","笑了","laughed"]], translation:"Mom was riding a horse in the yard. The horse walked very slowly, so Mom got a bit impatient and jokingly scolded the horse. Everyone laughed." },
+];
+
+const LESSON_FEB20 = {
+  id: 'Joshua_Pritchard-2026-02-20',
+  title: 'Joshua Pritchard - 2026.02.20',
+  subtitle: 'Airport trip, 才 & 还, political parties, story practice',
+  date: '2026-02-20',
+  vocabCount: LESSON_FEB20_VOCAB.length,
+  sentenceCount: LESSON_FEB20_SENTENCES.length,
+  images: ["images/Joshua_Pritchard-2026-02-20/0.png", "images/Joshua_Pritchard-2026-02-20/1.png"],
 };
 
 // ─────────────────────────────────────────────
@@ -2651,6 +2890,11 @@ let state = {
   sentenceFilter: 'all',
   showWordMeanings: true,
 };
+
+const ALL_SEED_LESSONS = [
+  LESSON_FEB06, LESSON_FEB13, LESSON_FEB20, INITIAL_LESSON, LESSON2, LESSON3, LESSON4,
+  LESSON5, LESSON6, LESSON7, LESSON8, LESSON9, LESSON10,
+];
 
 function loadState() {
   try {
@@ -2752,12 +2996,38 @@ function loadState() {
       state.sentences[`Joshua_Pritchard-2026-08-27_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-08-27' };
     });
   }
-  // Re-sync source links for previously-saved lessons (some seeded links were wrong)
-  [INITIAL_LESSON, LESSON2, LESSON3, LESSON4, LESSON5, LESSON6, LESSON7, LESSON8, LESSON9, LESSON10]
-    .forEach(seed => {
-      const l = state.lessons[seed.id];
-      if (l && seed.sourceUrl) l.sourceUrl = seed.sourceUrl;
+  if (!state.lessons['Joshua_Pritchard-2026-02-06']) {
+    state.lessons['Joshua_Pritchard-2026-02-06'] = LESSON_FEB06;
+    LESSON_FEB06_VOCAB.forEach((v, i) => {
+      state.vocab[`Joshua_Pritchard-2026-02-06_${i}`] = { lessonId: 'Joshua_Pritchard-2026-02-06', pinyin: v[0], char: v[1], meaning: v[2] };
     });
+    LESSON_FEB06_SENTENCES.forEach((s, i) => {
+      state.sentences[`Joshua_Pritchard-2026-02-06_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-02-06' };
+    });
+  }
+  if (!state.lessons['Joshua_Pritchard-2026-02-13']) {
+    state.lessons['Joshua_Pritchard-2026-02-13'] = LESSON_FEB13;
+    LESSON_FEB13_VOCAB.forEach((v, i) => {
+      state.vocab[`Joshua_Pritchard-2026-02-13_${i}`] = { lessonId: 'Joshua_Pritchard-2026-02-13', pinyin: v[0], char: v[1], meaning: v[2] };
+    });
+    LESSON_FEB13_SENTENCES.forEach((s, i) => {
+      state.sentences[`Joshua_Pritchard-2026-02-13_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-02-13' };
+    });
+  }
+  if (!state.lessons['Joshua_Pritchard-2026-02-20']) {
+    state.lessons['Joshua_Pritchard-2026-02-20'] = LESSON_FEB20;
+    LESSON_FEB20_VOCAB.forEach((v, i) => {
+      state.vocab[`Joshua_Pritchard-2026-02-20_${i}`] = { lessonId: 'Joshua_Pritchard-2026-02-20', pinyin: v[0], char: v[1], meaning: v[2] };
+    });
+    LESSON_FEB20_SENTENCES.forEach((s, i) => {
+      state.sentences[`Joshua_Pritchard-2026-02-20_${i}`] = { ...s, lessonId: 'Joshua_Pritchard-2026-02-20' };
+    });
+  }
+  // Lesson materials are archived in this repo, so keep saved copies in step with the seed data
+  ALL_SEED_LESSONS.forEach(seed => {
+    const l = state.lessons[seed.id];
+    if (l) l.images = seed.images || [];
+  });
   // Normalize lesson titles to one consistent date-based format (no names)
   Object.values(state.lessons).forEach(l => {
     if (l.date) l.title = `Lesson ${l.date}`;
@@ -2765,7 +3035,8 @@ function loadState() {
   // Backfill English meanings that were blank in previously-saved data,
   // using the (now complete) seed data as the source of truth
   const seedMeanings = {};
-  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB]
+  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB,
+   LESSON_FEB06_VOCAB, LESSON_FEB13_VOCAB, LESSON_FEB20_VOCAB]
     .forEach(arr => arr.forEach(([p, c, m]) => {
       if (m && m.trim()) seedMeanings[`${c}|${p}`] = m;
     }));
@@ -2788,7 +3059,8 @@ function loadState() {
   const seedTranslations = {};
   const hanziOf = s => (s.words || []).map(w => w[1] || '').join('');
   [INITIAL_SENTENCES, LESSON2_SENTENCES, LESSON3_SENTENCES, LESSON4_SENTENCES,
-   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES]
+   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES,
+   LESSON_FEB06_SENTENCES, LESSON_FEB13_SENTENCES, LESSON_FEB20_SENTENCES]
     .forEach(arr => arr.forEach(s => {
       if (s.translation && s.translation.trim()) {
         if (s.audio) seedTranslations[`a:${s.audio}`] = s.translation;
@@ -3219,9 +3491,36 @@ function toggleWordMeanings(show) {
   renderSentences();
 }
 
+function renderLessonMaterials(lessonId) {
+  const el = document.getElementById('lessonMaterials');
+  if (!el) return;
+  // Only meaningful for a single lesson — "All Lessons" would be a wall of scans.
+  const images = (lessonId !== 'all' && state.lessons[lessonId]?.images) || [];
+  el.innerHTML = images.length
+    ? `<div class="lm-label">Lesson materials</div>` + images.map(src =>
+        `<img src="${src}" alt="Lesson material" loading="lazy" onclick="openLightbox('${esc(src)}')">`
+      ).join('')
+    : '';
+}
+
+function openLightbox(src) {
+  const box = document.getElementById('imgLightbox');
+  document.getElementById('imgLightboxImg').src = src;
+  box.classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('imgLightbox').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
 function renderSentences() {
   const lesson = document.getElementById('sentenceLesson')?.value || 'all';
   let sentences = getAllSentences(lesson);
+  renderLessonMaterials(lesson);
   if (state.sentenceFilter !== 'all') {
     sentences = sentences.filter(s => s.type === state.sentenceFilter);
   }
@@ -3668,9 +3967,8 @@ function renderLessonsManager() {
       <span class="lesson-row-icon">📖</span>
       <div class="lesson-row-info">
         <div class="lesson-row-title">${l.title}</div>
-        <div class="lesson-row-meta">${l.vocabCount} words · ${l.sentenceCount} sentences · ${l.date}</div>
+        <div class="lesson-row-meta">${l.vocabCount} words · ${l.sentenceCount} sentences${l.images?.length ? ` · ${l.images.length} materials` : ''} · ${l.date}</div>
       </div>
-      <a href="${l.sourceUrl}" target="_blank" class="lesson-row-del" title="Open original" style="font-size:0.85rem">🔗</a>
       <button class="lesson-row-del" onclick="deleteLesson('${l.id}')" title="Delete lesson">✕</button>
     </div>
   `).join('');
@@ -4062,5 +4360,7 @@ populateLessonSelects();
 renderSidebarLessons();
 renderDashboard();
 </script>
+<div class="img-lightbox" id="imgLightbox" onclick="closeLightbox()"><img id="imgLightboxImg" alt=""></div>
+
 </body>
 </html>
