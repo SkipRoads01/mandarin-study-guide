@@ -2259,6 +2259,45 @@ const LESSON10 = {
   rev: 1,
 };
 
+const LESSON11_VOCAB = [
+  ["liǎng gè","两个","two (of something)"], ["wǎnshang","晚上","evening, night"], ["lù yíng","露营","go camping"], ["tā men","他们","they"], ["diào le","钓了","caught (fishing)"], ["hěn duō","很多","a lot，many"], ["yú","鱼","fish"], ["ma","吗","yes/no"], ["qiū tiān","秋天","fall, autumn"], ["zhè","这","this"], ["shì","是","to be"], ["chéng dū","成都","Chengdu"], ["de","的","posessive form"], ["dōng tiān","冬天","winter"], ["fēng","风","wind"], ["hěn","很","very, quite"], ["shūfu","舒服","comfortable，well"], ["míng tiān","明天","tomorrow"], ["wǒ","我","I, me"], ["yào","要","to be going to,to want sth, would like to, need"], ["chuān","穿","to wear, to put on"], ["wài tào","外套","coat, jacket"], ["zài shuō","再说","to talk about it later; besides"], ["yǒu qián le","有钱了","to have money (once I have money)"], ["zài","再","again, once more"], ["qù","去","to go"], ["Xiàwēiyí","夏威夷","Hawaii"], ["zài","在","to be in/on/at"], ["děng","等","wait, etc., and so on"], ["qīzi","妻子","wife"], ["zhǎo","找","to look for, search"], ["nǐ","你","(singular) you"], ["yǒu shì ma","有事吗","is there something (you need)?"], ["nǐ hǎo","你好","hello"], ["qǐng wèn","请问","excuse me"], ["shéi","谁","who, whom"], ["shìqing","事情","thing, matter, affair"], ["xiànzài","现在","now"], ["gàosù","告诉","to tell"], ["yí jiàn","一件","one (measure word for matters and clothing)"], ["māma","妈妈","mother"], ["jiào","叫","to call, to be called, to ask"], ["mǎi diǎn","买点","to buy a bit of, to buy some"], ["yán","盐","salt"], ["ràng","让","to let, to allow"], ["zài jiā","在家","at home"], ["zuò zuò yè","做作业","to do homework"], ["bú yào","不要","don't ( in an imperative sentence)"], ["kàn diàn shì","看电视","watching tv"], ["qǐng","请","(polite) please ; invite"], ["péngyou","朋友","friend"], ["chī fàn","吃饭","to eat a meal"]
+];
+
+const LESSON11_SENTENCES = [
+  { id:1, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/0.wav", words:[["liǎng gè","两个","two (of something)"], ["wǎnshang","晚上","evening, night"]], translation:"Two nights." },
+  { id:2, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/1.wav", words:[["lù yíng","露营","go camping"]], translation:"To go camping." },
+  { id:3, type:'question', audio:"audio/Joshua_Pritchard-2026-09-09/2.wav", words:[["tā men","他们","they"], ["diào le","钓了","caught (fishing)"], ["hěn duō","很多","a lot，many"], ["yú","鱼","fish"], ["ma","吗","yes/no"]], translation:"Did they catch a lot of fish?" },
+  { id:4, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/3.wav", words:[["qiū tiān","秋天","fall, autumn"]], translation:"Fall / autumn." },
+  { id:5, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/4.wav", words:[["zhè","这","this"], ["shì","是","to be"], ["chéng dū","成都","Chengdu"], ["de","的","posessive form"], ["dōng tiān","冬天","winter"]], translation:"This is winter in Chengdu." },
+  { id:6, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/5.wav", words:[["fēng","风","wind"]], translation:"Wind." },
+  { id:7, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/6.wav", words:[["hěn","很","very, quite"], ["shūfu","舒服","comfortable，well"]], translation:"Very comfortable / it feels nice." },
+  { id:8, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/7.wav", words:[["míng tiān","明天","tomorrow"], ["wǒ","我","I, me"], ["yào","要","to be going to,to want sth, would like to, need"], ["chuān","穿","to wear, to put on"], ["wài tào","外套","coat, jacket"]], translation:"Tomorrow I'm going to wear a coat." },
+  { id:9, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/8.wav", words:[["míng tiān","明天","tomorrow"], ["zài shuō","再说","to talk about it later; besides"]], translation:"Let's talk about it tomorrow." },
+  { id:10, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/9.wav", words:[["yǒu qián le","有钱了","to have money (once I have money)"], ["zài","再","again, once more"], ["qù","去","to go"], ["Xiàwēiyí","夏威夷","Hawaii"]], translation:"Once I have money, I'll go to Hawaii." },
+  { id:11, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/10.wav", words:[["wǒ","我","I, me"], ["zài","在","to be in/on/at"], ["děng","等","wait, etc., and so on"], ["wǒ","我","I, me"], ["qīzi","妻子","wife"]], translation:"I'm waiting for my wife." },
+  { id:12, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/11.wav", words:[["zhǎo","找","to look for, search"]], translation:"To look for / to search." },
+  { id:13, type:'question', audio:"audio/Joshua_Pritchard-2026-09-09/12.wav", words:[["nǐ","你","(singular) you"], ["zhǎo","找","to look for, search"], ["wǒ","我","I, me"], ["yǒu shì ma","有事吗","is there something (you need)?"]], translation:"Are you looking for me about something?" },
+  { id:14, type:'question', audio:"audio/Joshua_Pritchard-2026-09-09/13.wav", words:[["nǐ hǎo","你好","hello"], ["qǐng wèn","请问","excuse me"], ["nǐ","你","(singular) you"], ["zhǎo","找","to look for, search"], ["shéi","谁","who, whom"]], translation:"Hello, excuse me — who are you looking for?" },
+  { id:15, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/14.wav", words:[["shìqing","事情","thing, matter, affair"]], translation:"Thing, matter, affair." },
+  { id:16, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/15.wav", words:[["wǒ","我","I, me"], ["xiànzài","现在","now"], ["yào","要","to be going to,to want sth, would like to, need"], ["gàosù","告诉","to tell"], ["nǐ","你","(singular) you"], ["yí jiàn","一件","one (measure word for matters and clothing)"], ["shìqing","事情","thing, matter, affair"]], translation:"I want to tell you something right now." },
+  { id:17, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/16.wav", words:[["māma","妈妈","mother"], ["jiào","叫","to call, to be called, to ask"], ["wǒ","我","I, me"], ["qù","去","to go"], ["mǎi diǎn","买点","to buy a bit of, to buy some"], ["yán","盐","salt"]], translation:"Mom told me to go buy some salt." },
+  { id:18, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/17.wav", words:[["māma","妈妈","mother"], ["ràng","让","to let, to allow"], ["wǒ","我","I, me"], ["zài jiā","在家","at home"], ["zuò zuò yè","做作业","to do homework"], ["bú yào","不要","don't ( in an imperative sentence)"], ["kàn diàn shì","看电视","watching tv"]], translation:"Mom is making me do homework at home and not watch TV." },
+  { id:19, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/18.wav", words:[["qǐng","请","(polite) please ; invite"]], translation:"Please / to invite (treat someone)." },
+  { id:20, type:'vocab', audio:"audio/Joshua_Pritchard-2026-09-09/19.wav", words:[["péngyou","朋友","friend"], ["qǐng","请","(polite) please ; invite"], ["wǒ","我","I, me"], ["chī fàn","吃饭","to eat a meal"]], translation:"A friend is treating me to a meal." },
+];
+
+const LESSON11 = {
+  id: 'Joshua_Pritchard-2026-09-09',
+  title: 'Joshua Pritchard - 2026.09.09',
+  subtitle: 'Camping & autumn weather, 再 for "later", 叫/让/请, 找 & 事情',
+  date: '2026-09-09',
+  vocabCount: LESSON11_VOCAB.length,
+  sentenceCount: LESSON11_SENTENCES.length,
+  sourceUrl: 'https://pub-3d85ed8223794e9b9dd58caa0dbaea4a.r2.dev/2026-09-09-Joshua_Pritchard-2026.09.09.html',
+  images: ['images/Joshua_Pritchard-2026-09-09/0.png', 'images/Joshua_Pritchard-2026-09-09/1.png'],
+  rev: 1,
+};
+
 // The three February lessons were imported later than the rest, so they sit at the
 // end of this file even though they are the earliest lessons chronologically.
 // Their source pages are gone from the bucket; everything here came from the
@@ -2481,6 +2520,7 @@ const ALL_SEED_LESSONS = [
   [LESSON8,        LESSON8_VOCAB,      LESSON8_SENTENCES],
   [LESSON9,        LESSON9_VOCAB,      LESSON9_SENTENCES],
   [LESSON10,       LESSON10_VOCAB,     LESSON10_SENTENCES],
+  [LESSON11,       LESSON11_VOCAB,     LESSON11_SENTENCES],
 ];
 
 function seedLessons() {
@@ -2519,7 +2559,7 @@ function loadState() {
   // Backfill English meanings that were blank in previously-saved data,
   // using the (now complete) seed data as the source of truth
   const seedMeanings = {};
-  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB,
+  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB, LESSON11_VOCAB,
    LESSON_FEB06_VOCAB, LESSON_FEB13_VOCAB, LESSON_FEB20_VOCAB]
     .forEach(arr => arr.forEach(([p, c, m]) => {
       if (m && m.trim()) seedMeanings[`${c}|${p}`] = m;
@@ -2543,7 +2583,7 @@ function loadState() {
   const seedTranslations = {};
   const hanziOf = s => (s.words || []).map(w => w[1] || '').join('');
   [INITIAL_SENTENCES, LESSON2_SENTENCES, LESSON3_SENTENCES, LESSON4_SENTENCES,
-   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES,
+   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES, LESSON11_SENTENCES,
    LESSON_FEB06_SENTENCES, LESSON_FEB13_SENTENCES, LESSON_FEB20_SENTENCES]
     .forEach(arr => arr.forEach(s => {
       if (s.translation && s.translation.trim()) {
