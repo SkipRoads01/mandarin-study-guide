@@ -3012,7 +3012,6 @@ function markLearned() {
   saveFcLearned();
   state.fcCards.splice(state.fcIndex, 1);
   if (state.fcIndex >= state.fcCards.length) state.fcIndex = 0;
-  state.fcFlipped = false;
   renderFlashcard();
 }
 
@@ -3029,7 +3028,6 @@ function shuffleFlashcards() {
     [state.fcCards[i], state.fcCards[j]] = [state.fcCards[j], state.fcCards[i]];
   }
   state.fcIndex = 0;
-  state.fcFlipped = false;
   renderFlashcard();
 }
 
@@ -3103,9 +3101,11 @@ function flipCard() {
   if (inner) inner.classList.toggle('flipped', state.fcFlipped);
 }
 
+// The flip is a mode, not a per-card accident: if you turned this card over
+// to read the answer, the next one comes up the same way round. Tapping the
+// card flips back, and that sticks too.
 function fcNav(dir) {
   state.fcIndex = (state.fcIndex + dir + state.fcCards.length) % state.fcCards.length;
-  state.fcFlipped = false;
   renderFlashcard();
 }
 
@@ -3201,9 +3201,10 @@ function fbRefreshUI() {
     // Any other filter only needs the add button repainted, which must not
     // throw away the learner's place in the pile.
     if (document.getElementById('fcLesson')?.value === FB_FILTER || fbWasDrillingBook) {
-      const at = state.fcIndex;
+      const at = state.fcIndex, wasFlipped = state.fcFlipped;
       initFlashcards();
       state.fcIndex = Math.min(at, Math.max(0, state.fcCards.length - 1));
+      state.fcFlipped = wasFlipped;   // adding a card mid-drill is not a new drill
       renderFlashcard();
     } else {
       renderFlashcard();
