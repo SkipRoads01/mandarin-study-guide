@@ -337,10 +337,9 @@
     .vocab-card {
       background: var(--surface);
       border: 1.5px solid var(--border-light);
-      /* Top padding reserves a band for the absolutely-positioned controls
-         (add-to-book on the left, lesson tag on the right) so neither can land on
-         top of the character. */
-      padding: 32px 14px 18px;
+      /* Top padding reserves a band for the add-to-book button, which is
+         absolutely positioned, so it never lands on top of the character. */
+      padding: 30px 14px 18px;
       border-radius: var(--r);
       text-align: center;
       cursor: pointer;
@@ -372,34 +371,6 @@
       color: var(--ink-muted);
       line-height: 1.4;
     }
-    .vocab-lesson-tag {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      max-width: calc(100% - 60px);
-      font-size: 0.6rem;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 2px 5px;
-      color: var(--ink-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .vocab-audio-btn {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background: none;
-      border: none;
-      font-size: 0.85rem;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.15s;
-      padding: 2px;
-    }
-    .vocab-card:hover .vocab-audio-btn { opacity: 1; }
 
     /* ── FLASHCARD BOOK ──────────────────────── */
     /* The add-to-book control. It sits on anything card-shaped — vocab cards,
@@ -498,17 +469,11 @@
     }
     .vocab-card:hover .fb-card-remove { opacity: 1; }
     .fb-card-remove:hover { background: var(--red); border-color: var(--red); color: #fff; }
-    .fb-added-date {
-      font-size: 0.58rem;
-      color: var(--ink-muted);
-      margin-top: 8px;
-      opacity: 0.75;
-    }
 
     /* No hover on a touch screen, so reveal-on-hover would put the add button out of
        reach entirely. Show the controls permanently there instead. */
     @media (hover: none) {
-      .fb-add-btn, .wc-fb-btn, .fb-card-remove, .vocab-audio-btn { opacity: 1; }
+      .fb-add-btn, .wc-fb-btn, .fb-card-remove { opacity: 1; }
     }
 
     /* Adding from the Sentences view happens far from the book, so confirm it
@@ -663,22 +628,18 @@
       text-align: center;
       line-height: 1.5;
     }
-    .fc-back-play {
-      margin-top: 14px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.8);
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* Text that speaks itself when tapped. No icon — the affordance is a
+       pointer cursor and a soft lift on hover, so the word stays the thing
+       you look at. */
+    .fc-speak {
       cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.15s;
+      border-radius: 10px;
+      padding: 2px 10px;
+      transition: background 0.15s, transform 0.1s;
     }
-    .fc-back-play:hover { background: rgba(255,255,255,0.2); }
+    .fc-speak:hover { background: rgba(28,13,0,0.06); }
+    .fc-speak:active { transform: scale(0.97); }
+    .flashcard-back .fc-speak:hover { background: rgba(255,255,255,0.12); }
 
     .fc-nav {
       display: flex;
@@ -2898,19 +2859,13 @@ function renderVocab() {
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🔍</div><h3>No words found</h3><p>Try a different search term</p></div>`;
     return;
   }
-  grid.innerHTML = vocab.map(v => {
-    const les = state.lessons[v.lessonId];
-    const tag = les ? (les.date || les.title) : v.lessonId;
-    return `
+  grid.innerHTML = vocab.map(v => `
     <div class="vocab-card" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
       ${fbAddBtn(v.char, v.pinyin, v.meaning, v.lessonId)}
-      <div class="vocab-lesson-tag" title="${esc(v.lessonId)}">${tag}</div>
-      <button class="vocab-audio-btn" onclick="speakChinese('${esc(v.char)}',event)" title="Hear pronunciation">🔊</button>
-      <div class="vocab-char">${v.char}</div>
+      <div class="vocab-char fc-speak" onclick="speakChinese('${esc(v.char)}',event)" title="Tap to hear">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
       ${showMeanings ? `<div class="vocab-meaning">${v.meaning}</div>` : ''}
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
 // ─────────────────────────────────────────────
@@ -3001,19 +2956,27 @@ function renderFlashcard() {
     `${current} / ${total}` + (learnedCount > 0 ? ` · ${learnedCount} learned` : '');
   document.getElementById('fcProgress').style.width = `${pct}%`;
 
-  let frontContent = '';
-  let backContent = '';
+  // The Chinese text is the play button — tapping it speaks the word, and a
+  // tap anywhere else on the card flips it. speakChinese stops propagation,
+  // so the two never fire together.
+  const speak = `onclick="speakChinese('${esc(card.char)}',event)"`;
   const mode = state.fcMode;
 
+  // Same back in every mode: pinyin, the (speakable) character, the meaning.
+  const backContent =
+    `<div class="fc-back-pinyin">${card.pinyin}</div>`
+    + `<div class="fc-back-char fc-speak" ${speak} title="Tap to hear">${card.char}</div>`
+    + `<div class="fc-back-meaning">${card.meaning}</div>`;
+
+  let frontContent = '';
   if (mode === 'char') {
-    frontContent = `<div class="fc-char" onclick="speakChinese('${esc(card.char)}',event)">${card.char}</div><div class="fc-hint">Tap character to hear · tap card to flip</div>`;
-    backContent = `<div class="fc-back-pinyin">${card.pinyin}</div><div class="fc-back-char">${card.char}</div><div class="fc-back-meaning">${card.meaning}</div><button class="fc-back-play" onclick="speakChinese('${esc(card.char)}',event)" title="Hear pronunciation">🔊</button>`;
+    frontContent = `<div class="fc-char fc-speak" ${speak} title="Tap to hear">${card.char}</div><div class="fc-hint">Tap the character to hear it · tap the card to flip</div>`;
   } else if (mode === 'meaning') {
+    // The prompt is English here, so there is nothing to speak without
+    // giving away the answer — the whole face just flips.
     frontContent = `<div class="fc-char" style="font-size:1.5rem;font-family:'DM Sans',sans-serif;font-weight:500">${card.meaning}</div><div class="fc-hint">Tap to reveal character</div>`;
-    backContent = `<div class="fc-back-pinyin">${card.pinyin}</div><div class="fc-back-char">${card.char}</div><div class="fc-back-meaning">${card.meaning}</div><button class="fc-back-play" onclick="speakChinese('${esc(card.char)}',event)" title="Hear pronunciation">🔊</button>`;
   } else if (mode === 'pinyin') {
-    frontContent = `<div class="fc-char" style="font-size:2rem;font-family:'DM Sans',sans-serif;font-style:italic;color:var(--blue)">${card.pinyin}</div><div class="fc-hint">Tap to reveal character</div>`;
-    backContent = `<div class="fc-back-pinyin">${card.pinyin}</div><div class="fc-back-char">${card.char}</div><div class="fc-back-meaning">${card.meaning}</div><button class="fc-back-play" onclick="speakChinese('${esc(card.char)}',event)" title="Hear pronunciation">🔊</button>`;
+    frontContent = `<div class="fc-char fc-speak" style="font-size:2rem;font-family:'DM Sans',sans-serif;font-style:italic;color:var(--blue)" ${speak} title="Tap to hear">${card.pinyin}</div><div class="fc-hint">Tap the pinyin to hear it · tap the card to flip</div>`;
   }
 
   arena.innerHTML = `
@@ -3227,21 +3190,13 @@ function renderFlashcardBook() {
     <button class="btn btn-ghost" onclick="fbClear()">Clear book</button>
   `;
 
-  grid.innerHTML = cards.map(v => {
-    const lesson = state.lessons[v.lessonId];
-    const tag = lesson ? (lesson.date || lesson.title) : (v.lessonId || 'added by hand');
-    const added = v.addedAt ? new Date(v.addedAt).toLocaleDateString() : '';
-    return `
+  grid.innerHTML = cards.map(v => `
     <div class="vocab-card" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
       <button class="fb-card-remove" onclick="fbRemove('${esc(v.char)}','${esc(v.pinyin)}')" title="Remove from flashcard book">✕</button>
-      <div class="vocab-lesson-tag">${tag}</div>
-      <button class="vocab-audio-btn" onclick="speakChinese('${esc(v.char)}',event)" title="Hear pronunciation">🔊</button>
-      <div class="vocab-char">${v.char}</div>
+      <div class="vocab-char fc-speak" onclick="speakChinese('${esc(v.char)}',event)" title="Tap to hear">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
       <div class="vocab-meaning">${v.meaning}</div>
-      ${added ? `<div class="fb-added-date">added ${added}</div>` : ''}
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
 // ─────────────────────────────────────────────
@@ -4146,8 +4101,9 @@ function lesRenderStudy() {
   const card = s.cards[lesPlayer.studyIdx];
   document.getElementById('lesStudyCount').textContent =
     `Card ${lesPlayer.studyIdx + 1} of ${s.cards.length}`;
-  const front = `<div class="fc-char" onclick="lesPlayCard('${esc(card.front)}',event)">${card.front}</div><div class="fc-hint">Tap character to hear · tap card to flip</div>`;
-  const back = `<div class="fc-back-pinyin">${card.back}</div><div class="fc-back-char">${card.front}</div><div class="fc-back-meaning">${card.eng}</div>${card.note ? `<div class="fc-back-meaning" style="font-size:0.78rem;color:var(--ink-muted);border-top:1px solid var(--border-light);margin-top:8px;padding-top:8px">${card.note}</div>` : ''}<button class="fc-back-play" onclick="lesPlayCard('${esc(card.front)}',event)" title="Hear pronunciation">🔊</button>`;
+  const play = `onclick="lesPlayCard('${esc(card.front)}',event)"`;
+  const front = `<div class="fc-char fc-speak" ${play} title="Tap to hear">${card.front}</div><div class="fc-hint">Tap the character to hear it · tap the card to flip</div>`;
+  const back = `<div class="fc-back-pinyin">${card.back}</div><div class="fc-back-char fc-speak" ${play} title="Tap to hear">${card.front}</div><div class="fc-back-meaning">${card.eng}</div>${card.note ? `<div class="fc-back-meaning" style="font-size:0.78rem;color:var(--ink-muted);border-top:1px solid var(--border-light);margin-top:8px;padding-top:8px">${card.note}</div>` : ''}`;
   document.getElementById('lesStudyArena').innerHTML = `
     <div class="flashcard-wrap" onclick="lesStudyFlip()">
       <div class="flashcard-inner ${lesPlayer.studyFlipped ? 'flipped' : ''}" id="lesFcInner">
