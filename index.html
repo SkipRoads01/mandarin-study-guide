@@ -3516,7 +3516,7 @@ function renderSentences() {
           ${audioHtml}
         </div>
         <div class="sentence-words">${wordsHtml}</div>
-        ${s.translation ? `<div class="sentence-translation">🇬🇧 ${s.translation}</div>` : ''}
+        ${s.translation ? `<div class="sentence-translation">${s.translation}</div>` : ''}
       </div>
     `;
   }).join('');
