@@ -338,6 +338,47 @@
       gap: 14px;
     }
 
+    /* Sectioned vocabulary. Collapsed, the page reads as a contents list
+       with counts instead of a thousand-card wall. */
+    .vocab-groups { display: block; }
+    .vocab-group { margin-bottom: 10px; }
+    .vocab-group-head {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--r);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-align: left;
+      transition: all 0.15s;
+    }
+    .vocab-group-head:hover { border-color: var(--red); background: var(--red-soft); }
+    .vocab-group-head.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    .vgh-chevron { color: var(--ink-muted); font-size: 0.75rem; width: 12px; }
+    .vgh-label { flex: 1; min-width: 0; }
+    .vgh-count {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2px 9px;
+    }
+    .vocab-group-head.open + .vocab-grid {
+      padding: 14px;
+      border: 1.5px solid var(--border-light);
+      border-top: none;
+      border-radius: 0 0 var(--r) var(--r);
+    }
+    .hidden-btn { display: none; }
+
     .vocab-card {
       background: var(--surface);
       border: 1.5px solid var(--border-light);
@@ -1492,7 +1533,13 @@ box-shadow: 0 12px 40px var(--shadow-md);
         <select class="filter-select" id="vocabLesson" onchange="renderVocab()">
           <option value="all">All Lessons</option>
         </select>
+        <select class="filter-select" id="vocabGroup" onchange="setVocabGroupBy(this.value)">
+          <option value="type">Group by type</option>
+          <option value="lesson">Group by lesson</option>
+          <option value="none">No grouping</option>
+        </select>
         <button class="btn btn-ghost" onclick="toggleMeanings()">Toggle Meanings</button>
+        <button class="btn btn-ghost" id="vocabExpandBtn" onclick="toggleAllVocabGroups()">Expand all</button>
       </div>
       <div class="vocab-grid" id="vocabGrid"></div>
     </div>
@@ -2914,6 +2961,94 @@ function toggleMeanings() {
   renderVocab();
 }
 
+// ── Word types ──────────────────────────────────
+// Over a thousand cards in one flat grid is unreadable, so the grid is cut
+// into sections. Lesson grouping is exact. Type grouping is a best guess:
+// the lessons carry no part-of-speech data, only an English gloss, so this
+// leans on closed sets of function words plus the one gloss pattern that is
+// genuinely reliable — a meaning starting with "to " is a verb. Anything it
+// cannot place honestly goes to "Nouns & other words" rather than being
+// filed somewhere it does not belong.
+const WT = (s) => new Set(s.split(' '));
+const WT_PRONOUN = WT('我 你 您 他 她 它 我们 你们 他们 她们 咱们 自己 大家 别人 谁 什么 哪 哪儿 哪里 哪个 这 那 这儿 那儿 这里 那里 怎么 为什么 多少 几 什么时候 别的 几天 多长时间');
+const WT_GRAMMAR = WT('的 了 吗 吧 呢 着 过 得 地 啊 呀 嘛 把 被 是的 多了 来说');
+const WT_CONNECT = WT('和 跟 但 但是 可是 因为 所以 如果 虽然 还是 而且 不但 然后 最后 首先 又 还有 关于 对 比 从 到 给 向 为了 除了');
+const WT_ADVERB  = WT('很 太 最 更 非常 常常 通常 有时候 已经 正在 越来越 一起 别 不 没 也 都 再 就 才 还 刚才 一定 可能 大概 差不多 当然 真 挺 特别 再次 一次 正好 只 先 快要 马上 终于 其实 好好 不常 一点 一点儿 有点儿 稍微');
+const WT_TIME    = WT('今天 明天 昨天 前天 后天 早上 上午 中午 下午 晚上 现在 以前 以后 最近 今年 去年 明年 前年 星期 周末 春天 夏天 秋天 冬天 时间 时候 小时 分钟 年 月 日 号 点 秒 平时 当时 将来 过去 每天 白天 夜里 一会儿 生日 复活节 春节 圣诞节');
+const WT_PLACE   = WT('中国 美国 日本 韩国 英国 法国 德国 加拿大 夏威夷 成都 北京 上海 纽约 波士顿 迈阿密 佛罗里达 瑞丽 洛杉矶 加州 学校 家 我家 他家 医院 公园 教室 机场 商店 饭馆 餐厅 银行 图书馆 办公室 农村 城市 小镇 菜市场 车站 火车站 大学 中学 小学 房间 厨房 厕所 超市 山 海 路 地方 世界 国家 附近 公司 旅馆 酒店 球场 体育馆');
+const WT_PEOPLE  = WT('妈妈 爸爸 父母 朋友 妻子 丈夫 孩子 老师 学生 同学 同事 侄子 女儿 儿子 哥哥 弟弟 姐姐 妹妹 爷爷 奶奶 外婆 外公 人 男人 女人 大人 好人 成人 年轻人 青少年 医生 警察 队友 家人 一家人 老板 邻居 美国人 中国人 参议员 团队 球队 队');
+const WT_NUMCHAR = new Set('一二三四五六七八九十百千万零两半第');
+const WT_ADJ = WT('good bad hot cold busy tired big small quick fast slow difficult easy important comfortable clever smart happy glad serious dangerous safe quiet interesting boring complicated far near warm cool expensive cheap new old young tall short long heavy light clean dirty beautiful delicious hungry thirsty alive');
+
+const WORD_TYPES = [
+  ['verb',    'Verbs & actions'],
+  ['people',  'People'],
+  ['place',   'Places'],
+  ['time',    'Time'],
+  ['number',  'Numbers & amounts'],
+  ['adj',     'Describing words'],
+  ['pronoun', 'Pronouns & questions'],
+  ['adverb',  'Adverbs & degree'],
+  ['connect', 'Connecting words'],
+  ['grammar', 'Grammar particles'],
+  ['other',   'Nouns & other words'],
+];
+
+function wordType(v) {
+  const c = v.char || '';
+  const m = (v.meaning || '').toLowerCase().trim();
+  if (m.startsWith('to ') || m.startsWith('to,')) return 'verb';
+  if (WT_PRONOUN.has(c)) return 'pronoun';
+  if (WT_GRAMMAR.has(c)) return 'grammar';
+  if (WT_CONNECT.has(c)) return 'connect';
+  if (WT_ADVERB.has(c))  return 'adverb';
+  if (WT_TIME.has(c))    return 'time';
+  if (WT_PLACE.has(c))   return 'place';
+  if (WT_PEOPLE.has(c))  return 'people';
+  if (m.includes('measure word')) return 'number';
+  if (c && [...c].every(ch => WT_NUMCHAR.has(ch))) return 'number';
+  if (/^\(?\d/.test(m) || /^(one|two|three|four|five|six|seven|eight|nine|ten|half|first|second|third)\b/.test(m)) return 'number';
+  if (WT_ADJ.has(m.split(/[,;，/（(]/)[0].trim())) return 'adj';
+  if (c.length > 1) {
+    if ('国省市州城镇村'.includes(c[c.length - 1])) return 'place';
+    if (c.length <= 3 && '员师生友'.includes(c[c.length - 1])) return 'people';
+    if ('天年月日'.includes(c[c.length - 1]) && '今明昨去前后每这那'.includes(c[0])) return 'time';
+  }
+  return 'other';
+}
+
+const VOCAB_GROUP_KEY = 'mandarinHub_vocabGroupBy';
+let vocabGroupBy = 'type';
+let vocabOpenGroups = new Set();   // which sections are expanded
+
+function loadVocabGroupBy() {
+  try {
+    const v = localStorage.getItem(VOCAB_GROUP_KEY);
+    if (v === 'type' || v === 'lesson' || v === 'none') vocabGroupBy = v;
+  } catch(e) {}
+}
+
+function setVocabGroupBy(v) {
+  vocabGroupBy = v;
+  vocabOpenGroups.clear();
+  try { localStorage.setItem(VOCAB_GROUP_KEY, v); } catch(e) {}
+  renderVocab();
+}
+
+function toggleVocabGroup(key) {
+  if (vocabOpenGroups.has(key)) vocabOpenGroups.delete(key);
+  else vocabOpenGroups.add(key);
+  renderVocab();
+}
+
+function toggleAllVocabGroups() {
+  const keys = [...document.querySelectorAll('#vocabGrid .vocab-group')].map(g => g.dataset.key);
+  const allOpen = keys.length > 0 && keys.every(k => vocabOpenGroups.has(k));
+  if (allOpen) vocabOpenGroups.clear();
+  else keys.forEach(k => vocabOpenGroups.add(k));
+  renderVocab();
+}
+
 function renderVocab() {
   const search = document.getElementById('vocabSearch')?.value.toLowerCase() || '';
   const lesson = document.getElementById('vocabLesson')?.value || 'all';
@@ -2927,17 +3062,82 @@ function renderVocab() {
   }
   const grid = document.getElementById('vocabGrid');
   if (!grid) return;
+
+  const sel = document.getElementById('vocabGroup');
+  if (sel && sel.value !== vocabGroupBy) sel.value = vocabGroupBy;
+
   if (vocab.length === 0) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🔍</div><h3>No words found</h3><p>Try a different search term</p></div>`;
+    grid.className = '';
+    grid.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><h3>No words found</h3><p>Try a different search term</p></div>`;
+    updateExpandBtn();
     return;
   }
-  grid.innerHTML = vocab.map(v => `
+
+  const cardHtml = v => `
     <div class="vocab-card" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event)"${tipAttrs(v.char, v.pinyin, v.meaning, showMeanings)}>
       ${fbAddBtn(v.char, v.pinyin, v.meaning, v.lessonId)}
       <div class="vocab-char fc-speak" onclick="speakChinese('${esc(v.char)}',event)" title="Tap to hear">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
       ${showMeanings ? `<div class="vocab-meaning">${v.meaning}</div>` : ''}
-    </div>`).join('');
+    </div>`;
+
+  if (vocabGroupBy === 'none') {
+    grid.className = 'vocab-grid';
+    grid.innerHTML = vocab.map(cardHtml).join('');
+    updateExpandBtn();
+    return;
+  }
+
+  // Build the sections, in a fixed order so the page does not reshuffle.
+  let groups;
+  if (vocabGroupBy === 'type') {
+    const by = new Map(WORD_TYPES.map(([k]) => [k, []]));
+    vocab.forEach(v => by.get(wordType(v)).push(v));
+    groups = WORD_TYPES
+      .map(([k, label]) => ({ key: k, label, items: by.get(k) }))
+      .filter(g => g.items.length);
+  } else {
+    const by = new Map();
+    vocab.forEach(v => {
+      if (!by.has(v.lessonId)) by.set(v.lessonId, []);
+      by.get(v.lessonId).push(v);
+    });
+    groups = [...by.entries()]
+      .map(([id, items]) => {
+        const les = state.lessons[id];
+        return { key: id, label: les ? `Lesson ${les.date || les.title}` : id, date: les?.date || '', items };
+      })
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  }
+
+  // A search that matched something should show it, not hide it behind a
+  // collapsed header.
+  const forceOpen = !!search;
+
+  grid.className = 'vocab-groups';
+  grid.innerHTML = groups.map(g => {
+    const open = forceOpen || vocabOpenGroups.has(g.key);
+    return `
+    <section class="vocab-group" data-key="${esc(g.key)}">
+      <button class="vocab-group-head${open ? ' open' : ''}" onclick="toggleVocabGroup('${esc(g.key)}')" aria-expanded="${open}">
+        <span class="vgh-chevron">${open ? '▾' : '▸'}</span>
+        <span class="vgh-label">${g.label}</span>
+        <span class="vgh-count">${g.items.length}</span>
+      </button>
+      ${open ? `<div class="vocab-grid">${g.items.map(cardHtml).join('')}</div>` : ''}
+    </section>`;
+  }).join('');
+  updateExpandBtn();
+}
+
+function updateExpandBtn() {
+  const btn = document.getElementById('vocabExpandBtn');
+  if (!btn) return;
+  if (vocabGroupBy === 'none') { btn.classList.add('hidden-btn'); return; }
+  btn.classList.remove('hidden-btn');
+  const keys = [...document.querySelectorAll('#vocabGrid .vocab-group')].map(g => g.dataset.key);
+  const allOpen = keys.length > 0 && keys.every(k => vocabOpenGroups.has(k));
+  btn.textContent = allOpen ? 'Collapse all' : 'Expand all';
 }
 
 // ─────────────────────────────────────────────
@@ -4335,6 +4535,7 @@ function lesResetAll() {
 loadState();
 loadFcLearned();
 loadFlashcardBook();
+loadVocabGroupBy();
 lesLoadDone();
 lesLoadManifest();
 populateLessonSelects();
