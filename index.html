@@ -338,7 +338,7 @@
       background: var(--surface);
       border: 1.5px solid var(--border-light);
       /* Top padding reserves a band for the absolutely-positioned controls
-         (+FB on the left, lesson tag on the right) so neither can land on
+         (add-to-book on the left, lesson tag on the right) so neither can land on
          top of the character. */
       padding: 32px 14px 18px;
       border-radius: var(--r);
@@ -402,48 +402,41 @@
     .vocab-card:hover .vocab-audio-btn { opacity: 1; }
 
     /* ── FLASHCARD BOOK ──────────────────────── */
-    /* The +FB control. It sits on anything card-shaped — vocab cards, word
-       chips in a sentence, the flashcard itself — and reads as a toggle:
-       muted "+FB" when the word is loose, gold "✓FB" once it is in the book. */
+    /* The add-to-book control. It sits on anything card-shaped — vocab cards,
+       word chips in a sentence, the flashcard itself — and reads as a toggle
+       with no wording at all: plus-and-book to add, check-and-book once the
+       word is in, gold to mark it as kept. */
     .fb-add-btn {
       position: absolute;
       top: 8px;
       left: 8px;
       display: inline-flex;
       align-items: center;
-      gap: 1px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.6rem;
-      font-weight: 600;
+      justify-content: center;
+      font-size: 0.66rem;
       line-height: 1;
       padding: 3px 5px;
       border-radius: 4px;
       border: 1px solid var(--border);
       background: var(--surface2);
-      color: var(--ink-muted);
       cursor: pointer;
       opacity: 0;
       transition: all 0.15s;
     }
     .vocab-card:hover .fb-add-btn { opacity: 1; }
-    .fb-add-btn:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
-    .fb-add-btn.in-book { opacity: 1; background: var(--gold); border-color: var(--gold); color: #fff; }
+    .fb-add-btn:hover { background: var(--gold); border-color: var(--gold); }
+    .fb-add-btn.in-book { opacity: 1; background: var(--gold); border-color: var(--gold); }
     .fb-add-btn.in-book:hover { background: var(--red); border-color: var(--red); }
 
     .wc-fb-btn {
       position: absolute;
-      top: -6px;
-      right: -6px;
-      width: 17px;
-      height: 17px;
-      padding: 0;
-      border-radius: 50%;
+      top: -7px;
+      right: -7px;
+      padding: 2px 3px;
+      border-radius: 5px;
       border: 1px solid var(--border);
       background: var(--surface);
-      color: var(--ink-muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.68rem;
-      font-weight: 700;
+      font-size: 0.56rem;
       line-height: 1;
       display: flex;
       align-items: center;
@@ -453,27 +446,25 @@
       transition: all 0.15s;
     }
     .word-chip:hover .wc-fb-btn { opacity: 1; }
-    .wc-fb-btn:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
-    .wc-fb-btn.in-book { opacity: 1; background: var(--gold); border-color: var(--gold); color: #fff; }
+    .wc-fb-btn:hover { background: var(--gold); border-color: var(--gold); }
+    .wc-fb-btn.in-book { opacity: 1; background: var(--gold); border-color: var(--gold); }
 
     .fb-card-fc {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 18px;
-      padding: 8px 16px;
-      border-radius: 20px;
+      justify-content: center;
+      margin-top: 16px;
+      padding: 7px 12px;
+      border-radius: 18px;
       border: 1.5px solid var(--border);
       background: var(--surface);
-      color: var(--ink-light);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 500;
+      font-size: 0.9rem;
+      line-height: 1;
       cursor: pointer;
       transition: all 0.15s;
     }
-    .fb-card-fc:hover { border-color: var(--gold); color: var(--gold); }
-    .fb-card-fc.in-book { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .fb-card-fc:hover { border-color: var(--gold); }
+    .fb-card-fc.in-book { background: var(--gold); border-color: var(--gold); }
 
     .fb-toolbar {
       display: flex;
@@ -514,7 +505,7 @@
       opacity: 0.75;
     }
 
-    /* No hover on a touch screen, so reveal-on-hover would put +FB out of
+    /* No hover on a touch screen, so reveal-on-hover would put the add button out of
        reach entirely. Show the controls permanently there instead. */
     @media (hover: none) {
       .fb-add-btn, .wc-fb-btn, .fb-card-remove, .vocab-audio-btn { opacity: 1; }
@@ -3037,10 +3028,7 @@ function renderFlashcard() {
       <button class="fc-nav-btn correct-btn" onclick="markLearned()" title="Learned — remove from pile">✓</button>
       <button class="fc-nav-btn" onclick="fcNav(1)" title="Next">→</button>
     </div>
-    <button class="fb-card-fc${fbHas(card.char, card.pinyin) ? ' in-book' : ''}"
-            onclick="fbToggle('${esc(card.char)}','${esc(card.pinyin)}','${esc(card.meaning)}','${esc(card.lessonId || '')}',event)">
-      📕 ${fbHas(card.char, card.pinyin) ? 'In your flashcard book ✓' : '+FB — set this one aside'}
-    </button>
+    ${fbAddBtn(card.char, card.pinyin, card.meaning, card.lessonId || '', 'fb-card-fc')}
     ${learnedCount > 0 ? `<button class="fc-reset-link" onclick="resetLearnedCards()" title="Return all learned cards to the pile">↺ Reset pile (${learnedCount} learned)</button>` : ''}
   `;
 }
@@ -3060,7 +3048,7 @@ function fcNav(dir) {
 // ─────────────────────────────────────────────
 // FLASHCARD BOOK
 // ─────────────────────────────────────────────
-// A hand-picked pile: words the learner tapped +FB on because they want to
+// A hand-picked pile: words the learner tapped the book icon on because they want to
 // come back to them, independent of which lesson they came from.
 //
 // Entries store the whole word, not a pointer into state.vocab, so a word
@@ -3097,7 +3085,7 @@ function saveFlashcardBook() {
   }
 }
 
-// Every +FB control toggles: a second click takes the word back out, so an
+// Every add-to-book control toggles: a second click takes the word back out, so an
 // accidental add is undone where it was made instead of over in the book.
 function fbToggle(char, pinyin, meaning, lessonId, event) {
   if (event) event.stopPropagation();
@@ -3135,7 +3123,7 @@ function fbClear() {
   fbRefreshUI();
 }
 
-// Repaint whatever is on screen, since +FB buttons live in four views.
+// Repaint whatever is on screen, since add-to-book buttons live in four views.
 function fbRefreshUI() {
   fbUpdateBadge();
   populateLessonSelects();
@@ -3146,7 +3134,7 @@ function fbRefreshUI() {
   else if (view === 'flashcards') {
     // When the drill is the book itself, the pile just changed membership and
     // has to be rebuilt — otherwise a cleared book would keep dealing cards.
-    // Any other filter only needs the +FB button repainted, which must not
+    // Any other filter only needs the add button repainted, which must not
     // throw away the learner's place in the pile.
     if (document.getElementById('fcLesson')?.value === FB_FILTER || fbWasDrillingBook) {
       const at = state.fcIndex;
@@ -3188,15 +3176,16 @@ function fbToast(msg) {
   fbToastTimer = setTimeout(() => el.classList.remove('show'), 1800);
 }
 
-// The +FB control, rendered wherever a word is shown as a card.
+// The add-to-book control, rendered wherever a word is shown as a card.
+// Icon only — plus-and-book to add, check-and-book once it is in. The word
+// itself is the content; the control should not shout over it. Hover title
+// and aria-label carry the meaning for anyone who needs it spelled out.
 function fbAddBtn(char, pinyin, meaning, lessonId, cls = 'fb-add-btn') {
   const inBook = fbHas(char, pinyin);
   const args = `'${esc(char)}','${esc(pinyin)}','${esc(meaning)}','${esc(lessonId)}',event`;
-  const label = cls === 'wc-fb-btn'
-    ? (inBook ? '✓' : '+')
-    : (inBook ? '✓FB' : '+FB');
+  const label = inBook ? '✓📕' : '+📕';
   const title = inBook ? 'In your flashcard book — click to remove' : 'Add to flashcard book';
-  return `<button class="${cls}${inBook ? ' in-book' : ''}" onclick="fbToggle(${args})" title="${title}">${label}</button>`;
+  return `<button class="${cls}${inBook ? ' in-book' : ''}" onclick="fbToggle(${args})" title="${title}" aria-label="${title}">${label}</button>`;
 }
 
 function fbStudy() {
@@ -3223,7 +3212,7 @@ function renderFlashcardBook() {
       <div class="empty-state" style="grid-column:1/-1">
         <div class="es-icon">📕</div>
         <h3>Your flashcard book is empty</h3>
-        <p>Hit <strong>+FB</strong> on any word — in Vocabulary, in a sentence, or on a flashcard — to set it aside here.</p>
+        <p>Hit <strong>+📕</strong> on any word — in Vocabulary, in a sentence, or on a flashcard — to set it aside here.</p>
       </div>`;
     return;
   }
