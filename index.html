@@ -119,6 +119,19 @@
     .nav-btn:hover { background: rgba(255,255,255,0.07); color: #f0e4d2; }
     .nav-btn.active { background: var(--red); color: #fff; font-weight: 500; }
     .nav-btn .icon { width: 18px; text-align: center; font-size: 1rem; }
+    .nav-badge {
+      margin-left: auto;
+      min-width: 18px;
+      padding: 1px 5px;
+      border-radius: 9px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .nav-badge:empty { display: none; }
 
     .sidebar-lessons {
       padding: 12px;
@@ -188,6 +201,8 @@
     .btn-primary:hover { background: var(--red-hover); }
     .btn-ghost { background: none; border: 1.5px solid var(--border); color: var(--ink-light); }
     .btn-ghost:hover { background: var(--surface2); border-color: var(--ink-muted); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn:disabled:hover { background: none; border-color: var(--border); }
 
     .content { padding: 28px 32px; }
 
@@ -322,8 +337,11 @@
     .vocab-card {
       background: var(--surface);
       border: 1.5px solid var(--border-light);
+      /* Top padding reserves a band for the absolutely-positioned controls
+         (+FB on the left, lesson tag on the right) so neither can land on
+         top of the character. */
+      padding: 32px 14px 18px;
       border-radius: var(--r);
-      padding: 18px 14px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
@@ -358,12 +376,16 @@
       position: absolute;
       top: 8px;
       right: 8px;
+      max-width: calc(100% - 60px);
       font-size: 0.6rem;
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 2px 5px;
       color: var(--ink-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .vocab-audio-btn {
       position: absolute;
@@ -378,6 +400,146 @@
       padding: 2px;
     }
     .vocab-card:hover .vocab-audio-btn { opacity: 1; }
+
+    /* ── FLASHCARD BOOK ──────────────────────── */
+    /* The +FB control. It sits on anything card-shaped — vocab cards, word
+       chips in a sentence, the flashcard itself — and reads as a toggle:
+       muted "+FB" when the word is loose, gold "✓FB" once it is in the book. */
+    .fb-add-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 1px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      line-height: 1;
+      padding: 3px 5px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--ink-muted);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.15s;
+    }
+    .vocab-card:hover .fb-add-btn { opacity: 1; }
+    .fb-add-btn:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .fb-add-btn.in-book { opacity: 1; background: var(--gold); border-color: var(--gold); color: #fff; }
+    .fb-add-btn.in-book:hover { background: var(--red); border-color: var(--red); }
+
+    .wc-fb-btn {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 17px;
+      height: 17px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.15s;
+    }
+    .word-chip:hover .wc-fb-btn { opacity: 1; }
+    .wc-fb-btn:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .wc-fb-btn.in-book { opacity: 1; background: var(--gold); border-color: var(--gold); color: #fff; }
+
+    .fb-card-fc {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--ink-light);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .fb-card-fc:hover { border-color: var(--gold); color: var(--gold); }
+    .fb-card-fc.in-book { background: var(--gold); border-color: var(--gold); color: #fff; }
+
+    .fb-toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+    .fb-count {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      margin-right: auto;
+    }
+    .fb-count strong { color: var(--ink); font-weight: 600; }
+    .fb-card-remove {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--ink-muted);
+      font-size: 0.7rem;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.15s;
+    }
+    .vocab-card:hover .fb-card-remove { opacity: 1; }
+    .fb-card-remove:hover { background: var(--red); border-color: var(--red); color: #fff; }
+    .fb-added-date {
+      font-size: 0.58rem;
+      color: var(--ink-muted);
+      margin-top: 8px;
+      opacity: 0.75;
+    }
+
+    /* No hover on a touch screen, so reveal-on-hover would put +FB out of
+       reach entirely. Show the controls permanently there instead. */
+    @media (hover: none) {
+      .fb-add-btn, .wc-fb-btn, .fb-card-remove, .vocab-audio-btn { opacity: 1; }
+    }
+
+    /* Adding from the Sentences view happens far from the book, so confirm it
+       on screen rather than leaving the click feeling like it did nothing. */
+    .fb-toast {
+      position: fixed;
+      bottom: 26px;
+      left: 50%;
+      z-index: 400;
+      padding: 10px 18px;
+      border-radius: 22px;
+      background: var(--ink);
+      color: #f4ede0;
+      font-size: 0.8rem;
+      font-weight: 500;
+      box-shadow: 0 6px 24px var(--shadow-md);
+      transform: translateX(-50%) translateY(90px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .fb-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
     /* ── FLASHCARDS ──────────────────────────── */
     .flashcard-controls {
@@ -858,6 +1020,7 @@ box-shadow: 0 12px 40px var(--shadow-md);
       gap: 2px;
       cursor: pointer;
       transition: all 0.15s;
+      position: relative;
     }
     .word-chip:hover { border-color: var(--red); background: var(--red-soft); }
     .wc-char { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; font-weight: 600; }
@@ -1091,7 +1254,7 @@ box-shadow: 0 12px 40px var(--shadow-md);
         grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
         gap: 10px;
       }
-      .vocab-card { padding: 14px 10px; }
+      .vocab-card { padding: 30px 10px 14px; }
       .vocab-char { font-size: 1.7rem; }
 
       /* Flashcards */
@@ -1289,6 +1452,10 @@ box-shadow: 0 12px 40px var(--shadow-md);
     <button class="nav-btn" onclick="showView('flashcards')" id="nav-flashcards">
       <span class="icon">🃏</span> Flashcards
     </button>
+    <button class="nav-btn" onclick="showView('flashcardbook')" id="nav-flashcardbook">
+      <span class="icon">📕</span> Flashcard Book
+      <span class="nav-badge" id="fbNavBadge"></span>
+    </button>
     <button class="nav-btn" onclick="showView('quiz')" id="nav-quiz">
       <span class="icon">✏️</span> Quiz
     </button>
@@ -1375,6 +1542,12 @@ box-shadow: 0 12px 40px var(--shadow-md);
         </div>
       </div>
       <div class="flashcard-arena" id="flashcardArena"></div>
+    </div>
+
+    <!-- FLASHCARD BOOK -->
+    <div class="view" id="view-flashcardbook">
+      <div class="fb-toolbar" id="fbToolbar"></div>
+      <div class="vocab-grid" id="fbGrid"></div>
     </div>
 
     <!-- QUIZ -->
@@ -2620,6 +2793,9 @@ function saveState() {
 }
 
 function getAllVocab(lessonFilter = 'all') {
+  // FB_FILTER is a pseudo-lesson, so every vocab consumer — flashcards, quiz,
+  // the vocabulary grid — can study the book without knowing it exists.
+  if (lessonFilter === FB_FILTER) return fbCards.slice();
   return Object.values(state.vocab).filter(v =>
     lessonFilter === 'all' || v.lessonId === lessonFilter
   );
@@ -2640,6 +2816,7 @@ const VIEW_META = {
   learn: { title: 'Learn Path', sub: 'A guided, step-by-step path through your lessons' },
   vocabulary: { title: 'Vocabulary', sub: 'Browse all words from your lessons' },
   flashcards: { title: 'Flashcards', sub: 'Practice character recall with flip cards' },
+  flashcardbook: { title: 'Flashcard Book', sub: 'Words you set aside to learn' },
   quiz: { title: 'Quiz', sub: 'Test your vocabulary knowledge' },
   sentences: { title: 'Sentences & Dialogues', sub: 'Review lesson sentences word by word' },
   lessons: { title: 'Lessons', sub: 'Manage and import lesson content' },
@@ -2657,10 +2834,11 @@ function showView(name) {
   if (name === 'dashboard') renderDashboard();
   if (name === 'learn') lesEnter();
   if (name === 'vocabulary') renderVocab();
+  populateLessonSelects();
   if (name === 'flashcards') initFlashcards();
+  if (name === 'flashcardbook') renderFlashcardBook();
   if (name === 'sentences') renderSentences();
   if (name === 'lessons') renderLessonsManager();
-  populateLessonSelects();
   closeSidebar();
 }
 
@@ -2729,15 +2907,19 @@ function renderVocab() {
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🔍</div><h3>No words found</h3><p>Try a different search term</p></div>`;
     return;
   }
-  grid.innerHTML = vocab.map(v => `
+  grid.innerHTML = vocab.map(v => {
+    const les = state.lessons[v.lessonId];
+    const tag = les ? (les.date || les.title) : v.lessonId;
+    return `
     <div class="vocab-card" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
-      <div class="vocab-lesson-tag">${v.lessonId}</div>
+      ${fbAddBtn(v.char, v.pinyin, v.meaning, v.lessonId)}
+      <div class="vocab-lesson-tag" title="${esc(v.lessonId)}">${tag}</div>
       <button class="vocab-audio-btn" onclick="speakChinese('${esc(v.char)}',event)" title="Hear pronunciation">🔊</button>
       <div class="vocab-char">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
       ${showMeanings ? `<div class="vocab-meaning">${v.meaning}</div>` : ''}
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 // ─────────────────────────────────────────────
@@ -2855,6 +3037,10 @@ function renderFlashcard() {
       <button class="fc-nav-btn correct-btn" onclick="markLearned()" title="Learned — remove from pile">✓</button>
       <button class="fc-nav-btn" onclick="fcNav(1)" title="Next">→</button>
     </div>
+    <button class="fb-card-fc${fbHas(card.char, card.pinyin) ? ' in-book' : ''}"
+            onclick="fbToggle('${esc(card.char)}','${esc(card.pinyin)}','${esc(card.meaning)}','${esc(card.lessonId || '')}',event)">
+      📕 ${fbHas(card.char, card.pinyin) ? 'In your flashcard book ✓' : '+FB — set this one aside'}
+    </button>
     ${learnedCount > 0 ? `<button class="fc-reset-link" onclick="resetLearnedCards()" title="Return all learned cards to the pile">↺ Reset pile (${learnedCount} learned)</button>` : ''}
   `;
 }
@@ -2869,6 +3055,204 @@ function fcNav(dir) {
   state.fcIndex = (state.fcIndex + dir + state.fcCards.length) % state.fcCards.length;
   state.fcFlipped = false;
   renderFlashcard();
+}
+
+// ─────────────────────────────────────────────
+// FLASHCARD BOOK
+// ─────────────────────────────────────────────
+// A hand-picked pile: words the learner tapped +FB on because they want to
+// come back to them, independent of which lesson they came from.
+//
+// Entries store the whole word, not a pointer into state.vocab, so a word
+// stays in the book after its lesson is deleted or re-seeded at a new rev.
+// It lives under its own localStorage key for the same reason the learned
+// pile does — re-seeding lesson data must never wipe the learner's own work.
+
+const FB_KEY = 'mandarinHub_flashcardBook';
+const FB_FILTER = '__book__';   // pseudo-lesson id understood by getAllVocab
+
+let fbCards = [];               // [{char, pinyin, meaning, lessonId, addedAt}]
+let fbIndex = new Set();        // "char|pinyin" of everything in fbCards
+
+function fbKey(char, pinyin) { return `${char}|${pinyin}`; }
+function fbHas(char, pinyin) { return fbIndex.has(fbKey(char, pinyin)); }
+function fbReindex() { fbIndex = new Set(fbCards.map(c => fbKey(c.char, c.pinyin))); }
+
+function loadFlashcardBook() {
+  try {
+    const raw = localStorage.getItem(FB_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) fbCards = parsed.filter(c => c && c.char);
+    }
+  } catch(e) {}
+  fbReindex();
+}
+
+function saveFlashcardBook() {
+  try { localStorage.setItem(FB_KEY, JSON.stringify(fbCards)); }
+  catch(e) {
+    console.error('saveFlashcardBook failed:', e);
+    alert(`⚠️ Could not save your flashcard book (${e.name || 'error'}).\n\nDetails: ${e.message || e}`);
+  }
+}
+
+// Every +FB control toggles: a second click takes the word back out, so an
+// accidental add is undone where it was made instead of over in the book.
+function fbToggle(char, pinyin, meaning, lessonId, event) {
+  if (event) event.stopPropagation();
+  fbNoteDrillingBook();
+  const key = fbKey(char, pinyin);
+  if (fbIndex.has(key)) {
+    fbCards = fbCards.filter(c => fbKey(c.char, c.pinyin) !== key);
+    fbIndex.delete(key);
+    fbToast(`Removed ${char} from your flashcard book`);
+  } else {
+    fbCards.push({ char, pinyin, meaning: meaning || '', lessonId: lessonId || '', addedAt: Date.now() });
+    fbIndex.add(key);
+    fbToast(`Added ${char} to your flashcard book`);
+  }
+  saveFlashcardBook();
+  fbRefreshUI();
+}
+
+function fbRemove(char, pinyin) {
+  fbNoteDrillingBook();
+  const key = fbKey(char, pinyin);
+  fbCards = fbCards.filter(c => fbKey(c.char, c.pinyin) !== key);
+  fbIndex.delete(key);
+  saveFlashcardBook();
+  fbRefreshUI();
+}
+
+function fbClear() {
+  if (fbCards.length === 0) return;
+  if (!confirm(`Remove all ${fbCards.length} cards from your flashcard book?\n\nThe words stay in their lessons — only the book is emptied.`)) return;
+  fbNoteDrillingBook();
+  fbCards = [];
+  fbIndex.clear();
+  saveFlashcardBook();
+  fbRefreshUI();
+}
+
+// Repaint whatever is on screen, since +FB buttons live in four views.
+function fbRefreshUI() {
+  fbUpdateBadge();
+  populateLessonSelects();
+  const view = state.currentView;
+  if (view === 'flashcardbook') renderFlashcardBook();
+  else if (view === 'vocabulary') renderVocab();
+  else if (view === 'sentences') renderSentences();
+  else if (view === 'flashcards') {
+    // When the drill is the book itself, the pile just changed membership and
+    // has to be rebuilt — otherwise a cleared book would keep dealing cards.
+    // Any other filter only needs the +FB button repainted, which must not
+    // throw away the learner's place in the pile.
+    if (document.getElementById('fcLesson')?.value === FB_FILTER || fbWasDrillingBook) {
+      const at = state.fcIndex;
+      initFlashcards();
+      state.fcIndex = Math.min(at, Math.max(0, state.fcCards.length - 1));
+      renderFlashcard();
+    } else {
+      renderFlashcard();
+    }
+  }
+  fbWasDrillingBook = false;
+}
+
+// populateLessonSelects drops the book option once the book is empty, which
+// resets the select before fbRefreshUI can read it — so note the filter at
+// the moment of the change, while it is still there to read.
+let fbWasDrillingBook = false;
+function fbNoteDrillingBook() {
+  fbWasDrillingBook = document.getElementById('fcLesson')?.value === FB_FILTER;
+}
+
+function fbUpdateBadge() {
+  const badge = document.getElementById('fbNavBadge');
+  if (badge) badge.textContent = fbCards.length ? String(fbCards.length) : '';
+}
+
+let fbToastTimer = null;
+function fbToast(msg) {
+  let el = document.getElementById('fbToast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'fbToast';
+    el.className = 'fb-toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(fbToastTimer);
+  fbToastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+// The +FB control, rendered wherever a word is shown as a card.
+function fbAddBtn(char, pinyin, meaning, lessonId, cls = 'fb-add-btn') {
+  const inBook = fbHas(char, pinyin);
+  const args = `'${esc(char)}','${esc(pinyin)}','${esc(meaning)}','${esc(lessonId)}',event`;
+  const label = cls === 'wc-fb-btn'
+    ? (inBook ? '✓' : '+')
+    : (inBook ? '✓FB' : '+FB');
+  const title = inBook ? 'In your flashcard book — click to remove' : 'Add to flashcard book';
+  return `<button class="${cls}${inBook ? ' in-book' : ''}" onclick="fbToggle(${args})" title="${title}">${label}</button>`;
+}
+
+function fbStudy() {
+  const sel = document.getElementById('fcLesson');
+  if (sel) sel.value = FB_FILTER;
+  showView('flashcards');
+}
+
+function fbQuiz() {
+  const sel = document.getElementById('quizLesson');
+  if (sel) sel.value = FB_FILTER;
+  showView('quiz');
+  resetQuiz();
+}
+
+function renderFlashcardBook() {
+  const toolbar = document.getElementById('fbToolbar');
+  const grid = document.getElementById('fbGrid');
+  if (!toolbar || !grid) return;
+
+  if (fbCards.length === 0) {
+    toolbar.innerHTML = '';
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="es-icon">📕</div>
+        <h3>Your flashcard book is empty</h3>
+        <p>Hit <strong>+FB</strong> on any word — in Vocabulary, in a sentence, or on a flashcard — to set it aside here.</p>
+      </div>`;
+    return;
+  }
+
+  // Newest first: the word just set aside is the one most likely wanted next.
+  const cards = [...fbCards].sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
+
+  toolbar.innerHTML = `
+    <span class="fb-count"><strong>${fbCards.length}</strong> card${fbCards.length === 1 ? '' : 's'} set aside</span>
+    <button class="btn btn-primary" onclick="fbStudy()">🃏 Study these</button>
+    <button class="btn btn-ghost" onclick="fbQuiz()" ${fbCards.length < 4 ? 'disabled title="Needs at least 4 cards"' : ''}>✏️ Quiz these</button>
+    <button class="btn btn-ghost" onclick="fbClear()">Clear book</button>
+  `;
+
+  grid.innerHTML = cards.map(v => {
+    const lesson = state.lessons[v.lessonId];
+    const tag = lesson ? (lesson.date || lesson.title) : (v.lessonId || 'added by hand');
+    const added = v.addedAt ? new Date(v.addedAt).toLocaleDateString() : '';
+    return `
+    <div class="vocab-card" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
+      <button class="fb-card-remove" onclick="fbRemove('${esc(v.char)}','${esc(v.pinyin)}')" title="Remove from flashcard book">✕</button>
+      <div class="vocab-lesson-tag">${tag}</div>
+      <button class="vocab-audio-btn" onclick="speakChinese('${esc(v.char)}',event)" title="Hear pronunciation">🔊</button>
+      <div class="vocab-char">${v.char}</div>
+      <div class="vocab-pinyin">${v.pinyin}</div>
+      <div class="vocab-meaning">${v.meaning}</div>
+      ${added ? `<div class="fb-added-date">added ${added}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 // ─────────────────────────────────────────────
@@ -3064,6 +3448,7 @@ function renderSentences() {
       const pinyin = w[0] || '', hanzi = w[1] || '', meaning = w[2] || '';
       return `
       <div class="word-chip" onclick="speakChinese('${esc(hanzi)}',event)" onmouseenter="showTooltip(event,'${esc(hanzi)}','${esc(pinyin)}','${esc(meaning)}')" onmouseleave="hideTooltip()" title="Click to hear">
+        ${fbAddBtn(hanzi, pinyin, meaning, s.lessonId, 'wc-fb-btn')}
         <span class="wc-char">${hanzi}</span>
         <span class="wc-pinyin">${pinyin}</span>
         ${state.showWordMeanings ? `<span class="wc-meaning">${meaning}</span>` : ''}
@@ -3542,12 +3927,26 @@ function setActiveLesson(id) {
 function populateLessonSelects() {
   const lessons = Object.values(state.lessons)
     .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-  const opts = `<option value="all">All Lessons</option>` + lessons.map(l =>
+  const lessonOpts = lessons.map(l =>
     `<option value="${l.id}">Lesson ${l.date || l.title}</option>`
   ).join('');
+  // The book is only offered where you can drill it, and only once it has
+  // something in it.
+  const bookOpt = fbCards.length
+    ? `<option value="${FB_FILTER}">📕 Flashcard Book (${fbCards.length})</option>`
+    : '';
+  const withBook = new Set(['fcLesson', 'quizLesson', 'vocabLesson']);
+
   ['vocabLesson','fcLesson','quizLesson','sentenceLesson'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.innerHTML = opts;
+    if (!el) return;
+    // Keep whatever was selected — this runs on every view change, and
+    // rebuilding the options used to silently reset the filter to "all".
+    const prev = el.value;
+    el.innerHTML = `<option value="all">All Lessons</option>`
+      + (withBook.has(id) ? bookOpt : '')
+      + lessonOpts;
+    if (prev && [...el.options].some(o => o.value === prev)) el.value = prev;
   });
 }
 
@@ -3878,9 +4277,11 @@ function lesResetAll() {
 
 loadState();
 loadFcLearned();
+loadFlashcardBook();
 lesLoadDone();
 lesLoadManifest();
 populateLessonSelects();
+fbUpdateBadge();
 renderSidebarLessons();
 renderDashboard();
 </script>
