@@ -2491,6 +2491,48 @@ const LESSON11 = {
   rev: 1,
 };
 
+const LESSON12_VOCAB = [
+  ["nǐ","你","(singular) you"], ["qù","去","to go"], ["lǚyóu","旅游","to travel, to take a trip"], ["hái shì","还是","or （question）, still"], ["chū chāi","出差","to go on a business trip"], ["wǒ","我","I, me"], ["yí gè","一个","1 unit of..."], ["rén","人","human, person"], ["dú láng","独狼","lone wolf"], ["shuāngbāotāi","双胞胎","twins"], ["sān bāo tāi","三胞胎","triplets"], ["shì","是","to be"], ["cōngming","聪明","clever, smart"], ["de","的","posessive form"], ["nà gè","那个","that one..."], ["běi","北","north"], ["mǎ qí dùn","马其顿","Macedonia"], ["tīng dào","听到","hear"], ["yǒu rén","有人","someone, somebody"], ["shuō","说","to speak, to say"], ["Zhōngwén","中文","Chinese language"], ["yóu kè","游客","tourist, visitor"], ["chī","吃","to eat"], ["wán","完","to finish, to end"], ["wǎn fàn","晚饭","dinner"], ["zài","再","again, once more"], ["kàn diàn shì","看电视","watching tv"], ["míng tiān","明天","tomorrow"], ["zài shuō","再说","to talk about it later; besides"], ["māma","妈妈","mother"], ["jiào","叫","to call, to be called, to ask"], ["zài jiā","在家","at home"], ["xuéxí","学习","to study, to learn"], ["fú wù","服务","service"], ["yímín","移民","immigrant"], ["ōu zhōu","欧洲","Europe"], ["zuì","最","most, to the greatest extent"], ["piányi","便宜","cheap, inexpensive"], ["guójiā","国家","country, nation"], ["yào","要","to be going to,to want sth, would like to, need"], ["gěi","给","(used after a verb) to, for，to give"], ["fúwùyuán","服务员","attendant, waiter/waitress"], ["xiǎo fèi","小费","tips"], ["ma","吗","yes/no"], ["yǒu yì diǎn","有一点","a little+ adj"], ["dànshì","但是","but, still, yet"], ["bù","不","no, not"], ["duō","多","much; many; more (adv  extent ); how (question)"], ["lǎobǎn","老板","boss, employer"], ["hěn jiǔ","很久","really long time"], ["méi","没","didn't haven't, don't have"], ["qí","骑","to ride"], ["mó tuō chē","摩托车","motorcycle"], ["le","了","past / a change or a new circumstance/done"], ["yìn dù","印度","India"], ["ān","安","(part of 印度安人, Native American)"], ["zhāng xuě","张雪","Zhang Xue (a name)"], ["jī chē","机车","motorbike, scooter"]
+];
+
+const LESSON12_SENTENCES = [
+  { id:1, type:'question', audio:"audio/Joshua_Pritchard-2026-10-29/0.wav", words:[["nǐ","你","(singular) you"], ["qù","去","to go"], ["lǚyóu","旅游","to travel, to take a trip"], ["hái shì","还是","or （question）, still"], ["chū chāi","出差","to go on a business trip"]], translation:"Are you traveling for fun or going on a business trip?" },
+  { id:2, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/1.wav", words:[["wǒ","我","I, me"], ["yí gè","一个","1 unit of..."], ["rén","人","human, person"], ["qù","去","to go"], ["lǚyóu","旅游","to travel, to take a trip"]], translation:"I'm traveling on my own." },
+  { id:3, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/2.wav", words:[["dú láng","独狼","lone wolf"]], translation:"Lone wolf." },
+  { id:4, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/3.wav", words:[["shuāngbāotāi","双胞胎","twins"]], translation:"Twins." },
+  { id:5, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/4.wav", words:[["sān bāo tāi","三胞胎","triplets"]], translation:"Triplets." },
+  { id:6, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/5.wav", words:[["wǒ","我","I, me"], ["shì","是","to be"], ["cōngming","聪明","clever, smart"], ["de","的","posessive form"], ["nà gè","那个","that one..."]], translation:"I'm the smart one." },
+  { id:7, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/6.wav", words:[["běi","北","north"], ["mǎ qí dùn","马其顿","Macedonia"]], translation:"North Macedonia." },
+  { id:8, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/7.wav", words:[["wǒ","我","I, me"], ["tīng dào","听到","hear"], ["yǒu rén","有人","someone, somebody"], ["shuō","说","to speak, to say"], ["Zhōngwén","中文","Chinese language"]], translation:"I heard someone speaking Chinese." },
+  { id:9, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/8.wav", words:[["yóu kè","游客","tourist, visitor"]], translation:"Tourist." },
+  { id:10, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/9.wav", words:[["chī","吃","to eat"], ["wán","完","to finish, to end"], ["wǎn fàn","晚饭","dinner"], ["zài","再","again, once more"], ["kàn diàn shì","看电视","watching tv"]], translation:"Watch TV after you finish dinner." },
+  { id:11, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/10.wav", words:[["míng tiān","明天","tomorrow"], ["zài shuō","再说","to talk about it later; besides"]], translation:"Let's talk about it tomorrow." },
+  { id:12, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/11.wav", words:[["māma","妈妈","mother"], ["jiào","叫","to call, to be called, to ask"], ["wǒ","我","I, me"], ["zài jiā","在家","at home"], ["xuéxí","学习","to study, to learn"]], translation:"Mom told me to study at home." },
+  { id:13, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/12.wav", words:[["fú wù","服务","service"]], translation:"Service." },
+  { id:14, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/13.wav", words:[["yímín","移民","immigrant"]], translation:"Immigrant; to immigrate." },
+  { id:15, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/14.wav", words:[["ōu zhōu","欧洲","Europe"], ["zuì","最","most, to the greatest extent"], ["piányi","便宜","cheap, inexpensive"], ["de","的","posessive form"], ["guójiā","国家","country, nation"]], translation:"The cheapest country in Europe." },
+  { id:16, type:'question', audio:"audio/Joshua_Pritchard-2026-10-29/15.wav", words:[["nǐ","你","(singular) you"], ["yào","要","to be going to,to want sth, would like to, need"], ["gěi","给","(used after a verb) to, for，to give"], ["fúwùyuán","服务员","attendant, waiter/waitress"], ["xiǎo fèi","小费","tips"], ["ma","吗","yes/no"]], translation:"Do you tip the waiter?" },
+  { id:17, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/16.wav", words:[["yǒu yì diǎn","有一点","a little+ adj"], ["xiǎo fèi","小费","tips"], ["dànshì","但是","but, still, yet"], ["bù","不","no, not"], ["duō","多","much; many; more (adv  extent ); how (question)"]], translation:"There's a small tip, but not much." },
+  { id:18, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/17.wav", words:[["lǎobǎn","老板","boss, employer"]], translation:"Boss." },
+  { id:19, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/18.wav", words:[["hěn jiǔ","很久","really long time"], ["méi","没","didn't haven't, don't have"], ["qí","骑","to ride"], ["mó tuō chē","摩托车","motorcycle"], ["le","了","past / a change or a new circumstance/done"]], translation:"I haven't ridden a motorcycle in a long time." },
+  { id:20, type:'vocab', audio:"audio/Joshua_Pritchard-2026-10-29/19.wav", words:[["yìn dù","印度","India"], ["ān","安","(part of 印度安人, Native American)"], ["rén","人","human, person"]], translation:"Native American." },
+  { id:21, type:'vocab', audio:"", words:[["zhāng xuě","张雪","Zhang Xue (a name)"], ["jī chē","机车","motorbike, scooter"]], translation:"Zhang Xue's motorbike." },
+];
+
+// Imported from the downloaded review page; this lesson was never published to
+// the bucket (the usual sourceUrl 404s), and it shipped with no images. The last
+// line, 张雪机车, has no teacher recording — that card falls back to TTS.
+const LESSON12 = {
+  id: 'Joshua_Pritchard-2026-10-29',
+  title: 'Joshua Pritchard - 2026.10.29',
+  subtitle: 'Travel vs. business trips, tipping & service, 完…再…, 很久没…了',
+  date: '2026-10-29',
+  vocabCount: LESSON12_VOCAB.length,
+  sentenceCount: LESSON12_SENTENCES.length,
+  images: [],
+  rev: 1,
+};
+
 // The three February lessons were imported later than the rest, so they sit at the
 // end of this file even though they are the earliest lessons chronologically.
 // Their source pages are gone from the bucket; everything here came from the
@@ -2714,6 +2756,7 @@ const ALL_SEED_LESSONS = [
   [LESSON9,        LESSON9_VOCAB,      LESSON9_SENTENCES],
   [LESSON10,       LESSON10_VOCAB,     LESSON10_SENTENCES],
   [LESSON11,       LESSON11_VOCAB,     LESSON11_SENTENCES],
+  [LESSON12,       LESSON12_VOCAB,     LESSON12_SENTENCES],
 ];
 
 function seedLessons() {
@@ -2752,7 +2795,7 @@ function loadState() {
   // Backfill English meanings that were blank in previously-saved data,
   // using the (now complete) seed data as the source of truth
   const seedMeanings = {};
-  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB, LESSON11_VOCAB,
+  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB, LESSON11_VOCAB, LESSON12_VOCAB,
    LESSON_FEB06_VOCAB, LESSON_FEB13_VOCAB, LESSON_FEB20_VOCAB]
     .forEach(arr => arr.forEach(([p, c, m]) => {
       if (m && m.trim()) seedMeanings[`${c}|${p}`] = m;
@@ -2776,7 +2819,7 @@ function loadState() {
   const seedTranslations = {};
   const hanziOf = s => (s.words || []).map(w => w[1] || '').join('');
   [INITIAL_SENTENCES, LESSON2_SENTENCES, LESSON3_SENTENCES, LESSON4_SENTENCES,
-   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES, LESSON11_SENTENCES,
+   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES, LESSON11_SENTENCES, LESSON12_SENTENCES,
    LESSON_FEB06_SENTENCES, LESSON_FEB13_SENTENCES, LESSON_FEB20_SENTENCES]
     .forEach(arr => arr.forEach(s => {
       if (s.translation && s.translation.trim()) {
@@ -2975,7 +3018,7 @@ const WT_GRAMMAR = WT('的 了 吗 吧 呢 着 过 得 地 啊 呀 嘛 把 被 �
 const WT_CONNECT = WT('和 跟 但 但是 可是 因为 所以 如果 虽然 还是 而且 不但 然后 最后 首先 又 还有 关于 对 比 从 到 给 向 为了 除了');
 const WT_ADVERB  = WT('很 太 最 更 非常 常常 通常 有时候 已经 正在 越来越 一起 别 不 没 也 都 再 就 才 还 刚才 一定 可能 大概 差不多 当然 真 挺 特别 再次 一次 正好 只 先 快要 马上 终于 其实 好好 不常 一点 一点儿 有点儿 稍微');
 const WT_TIME    = WT('今天 明天 昨天 前天 后天 早上 上午 中午 下午 晚上 现在 以前 以后 最近 今年 去年 明年 前年 星期 周末 春天 夏天 秋天 冬天 时间 时候 小时 分钟 年 月 日 号 点 秒 平时 当时 将来 过去 每天 白天 夜里 一会儿 生日 复活节 春节 圣诞节');
-const WT_PLACE   = WT('中国 美国 日本 韩国 英国 法国 德国 加拿大 夏威夷 成都 北京 上海 纽约 波士顿 迈阿密 佛罗里达 瑞丽 洛杉矶 加州 学校 家 我家 他家 医院 公园 教室 机场 商店 饭馆 餐厅 银行 图书馆 办公室 农村 城市 小镇 菜市场 车站 火车站 大学 中学 小学 房间 厨房 厕所 超市 山 海 路 地方 世界 国家 附近 公司 旅馆 酒店 球场 体育馆');
+const WT_PLACE   = WT('中国 美国 日本 韩国 英国 法国 德国 加拿大 印度 马其顿 欧洲 亚洲 夏威夷 成都 北京 上海 纽约 波士顿 迈阿密 佛罗里达 瑞丽 洛杉矶 加州 学校 家 我家 他家 医院 公园 教室 机场 商店 饭馆 餐厅 银行 图书馆 办公室 农村 城市 小镇 菜市场 车站 火车站 大学 中学 小学 房间 厨房 厕所 超市 山 海 路 地方 世界 国家 附近 公司 旅馆 酒店 球场 体育馆');
 const WT_PEOPLE  = WT('妈妈 爸爸 父母 朋友 妻子 丈夫 孩子 老师 学生 同学 同事 侄子 女儿 儿子 哥哥 弟弟 姐姐 妹妹 爷爷 奶奶 外婆 外公 人 男人 女人 大人 好人 成人 年轻人 青少年 医生 警察 队友 家人 一家人 老板 邻居 美国人 中国人 参议员 团队 球队 队');
 const WT_NUMCHAR = new Set('一二三四五六七八九十百千万零两半第');
 const WT_ADJ = WT('good bad hot cold busy tired big small quick fast slow difficult easy important comfortable clever smart happy glad serious dangerous safe quiet interesting boring complicated far near warm cool expensive cheap new old young tall short long heavy light clean dirty beautiful delicious hungry thirsty alive');
