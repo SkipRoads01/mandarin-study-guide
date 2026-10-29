@@ -58,7 +58,11 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
     }
+    .sidebar-logo:hover { background: rgba(255,255,255,0.05); }
+    .sidebar-logo:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
 
     .logo-hanzi {
       font-family: 'Noto Serif SC', serif;
@@ -602,12 +606,6 @@
       color: var(--ink);
       line-height: 1;
     }
-    .fc-hint {
-      font-size: 0.72rem;
-      color: var(--ink-muted);
-      margin-top: 14px;
-      letter-spacing: 0.05em;
-    }
     .fc-back-pinyin {
       font-size: 1.2rem;
       color: #f0c080;
@@ -1114,6 +1112,26 @@ box-shadow: 0 12px 40px var(--shadow-md);
     .view.active { animation: fadeIn 0.25s ease; }
 
     /* ── MOBILE NAV ─────────────────────────── */
+    .back-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      color: var(--ink-light);
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+      margin-right: 12px;
+      padding: 0;
+      transition: all 0.15s;
+    }
+    .back-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+    .back-btn.hidden { display: none; }
+
     .menu-toggle {
       display: none;
       background: none;
@@ -1383,7 +1401,9 @@ box-shadow: 0 12px 40px var(--shadow-md);
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
+  <div class="sidebar-logo" onclick="goHome()" role="link" tabindex="0"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goHome();}"
+       title="Back to the dashboard">
     <span class="logo-hanzi">汉</span>
     <div class="logo-text">
       <h1>Mandarin Hub</h1>
@@ -1427,6 +1447,7 @@ box-shadow: 0 12px 40px var(--shadow-md);
   <div class="topbar">
     <div class="topbar-left">
       <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+      <button class="back-btn hidden" id="backBtn" onclick="goBack()" aria-label="Back" title="Back">←</button>
       <div class="topbar-text">
         <div class="topbar-title" id="topbarTitle">Dashboard</div>
         <div class="topbar-sub" id="topbarSub">Overview of your study progress</div>
@@ -2774,7 +2795,35 @@ const VIEW_META = {
   lessons: { title: 'Lessons', sub: 'Manage and import lesson content' },
 };
 
-function showView(name) {
+// Views are swapped in place rather than loaded, so without this the browser
+// Back button (and the trackpad swipe, and the phone back gesture) leaves the
+// app entirely instead of returning to where you just were. Each view change
+// pushes a history entry carrying everything needed to rebuild the screen:
+// the view, the selected lesson, and for flashcards the exact card.
+let navDepth = 0;
+
+function navEntry(name, opts = {}) {
+  return {
+    view: name,
+    lesson: state.activeLesson || null,
+    target: opts.target || null,
+  };
+}
+
+function showView(name, opts = {}) {
+  if (!VIEW_META[name]) return;
+
+  // `restoring` means we arrived via Back/Forward — the entry already exists.
+  if (!opts.restoring) {
+    const same = state.currentView === name && !opts.target;
+    if (same) {
+      history.replaceState({ nav: navEntry(name, opts), depth: navDepth }, '', '#' + name);
+    } else {
+      navDepth++;
+      history.pushState({ nav: navEntry(name, opts), depth: navDepth }, '', '#' + name);
+    }
+  }
+
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(`view-${name}`).classList.add('active');
@@ -2787,12 +2836,35 @@ function showView(name) {
   if (name === 'learn') lesEnter();
   if (name === 'vocabulary') renderVocab();
   populateLessonSelects();
-  if (name === 'flashcards') initFlashcards();
+  if (name === 'flashcards') initFlashcards(opts.target);
   if (name === 'flashcardbook') renderFlashcardBook();
   if (name === 'sentences') renderSentences();
   if (name === 'lessons') renderLessonsManager();
+  updateBackBtn();
   closeSidebar();
 }
+
+window.addEventListener('popstate', e => {
+  const nav = e.state?.nav;
+  navDepth = e.state?.depth || 0;
+  if (!nav) { updateBackBtn(); return; }
+  if (nav.lesson !== (state.activeLesson || null)) {
+    state.activeLesson = nav.lesson;
+    renderSidebarLessons();
+  }
+  showView(nav.view, { restoring: true, target: nav.target });
+});
+
+function goBack() { history.back(); }
+
+// Only offer Back while there is somewhere inside the app to go back to —
+// otherwise it would walk the user out to whatever page they came from.
+function updateBackBtn() {
+  const btn = document.getElementById('backBtn');
+  if (btn) btn.classList.toggle('hidden', navDepth <= 0);
+}
+
+function goHome() { showView('dashboard'); }
 
 function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
 function closeSidebar() { document.body.classList.remove('sidebar-open'); }
@@ -2824,7 +2896,7 @@ function renderDashboard() {
   }
   const recent = recentPool.slice(0, 20);
   document.getElementById('recentWords').innerHTML = recent.map(v => `
-    <div class="mini-word-chip" onclick="showView('flashcards')" title="${v.meaning}">
+    <div class="mini-word-chip" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event)" title="${esc(v.meaning)}">
       <span class="mini-char">${v.char}</span>
       <span class="mini-pinyin">${v.pinyin}</span>
     </div>
@@ -2860,7 +2932,7 @@ function renderVocab() {
     return;
   }
   grid.innerHTML = vocab.map(v => `
-    <div class="vocab-card" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
+    <div class="vocab-card" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event)" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
       ${fbAddBtn(v.char, v.pinyin, v.meaning, v.lessonId)}
       <div class="vocab-char fc-speak" onclick="speakChinese('${esc(v.char)}',event)" title="Tap to hear">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
@@ -2894,14 +2966,43 @@ function saveFcLearned() {
   catch(e) { console.error('saveFcLearned failed:', e); }
 }
 
-function initFlashcards() {
+// `target` is a {char, pinyin} to open on, so arriving from a word elsewhere
+// in the app lands on that word rather than the top of the pile.
+function initFlashcards(target) {
   const lesson = document.getElementById('fcLesson')?.value || 'all';
   let vocab = getAllVocab(lesson);
   state.fcTotalInFilter = vocab.length;
   state.fcCards = vocab.filter(v => !fcLearned.has(fcKey(v)));
   state.fcIndex = 0;
   state.fcFlipped = false;
+
+  if (target && target.char) {
+    const key = `${target.char}|${target.pinyin}`;
+    let i = state.fcCards.findIndex(v => fcKey(v) === key);
+    if (i === -1) {
+      // The word is sitting in the learned pile. Show it anyway rather than
+      // silently landing on an unrelated card — but only for this visit; the
+      // learned pile itself is left alone.
+      const found = vocab.find(v => fcKey(v) === key);
+      if (found) { state.fcCards.unshift(found); i = 0; }
+    }
+    if (i >= 0) state.fcIndex = i;
+  }
   renderFlashcard();
+}
+
+// Open the flashcard drill on one specific word, from wherever it was clicked.
+function openFlashcardFor(char, pinyin, lessonId, event, preferFilter) {
+  if (event) event.stopPropagation();
+  const sel = document.getElementById('fcLesson');
+  if (sel) {
+    const wanted = [...sel.options].some(o => o.value === preferFilter) ? preferFilter : null;
+    // Widen the filter if the word's own lesson isn't the one selected,
+    // otherwise the card being navigated to would not be in the pile.
+    if (wanted) sel.value = wanted;
+    else if (sel.value !== 'all' && sel.value !== lessonId) sel.value = 'all';
+  }
+  showView('flashcards', { target: { char, pinyin } });
 }
 
 function markLearned() {
@@ -2970,13 +3071,13 @@ function renderFlashcard() {
 
   let frontContent = '';
   if (mode === 'char') {
-    frontContent = `<div class="fc-char fc-speak" ${speak} title="Tap to hear">${card.char}</div><div class="fc-hint">Tap the character to hear it · tap the card to flip</div>`;
+    frontContent = `<div class="fc-char fc-speak" ${speak} title="Tap to hear">${card.char}</div>`;
   } else if (mode === 'meaning') {
     // The prompt is English here, so there is nothing to speak without
     // giving away the answer — the whole face just flips.
-    frontContent = `<div class="fc-char" style="font-size:1.5rem;font-family:'DM Sans',sans-serif;font-weight:500">${card.meaning}</div><div class="fc-hint">Tap to reveal character</div>`;
+    frontContent = `<div class="fc-char" style="font-size:1.5rem;font-family:'DM Sans',sans-serif;font-weight:500">${card.meaning}</div>`;
   } else if (mode === 'pinyin') {
-    frontContent = `<div class="fc-char fc-speak" style="font-size:2rem;font-family:'DM Sans',sans-serif;font-style:italic;color:var(--blue)" ${speak} title="Tap to hear">${card.pinyin}</div><div class="fc-hint">Tap the pinyin to hear it · tap the card to flip</div>`;
+    frontContent = `<div class="fc-char fc-speak" style="font-size:2rem;font-family:'DM Sans',sans-serif;font-style:italic;color:var(--blue)" ${speak} title="Tap to hear">${card.pinyin}</div>`;
   }
 
   arena.innerHTML = `
@@ -3191,8 +3292,8 @@ function renderFlashcardBook() {
   `;
 
   grid.innerHTML = cards.map(v => `
-    <div class="vocab-card" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
-      <button class="fb-card-remove" onclick="fbRemove('${esc(v.char)}','${esc(v.pinyin)}')" title="Remove from flashcard book">✕</button>
+    <div class="vocab-card" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event,FB_FILTER)" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
+      <button class="fb-card-remove" onclick="event.stopPropagation();fbRemove('${esc(v.char)}','${esc(v.pinyin)}')" title="Remove from flashcard book">✕</button>
       <div class="vocab-char fc-speak" onclick="speakChinese('${esc(v.char)}',event)" title="Tap to hear">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
       <div class="vocab-meaning">${v.meaning}</div>
@@ -4102,7 +4203,7 @@ function lesRenderStudy() {
   document.getElementById('lesStudyCount').textContent =
     `Card ${lesPlayer.studyIdx + 1} of ${s.cards.length}`;
   const play = `onclick="lesPlayCard('${esc(card.front)}',event)"`;
-  const front = `<div class="fc-char fc-speak" ${play} title="Tap to hear">${card.front}</div><div class="fc-hint">Tap the character to hear it · tap the card to flip</div>`;
+  const front = `<div class="fc-char fc-speak" ${play} title="Tap to hear">${card.front}</div>`;
   const back = `<div class="fc-back-pinyin">${card.back}</div><div class="fc-back-char fc-speak" ${play} title="Tap to hear">${card.front}</div><div class="fc-back-meaning">${card.eng}</div>${card.note ? `<div class="fc-back-meaning" style="font-size:0.78rem;color:var(--ink-muted);border-top:1px solid var(--border-light);margin-top:8px;padding-top:8px">${card.note}</div>` : ''}`;
   document.getElementById('lesStudyArena').innerHTML = `
     <div class="flashcard-wrap" onclick="lesStudyFlip()">
@@ -4228,7 +4329,17 @@ lesLoadManifest();
 populateLessonSelects();
 fbUpdateBadge();
 renderSidebarLessons();
-renderDashboard();
+
+// Seed history with the opening view so the first Back press has a floor,
+// and honour a #view in the URL so a reloaded or bookmarked page reopens
+// where it left off.
+(function bootView() {
+  const fromHash = (location.hash || '').replace('#', '');
+  const start = VIEW_META[fromHash] ? fromHash : 'dashboard';
+  navDepth = 0;
+  history.replaceState({ nav: navEntry(start), depth: 0 }, '', '#' + start);
+  showView(start, { restoring: true });
+})();
 </script>
 <div class="img-lightbox" id="imgLightbox" onclick="closeLightbox()"><img id="imgLightboxImg" alt=""></div>
 
