@@ -2932,7 +2932,7 @@ function renderVocab() {
     return;
   }
   grid.innerHTML = vocab.map(v => `
-    <div class="vocab-card" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event)" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
+    <div class="vocab-card" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event)"${tipAttrs(v.char, v.pinyin, v.meaning, showMeanings)}>
       ${fbAddBtn(v.char, v.pinyin, v.meaning, v.lessonId)}
       <div class="vocab-char fc-speak" onclick="speakChinese('${esc(v.char)}',event)" title="Tap to hear">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
@@ -3293,7 +3293,7 @@ function renderFlashcardBook() {
   `;
 
   grid.innerHTML = cards.map(v => `
-    <div class="vocab-card" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event,FB_FILTER)" onmouseenter="showTooltip(event,'${esc(v.char)}','${esc(v.pinyin)}','${esc(v.meaning)}')" onmouseleave="hideTooltip()">
+    <div class="vocab-card" onclick="openFlashcardFor('${esc(v.char)}','${esc(v.pinyin)}','${esc(v.lessonId)}',event,FB_FILTER)">
       <button class="fb-card-remove" onclick="event.stopPropagation();fbRemove('${esc(v.char)}','${esc(v.pinyin)}')" title="Remove from flashcard book">✕</button>
       <div class="vocab-char fc-speak" onclick="speakChinese('${esc(v.char)}',event)" title="Tap to hear">${v.char}</div>
       <div class="vocab-pinyin">${v.pinyin}</div>
@@ -3493,7 +3493,7 @@ function renderSentences() {
     const wordsHtml = (s.words || []).map(w => {
       const pinyin = w[0] || '', hanzi = w[1] || '', meaning = w[2] || '';
       return `
-      <div class="word-chip" onclick="speakChinese('${esc(hanzi)}',event)" onmouseenter="showTooltip(event,'${esc(hanzi)}','${esc(pinyin)}','${esc(meaning)}')" onmouseleave="hideTooltip()" title="Click to hear">
+      <div class="word-chip" onclick="speakChinese('${esc(hanzi)}',event)"${tipAttrs(hanzi, pinyin, meaning, state.showWordMeanings)} title="Click to hear">
         ${fbAddBtn(hanzi, pinyin, meaning, s.lessonId, 'wc-fb-btn')}
         <span class="wc-char">${hanzi}</span>
         <span class="wc-pinyin">${pinyin}</span>
@@ -4002,6 +4002,15 @@ function populateLessonSelects() {
 // ─────────────────────────────────────────────
 
 const tooltip = document.getElementById('tooltip');
+
+// The tooltip repeats character, pinyin and meaning — which is exactly what a
+// card already shows. Only worth hanging on something whose meaning is hidden,
+// so this returns the hover handlers or nothing at all.
+function tipAttrs(char, pinyin, meaning, meaningVisible) {
+  if (meaningVisible || !meaning) return '';
+  return ` onmouseenter="showTooltip(event,'${esc(char)}','${esc(pinyin)}','${esc(meaning)}')" onmouseleave="hideTooltip()"`;
+}
+
 function showTooltip(e, char, pinyin, meaning) {
   document.getElementById('ttChar').textContent = char;
   document.getElementById('ttPinyin').textContent = pinyin;
