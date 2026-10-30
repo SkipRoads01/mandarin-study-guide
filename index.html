@@ -1436,6 +1436,35 @@ box-shadow: 0 12px 40px var(--shadow-md);
     .les-result.fail .les-result-score { color: var(--red); }
     .les-result-msg { font-size: 0.95rem; color: var(--ink-light); margin: 8px 0 22px; }
     .les-result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── IMMERSION WORK ──────────────────────── */
+    .imm-wrap { max-width: 760px; }
+    .imm-count { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 18px; }
+    .imm-group { margin-bottom: 26px; }
+    .imm-group-head {
+      display: flex; align-items: baseline; gap: 10px;
+      font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700;
+      color: var(--ink); padding-bottom: 8px; margin-bottom: 10px;
+      border-bottom: 1.5px solid var(--border-light);
+    }
+    .imm-group-count { font-size: 0.72rem; font-family: 'DM Sans', sans-serif; font-weight: 400; color: var(--ink-muted); }
+    .imm-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--surface); border: 1.5px solid var(--border-light);
+      border-radius: var(--r); padding: 13px 15px; margin-bottom: 8px;
+      cursor: pointer; transition: border-color 0.15s, opacity 0.15s;
+    }
+    .imm-item:hover { border-color: var(--red); }
+    .imm-check { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--red); cursor: pointer; flex: none; }
+    .imm-title { font-size: 0.95rem; font-weight: 500; color: var(--ink); }
+    .imm-year { font-size: 0.78rem; color: var(--ink-muted); font-weight: 400; }
+    .imm-where { font-size: 0.82rem; color: var(--ink-light); line-height: 1.55; margin-top: 3px; }
+    .imm-where a { color: var(--blue); }
+    .imm-where a:hover { color: var(--red); }
+    /* Done is greyed, never removed — the list stays a list of what there is. */
+    .imm-item.done { opacity: 0.55; background: var(--surface2); }
+    .imm-item.done .imm-title, .imm-item.done .imm-where { color: var(--ink-muted); }
+    .imm-item.done .imm-where a { color: var(--ink-muted); }
   </style>
 </head>
 <body>
@@ -1474,6 +1503,9 @@ box-shadow: 0 12px 40px var(--shadow-md);
     </button>
     <button class="nav-btn" onclick="showView('sentences')" id="nav-sentences">
       <span class="icon">💬</span> Sentences
+    </button>
+    <button class="nav-btn" onclick="showView('immersion')" id="nav-immersion">
+      <span class="icon">🎬</span> Immersion Work
     </button>
     <span class="nav-section-label">Manage</span>
     <button class="nav-btn" onclick="showView('lessons')" id="nav-lessons">
@@ -1669,6 +1701,14 @@ box-shadow: 0 12px 40px var(--shadow-md);
           </div>
         </div>
         <div id="lessonListTable" class="lesson-list-table"></div>
+      </div>
+    </div>
+
+    <!-- IMMERSION WORK -->
+    <div class="view" id="view-immersion">
+      <div class="imm-wrap">
+        <div class="imm-count" id="immCount"></div>
+        <div id="immList"></div>
       </div>
     </div>
 
@@ -2882,6 +2922,7 @@ const VIEW_META = {
   flashcardbook: { title: 'Flashcard Book', sub: 'Words you set aside to learn' },
   quiz: { title: 'Quiz', sub: 'Test your vocabulary knowledge' },
   sentences: { title: 'Sentences & Dialogues', sub: 'Review lesson sentences word by word' },
+  immersion: { title: 'Immersion Work', sub: 'Films, series and podcasts to work through' },
   lessons: { title: 'Lessons', sub: 'Manage and import lesson content' },
 };
 
@@ -2929,6 +2970,7 @@ function showView(name, opts = {}) {
   if (name === 'flashcards') initFlashcards(opts.target);
   if (name === 'flashcardbook') renderFlashcardBook();
   if (name === 'sentences') renderSentences();
+  if (name === 'immersion') renderImmersion();
   if (name === 'lessons') renderLessonsManager();
   updateBackBtn();
   closeSidebar();
@@ -4572,6 +4614,114 @@ function lesResetAll() {
 }
 
 // ─────────────────────────────────────────────
+// IMMERSION WORK
+// ─────────────────────────────────────────────
+
+// Watching and listening to work through. Each item's `id` is what the ticked
+// set remembers, so a title can be reworded freely but an id must never change
+// or the tick next to it is lost. `where` is authored HTML — it is written
+// here, never typed in by anyone, so the links go in as links.
+const IMMERSION = [
+  { label: 'Taiwanese films', items: [
+    { id: 'yi-yi', title: 'Yi Yi', year: '2000',
+      where: `<a href="https://www.criterionchannel.com/videos/yi-yi" target="_blank" rel="noopener">Criterion Channel</a>, or free on Kanopy with a library card (<a href="https://www.justwatch.com/us/movie/yi-yi" target="_blank" rel="noopener">JustWatch</a>). Also rentable on Amazon.` },
+    { id: 'brighter-summer-day', title: 'A Brighter Summer Day', year: '1991',
+      where: `<a href="https://www.criterionchannel.com/videos/a-brighter-summer-day" target="_blank" rel="noopener">Criterion Channel</a>. Also rent or buy on Apple TV, Prime Video, Google Play, YouTube and Fandango at Home (<a href="https://www.yidio.com/movie/a-brighter-summer-day/11818" target="_blank" rel="noopener">Yidio</a>).` },
+    { id: 'dear-ex', title: 'Dear Ex', year: '2018',
+      where: `Netflix (<a href="https://about.netflix.com/news/netflix-announces-dear-ex" target="_blank" rel="noopener">announcement</a>).` },
+    { id: 'detention', title: 'Detention', year: '2019',
+      where: `Free on Tubi, also on Prime Video (<a href="https://unsub.tv/title/rjPC34MF/detention-2019" target="_blank" rel="noopener">unSUB</a>).` },
+  ]},
+  { label: 'Mainland films', items: [
+    { id: 'dying-to-survive', title: 'Dying to Survive', year: '2018',
+      where: `<a href="https://www.criterionchannel.com/dying-to-survive" target="_blank" rel="noopener">Criterion Channel</a>, or Fandango at Home (<a href="https://www.rottentomatoes.com/m/dying_to_survive" target="_blank" rel="noopener">Rotten Tomatoes</a>).` },
+    { id: 'black-coal-thin-ice', title: 'Black Coal, Thin Ice', year: '2014',
+      where: `<a href="https://criterionchannel.com/black-coal-thin-ice" target="_blank" rel="noopener">Criterion Channel</a>, or Prime Video and the Hi-YAH Amazon Channel (<a href="https://justwatch.com/ca/movie/black-coal-thin-ice" target="_blank" rel="noopener">JustWatch</a>).` },
+    { id: 'ash-is-purest-white', title: 'Ash Is Purest White', year: '2018',
+      where: `<a href="https://www.criterionchannel.com/videos/ash-is-purest-white" target="_blank" rel="noopener">Criterion Channel</a>, Kanopy, Philo, or rent on Amazon (<a href="https://cinemateque-backend.onrender.com/film/tm307249?country=US" target="_blank" rel="noopener">Cinemateque</a>).` },
+    { id: 'so-long-my-son', title: 'So Long, My Son', year: '2019',
+      where: `No US streaming right now — DVD and Blu-ray only (<a href="https://www.justwatch.com/us/movie/so-long-my-son" target="_blank" rel="noopener">JustWatch</a>).` },
+  ]},
+  { label: 'Series', items: [
+    { id: 'the-bad-kids', title: 'The Bad Kids', year: '2020',
+      where: `iQIYI — search the title on <a href="https://www.iq.com" target="_blank" rel="noopener">iq.com</a>, their international site. No direct episode link to give.` },
+    { id: 'the-long-night', title: 'The Long Night', year: '2020',
+      where: `<a href="https://www.iq.com/play/the-long-night-episode-6-9vq1qoumnw?lang=en_us" target="_blank" rel="noopener">iq.com</a>, with English subtitles.` },
+    { id: 'wave-makers', title: 'Wave Makers', year: '2023',
+      where: `<a href="https://netflix.com/title/81655481" target="_blank" rel="noopener">Netflix</a>.` },
+  ]},
+  { label: 'Podcasts', items: [
+    { id: 'story-fm', title: '故事FM', year: 'Story FM',
+      where: `<a href="https://storyfm.cn/" target="_blank" rel="noopener">storyfm.cn</a>, and on Apple Podcasts.` },
+    { id: 'hu-zuo-hu-you', title: '忽左忽右', year: '',
+      where: `Apple Podcasts and Spotify (<a href="https://podnews.net/podcast/1493503146" target="_blank" rel="noopener">Podnews</a>). Take the main feed, not the one labelled 中国版.` },
+    { id: 'stochastic-volatility', title: '随机波动', year: 'StochasticVolatility',
+      where: `<a href="https://stochasticvolatility.substack.com" target="_blank" rel="noopener">Substack</a>, or search the Chinese name in your podcast app.` },
+  ]},
+];
+
+const IMM_KEY = 'mandarinHub_immersionDone';
+let immDone = new Set();
+
+function loadImmersionDone() {
+  try {
+    const raw = localStorage.getItem(IMM_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) immDone = new Set(parsed);
+    }
+  } catch(e) {}
+}
+
+function saveImmersionDone() {
+  try { localStorage.setItem(IMM_KEY, JSON.stringify([...immDone])); }
+  catch(e) {
+    console.error('saveImmersionDone failed:', e);
+    alert(`⚠️ Could not save your immersion progress (${e.name || 'error'}).\n\nDetails: ${e.message || e}`);
+  }
+}
+
+function immToggle(id) {
+  if (immDone.has(id)) immDone.delete(id); else immDone.add(id);
+  saveImmersionDone();
+  renderImmersion();
+}
+
+// Clicking the row ticks it, but a click on one of the links is a click on that
+// link — otherwise opening a listing would silently mark the thing watched.
+function immRowClick(id, event) {
+  if (event.target.closest('a')) return;
+  if (event.target.classList.contains('imm-check')) return;  // its own onchange fires
+  immToggle(id);
+}
+
+function renderImmersion() {
+  const total = IMMERSION.reduce((n, g) => n + g.items.length, 0);
+  const done = IMMERSION.reduce((n, g) => n + g.items.filter(i => immDone.has(i.id)).length, 0);
+  document.getElementById('immCount').textContent = `${done} of ${total} done`;
+  document.getElementById('immList').innerHTML = IMMERSION.map(g => {
+    const gDone = g.items.filter(i => immDone.has(i.id)).length;
+    const rows = g.items.map(it => {
+      const isDone = immDone.has(it.id);
+      return `
+        <div class="imm-item${isDone ? ' done' : ''}" onclick="immRowClick('${it.id}',event)">
+          <input type="checkbox" class="imm-check" ${isDone ? 'checked' : ''}
+                 onchange="immToggle('${it.id}')" aria-label="${esc(it.title)}">
+          <div>
+            <div class="imm-title">${it.title}${it.year ? ` <span class="imm-year">${it.year}</span>` : ''}</div>
+            <div class="imm-where">${it.where}</div>
+          </div>
+        </div>`;
+    }).join('');
+    return `
+      <section class="imm-group">
+        <div class="imm-group-head">${g.label} <span class="imm-group-count">${gDone} / ${g.items.length}</span></div>
+        ${rows}
+      </section>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
 
@@ -4579,6 +4729,7 @@ loadState();
 loadFcLearned();
 loadFlashcardBook();
 loadVocabGroupBy();
+loadImmersionDone();
 lesLoadDone();
 lesLoadManifest();
 populateLessonSelects();
