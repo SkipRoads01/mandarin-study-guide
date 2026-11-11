@@ -787,6 +787,7 @@
     .quiz-score span { color: var(--red); font-weight: 600; }
 
     .quiz-prompt-card {
+      position: relative;
       background: var(--surface);
       border: 1.5px solid var(--border-light);
       border-radius: 16px;
@@ -829,6 +830,54 @@
     .quiz-option.correct { border-color: #27ae60 !important; background: #eafaf1 !important; color: #1e8449 !important; }
     .quiz-option.wrong { border-color: var(--red) !important; background: var(--red-soft) !important; color: var(--red) !important; }
     .quiz-option:disabled { cursor: default; }
+    /* Once the question is answered an option stops being a choice and becomes
+       a way to hear the word it belongs to. */
+    .quiz-option.answered { cursor: pointer; }
+    .quiz-option.answered:hover { border-color: var(--border); background: var(--surface); }
+
+    /* Anything in the quiz you can tap to hear. */
+    .quiz-speak { cursor: pointer; }
+    .quiz-speak:hover { color: var(--red); }
+
+    /* Carries no box of its own, so the absolutely-placed button inside it does
+       not open a gap in the prompt card's column. */
+    #quizFbSlot { display: contents; }
+    .quiz-fb-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      line-height: 1;
+      padding: 5px 8px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quiz-fb-btn:hover { background: var(--gold); border-color: var(--gold); }
+    .quiz-fb-btn.in-book { background: var(--gold); border-color: var(--gold); }
+
+    /* Missed words, listed at the end so the quiz feeds the book directly. */
+    .quiz-missed { margin-top: 26px; text-align: left; }
+    .quiz-missed-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      font-size: 0.82rem; color: var(--ink-muted);
+      padding-bottom: 8px; margin-bottom: 10px;
+      border-bottom: 1.5px solid var(--border-light);
+    }
+    .quiz-missed-row {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--surface); border: 1.5px solid var(--border-light);
+      border-radius: var(--r); padding: 10px 12px; margin-bottom: 8px;
+    }
+    .quiz-missed-char { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; font-weight: 600; }
+    .quiz-missed-text { flex: 1; min-width: 0; font-size: 0.82rem; color: var(--ink-light); }
+    .quiz-missed-pinyin { color: var(--blue); font-style: italic; }
+    .quiz-missed-row .quiz-fb-btn { position: static; flex: none; }
 
     .quiz-next-btn {
       margin-top: 20px;
@@ -1658,6 +1707,7 @@ box-shadow: 0 12px 40px var(--shadow-md);
             <button class="btn btn-primary" onclick="startQuizFromSetup()">Play Again</button>
             <button class="btn btn-ghost" onclick="resetQuiz()">Change Settings</button>
           </div>
+          <div class="quiz-missed" id="quizMissed"></div>
         </div>
       </div>
     </div>
@@ -2767,6 +2817,7 @@ let state = {
   quizQuestions: [],
   quizCurrent: 0,
   quizScore: 0,
+  quizMissed: [],
   sentenceFilter: 'all',
   showWordMeanings: true,
 };
@@ -3480,6 +3531,7 @@ function fbRefreshUI() {
   if (view === 'flashcardbook') renderFlashcardBook();
   else if (view === 'vocabulary') renderVocab();
   else if (view === 'sentences') renderSentences();
+  else if (view === 'quiz') fbPaintQuizUI();
   else if (view === 'flashcards') {
     // When the drill is the book itself, the pile just changed membership and
     // has to be rebuilt — otherwise a cleared book would keep dealing cards.
@@ -3592,6 +3644,22 @@ function renderFlashcardBook() {
 
 let currentQuizType = 'char-to-meaning';
 
+// The question currently on screen. `state.quizCurrent` has already moved on by
+// the time an answer is showing, so it cannot be used to repaint the card.
+let quizShown = null;
+
+function quizFbBtn(item) {
+  return fbAddBtn(item.char, item.pinyin, item.meaning, item.lessonId || '', 'quiz-fb-btn');
+}
+
+// Adding a word mid-question must not redraw the question — that would wipe the
+// right/wrong marking the learner is still reading. Only the button changes.
+function fbPaintQuizUI() {
+  const slot = document.getElementById('quizFbSlot');
+  if (slot && quizShown) slot.innerHTML = quizFbBtn(quizShown.item);
+  if (document.getElementById('quizResults')?.style.display === 'block') renderQuizMissed();
+}
+
 function selectQuizType(type, el) {
   currentQuizType = type;
   document.querySelectorAll('.quiz-config-card').forEach(c => c.classList.remove('selected'));
@@ -3625,6 +3693,7 @@ function startQuizFromSetup() {
 
   state.quizCurrent = 0;
   state.quizScore = 0;
+  state.quizMissed = [];
   document.getElementById('quizSetup').style.display = 'none';
   document.getElementById('quizResults').style.display = 'none';
   document.getElementById('quizPlay').style.display = 'block';
@@ -3636,19 +3705,27 @@ function renderQuizQuestion() {
   const q = state.quizQuestions[state.quizCurrent];
   if (!q) { showQuizResults(); return; }
   const type = currentQuizType;
+  quizShown = q;
   document.getElementById('quizScoreDisplay').textContent = state.quizScore;
 
+  // The character on the prompt speaks when tapped, the same as a flashcard.
+  // On the two prompts that withhold the character there is nothing to speak
+  // yet — the options take over that job once the answer is in.
+  const speak = `class="quiz-q-char quiz-speak" onclick="speakChinese('${esc(q.item.char)}',event)" title="Tap to hear"`;
   let promptHtml = '';
   if (type === 'char-to-meaning') {
-    promptHtml = `<div class="quiz-q-char">${q.item.char}</div><div class="quiz-q-pinyin">${q.item.pinyin}</div><div class="quiz-q-prompt">What does this mean?</div>`;
+    promptHtml = `<div ${speak}>${q.item.char}</div><div class="quiz-q-pinyin">${q.item.pinyin}</div><div class="quiz-q-prompt">What does this mean?</div>`;
   } else if (type === 'meaning-to-char') {
     promptHtml = `<div class="quiz-q-char" style="font-size:1.6rem;font-family:'DM Sans';font-weight:500">${q.item.meaning}</div><div class="quiz-q-prompt">Which character is this?</div>`;
   } else if (type === 'pinyin-to-char') {
     promptHtml = `<div class="quiz-q-char" style="font-size:2rem;font-style:italic;font-family:'DM Sans';color:var(--blue)">${q.item.pinyin}</div><div class="quiz-q-prompt">Which character matches?</div>`;
   } else if (type === 'char-to-pinyin') {
-    promptHtml = `<div class="quiz-q-char">${q.item.char}</div><div class="quiz-q-prompt">What is the pinyin?</div>`;
+    promptHtml = `<div ${speak}>${q.item.char}</div><div class="quiz-q-prompt">What is the pinyin?</div>`;
   }
 
+  // The book button sits on the card for the whole question, so a word can be
+  // set aside either on sight or after getting it wrong.
+  promptHtml += `<span id="quizFbSlot">${quizFbBtn(q.item)}</span>`;
   document.getElementById('quizPromptCard').innerHTML = promptHtml;
 
   let optHtml = q.options.map(opt => {
@@ -3675,10 +3752,18 @@ function checkAnswer(btn, charVal) {
   const q = state.quizQuestions[state.quizCurrent];
   const correct = charVal === q.item.char;
   if (correct) state.quizScore++;
+  else state.quizMissed.push(q.item);
+  const byChar = {};
+  q.options.forEach(o => { byChar[o.char] = o; });
   document.querySelectorAll('.quiz-option').forEach(b => {
-    b.disabled = true;
     const bChar = b.getAttribute('onclick').match(/'([^']+)'\)/)?.[1];
     if (bChar === q.item.char) b.classList.add('correct');
+    // The question is settled, so each option turns into its own audio button:
+    // tap any of the four to hear the word it stands for.
+    const opt = byChar[bChar];
+    b.classList.add('answered');
+    b.setAttribute('title', 'Tap to hear');
+    b.setAttribute('onclick', opt ? `speakChinese('${esc(opt.char)}',event)` : '');
   });
   if (!correct) btn.classList.add('wrong');
   document.getElementById('quizScoreDisplay').textContent = state.quizScore;
@@ -3706,6 +3791,41 @@ function showQuizResults() {
   ];
   const msg = msgs.find(([threshold]) => pct >= threshold)?.[1] || msgs[3][1];
   document.getElementById('quizResultMsg').textContent = msg;
+  renderQuizMissed();
+}
+
+// What you got wrong, with a book button on each — the whole point of being
+// told you got them wrong.
+function renderQuizMissed() {
+  const box = document.getElementById('quizMissed');
+  if (!box) return;
+  const missed = state.quizMissed || [];
+  if (!missed.length) { box.innerHTML = ''; return; }
+  const allIn = missed.every(m => fbHas(m.char, m.pinyin));
+  const rows = missed.map(m => `
+    <div class="quiz-missed-row">
+      <span class="quiz-missed-char quiz-speak" onclick="speakChinese('${esc(m.char)}',event)" title="Tap to hear">${m.char}</span>
+      <span class="quiz-missed-text"><span class="quiz-missed-pinyin">${m.pinyin}</span> — ${m.meaning}</span>
+      ${quizFbBtn(m)}
+    </div>`).join('');
+  box.innerHTML = `
+    <div class="quiz-missed-head">
+      <span>Missed ${missed.length}</span>
+      ${allIn ? '' : `<button class="btn btn-ghost" style="padding:5px 12px;font-size:0.76rem" onclick="quizAddAllMissed()">Add all to book 📕</button>`}
+    </div>
+    ${rows}`;
+}
+
+function quizAddAllMissed() {
+  const adding = (state.quizMissed || []).filter(m => !fbHas(m.char, m.pinyin));
+  if (!adding.length) return;
+  adding.forEach(m => {
+    fbCards.push({ char: m.char, pinyin: m.pinyin, meaning: m.meaning || '', lessonId: m.lessonId || '', addedAt: Date.now() });
+    fbIndex.add(fbKey(m.char, m.pinyin));
+  });
+  saveFlashcardBook();
+  fbToast(`Added ${adding.length} word${adding.length === 1 ? '' : 's'} to your flashcard book`);
+  fbRefreshUI();
 }
 
 function resetQuiz() {
