@@ -2644,6 +2644,60 @@ const LESSON12 = {
   rev: 1,
 };
 
+const LESSON13_VOCAB = [
+  ["méi","没","didn't haven't, don't have"], ["qù guò","去过","ever been to..."], ["guǎng xī","广西","Guangxi (region in southern China)"], ["wǒmen","我们","we, us"], ["xǐ huan","喜欢","to like, to be fond of"], ["qù","去","to go"], ["hǎi biān","海边","seaside"], ["nǐ de","你的","your; yours"], ["háizi","孩子","child, kid"], ["wán","玩","to play"], ["ma","吗","yes/no"], ["fùjìn","附近","nearby, vicinity, neighborhood"], ["yǒu","有","to have, there be"], ["hǎi tān","海滩","beach"], ["bō shì dùn","波士顿","Boston"], ["de","的","posessive form"], ["piàoliang","漂亮","beautiful, pretty"], ["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["shēntǐ","身体","body；health"], ["hǎo","好","good, fine，  so (colloquial)"], ["dōng tiān","冬天","winter"], ["yǒu yòng","有用","useful"], ["huá bīng","滑冰","to skate"], ["wǒ","我","I, me"], ["bù","不","no, not"], ["ānquán","安全","safe, secure"], ["bīng","冰","ice"], ["yǒu diǎn","有点","a little + adj"], ["báo","薄","thin"], ["hòu","厚","deep, profound"], ["zhè","这","this"], ["běn shū","本书","(measure word 本 + 书) book"], ["hěn hòu","很厚","very thick"], ["tīngshuō","听说","to hear about, to be told"], ["tā men","他们","they"], ["dǎsuàn","打算","plan; to intend"], ["pāi","拍","to take (a photo), to shoot (a video), to tap"], ["yí gè","一个","1 unit of..."], ["diàn shì jù","电视剧","TV show， dramas, series"], ["xiànzài","现在","now"], ["Zhōngguó","中国","China"], ["rén","人","human, person"], ["dōu","都","both, all, even"], ["kàn","看","to look at, to watch, to read"], ["AI","AI","AI (artificial intelligence)"], ["duǎn jù","短剧","short drama, micro-drama"], ["ōu zhōu","欧洲","Europe"], ["zhōu","州","state"], ["dé zhōu","德州","Texas"], ["jiā zhōu","加州","California"], ["Mǎsàzhūsài Zhōu","马萨诸塞州","Massachusetts"], ["měi zhōu","美洲","the Americas"], ["jīn tiān","今天","today"], ["kě néng","可能","maybe, perhaps, probably"], ["yào","要","to be going to,to want sth, would like to, need"], ["qí","骑","to ride"], ["mó tuō chē","摩托车","motorcycle"], ["dǎ bù kāi","打不开","can't get it open"], ["tīng bù dǒng","听不懂","can't understand (what you hear)"], ["jiào","叫","to call, to be called, to ask"], ["fúwùyuán","服务员","attendant, waiter/waitress"], ["zhuōzi","桌子","desk, table"], ["shàng","上","to go up, to ascend"], ["fàn","饭","meal, food"], ["chī bù wán le","吃不完了","can't finish eating it"], ["nín","您","(polite) you"], ["shì","是","to be"], ["něi gè","哪个","which one"], ["dì bā","第八","eighth"], ["zhuō","桌","table (measure word for tables)"], ["wǒ de","我的","my, mine"], ["gǒu","狗","dog"], ["chī","吃","to eat"]
+];
+
+const LESSON13_SENTENCES = [
+  { id:1, type:'vocab', audio:"", words:[["méi","没","didn't haven't, don't have"], ["qù guò","去过","ever been to..."], ["guǎng xī","广西","Guangxi (region in southern China)"]], translation:"I haven't been to Guangxi." },
+  { id:2, type:'vocab', audio:"", words:[["wǒmen","我们","we, us"], ["xǐ huan","喜欢","to like, to be fond of"], ["qù","去","to go"], ["hǎi biān","海边","seaside"]], translation:"We like going to the seaside." },
+  { id:3, type:'question', audio:"", words:[["nǐ de","你的","your; yours"], ["háizi","孩子","child, kid"], ["xǐ huan","喜欢","to like, to be fond of"], ["qù","去","to go"], ["hǎi biān","海边","seaside"], ["wán","玩","to play"], ["ma","吗","yes/no"]], translation:"Do your kids like going to the seaside to play?" },
+  { id:4, type:'vocab', audio:"", words:[["fùjìn","附近","nearby, vicinity, neighborhood"]], translation:"...nearby." },
+  { id:5, type:'vocab', audio:"", words:[["wǒmen","我们","we, us"], ["fùjìn","附近","nearby, vicinity, neighborhood"], ["yǒu","有","to have, there be"], ["hǎi tān","海滩","beach"]], translation:"There's a beach near us." },
+  { id:6, type:'question', audio:"", words:[["bō shì dùn","波士顿","Boston"], ["de","的","posessive form"], ["hǎi tān","海滩","beach"], ["piàoliang","漂亮","beautiful, pretty"], ["ma","吗","yes/no"]], translation:"Are the beaches in Boston nice?" },
+  { id:7, type:'vocab', audio:"", words:[["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["shēntǐ","身体","body；health"], ["hǎo","好","good, fine，  so (colloquial)"]], translation:"It's good for your health." },
+  { id:8, type:'vocab', audio:"", words:[["dōng tiān","冬天","winter"], ["qù","去","to go"], ["yǒu yòng","有用","useful"], ["duì","对","yes, correct，(used before a noun or pronoun) to, for"], ["shēntǐ","身体","body；health"], ["hǎo","好","good, fine，  so (colloquial)"]], translation:"Going in winter is useful - it's good for your health." },
+  { id:9, type:'vocab', audio:"", words:[["huá bīng","滑冰","to skate"]], translation:"Ice skating." },
+  { id:10, type:'vocab', audio:"", words:[["wǒ","我","I, me"], ["dōng tiān","冬天","winter"], ["qù","去","to go"], ["huá bīng","滑冰","to skate"]], translation:"I go ice skating in winter." },
+  { id:11, type:'vocab', audio:"", words:[["bù","不","no, not"], ["ānquán","安全","safe, secure"]], translation:"Not safe." },
+  { id:12, type:'vocab', audio:"", words:[["bīng","冰","ice"], ["yǒu diǎn","有点","a little + adj"], ["báo","薄","thin"]], translation:"The ice is a bit thin." },
+  { id:13, type:'vocab', audio:"", words:[["hòu","厚","deep, profound"]], translation:"Thick." },
+  { id:14, type:'vocab', audio:"", words:[["zhè","这","this"], ["běn shū","本书","(measure word 本 + 书) book"], ["hěn hòu","很厚","very thick"]], translation:"This book is very thick." },
+  { id:15, type:'vocab', audio:"", words:[["wǒ","我","I, me"], ["tīngshuō","听说","to hear about, to be told"], ["zhè","这","this"], ["běn shū","本书","(measure word 本 + 书) book"], ["hěn hòu","很厚","very thick"]], translation:"I heard this book is very thick." },
+  { id:16, type:'vocab', audio:"", words:[["tā men","他们","they"], ["dǎsuàn","打算","plan; to intend"], ["pāi","拍","to take (a photo), to shoot (a video), to tap"], ["yí gè","一个","1 unit of..."], ["diàn shì jù","电视剧","TV show， dramas, series"]], translation:"They're planning to shoot a TV series." },
+  { id:17, type:'vocab', audio:"", words:[["xiànzài","现在","now"], ["Zhōngguó","中国","China"], ["rén","人","human, person"], ["dōu","都","both, all, even"], ["kàn","看","to look at, to watch, to read"], ["AI","AI","AI (artificial intelligence)"], ["duǎn jù","短剧","short drama, micro-drama"]], translation:"These days Chinese people all watch AI short dramas." },
+  { id:18, type:'vocab', audio:"", words:[["ōu zhōu","欧洲","Europe"]], translation:"Europe." },
+  { id:19, type:'vocab', audio:"", words:[["zhōu","州","state"]], translation:"State." },
+  { id:20, type:'vocab', audio:"", words:[["dé zhōu","德州","Texas"]], translation:"Texas." },
+  { id:21, type:'vocab', audio:"", words:[["jiā zhōu","加州","California"]], translation:"California." },
+  { id:22, type:'vocab', audio:"", words:[["Mǎsàzhūsài Zhōu","马萨诸塞州","Massachusetts"]], translation:"Massachusetts." },
+  { id:23, type:'vocab', audio:"", words:[["měi zhōu","美洲","the Americas"]], translation:"The Americas." },
+  { id:24, type:'vocab', audio:"", words:[["jīn tiān","今天","today"], ["wǒ","我","I, me"], ["kě néng","可能","maybe, perhaps, probably"], ["yào","要","to be going to,to want sth, would like to, need"], ["qí","骑","to ride"], ["mó tuō chē","摩托车","motorcycle"]], translation:"I might ride my motorcycle today." },
+  { id:25, type:'vocab', audio:"", words:[["dǎ bù kāi","打不开","can't get it open"]], translation:"Can't get it open." },
+  { id:26, type:'vocab', audio:"", words:[["tīng bù dǒng","听不懂","can't understand (what you hear)"]], translation:"Can't understand it." },
+  { id:27, type:'vocab', audio:"", words:[["jiào","叫","to call, to be called, to ask"]], translation:"To call; to tell someone to do something." },
+  { id:28, type:'vocab', audio:"", words:[["fúwùyuán","服务员","attendant, waiter/waitress"], ["wǒ","我","I, me"], ["zhuōzi","桌子","desk, table"], ["shàng","上","to go up, to ascend"], ["de","的","posessive form"], ["fàn","饭","meal, food"], ["chī bù wán le","吃不完了","can't finish eating it"]], translation:"Waiter, I can't finish the food on my table." },
+  { id:29, type:'question', audio:"", words:[["nín","您","(polite) you"], ["shì","是","to be"], ["něi gè","哪个","which one"], ["zhuōzi","桌子","desk, table"]], translation:"Which table are you at?" },
+  { id:30, type:'vocab', audio:"", words:[["dì bā","第八","eighth"], ["zhuō","桌","table (measure word for tables)"]], translation:"Table eight." },
+  { id:31, type:'vocab', audio:"", words:[["wǒ","我","I, me"], ["jiào","叫","to call, to be called, to ask"], ["wǒ de","我的","my, mine"], ["gǒu","狗","dog"], ["qù","去","to go"], ["chī","吃","to eat"]], translation:"I'll tell my dog to go and eat it." },
+];
+
+// Imported from the downloaded package (dbqst13k7ckc73arepcg.zip). This lesson
+// was never published to the bucket (the usual sourceUrl 404s) and it shipped
+// with no teacher recordings at all - every card here falls back to TTS. The
+// three images are the hotel front-desk dialogue, its comic strip and the
+// pattern drill that cards 25-31 practise.
+const LESSON13 = {
+  id: 'Joshua_Pritchard-2026-11-12',
+  title: 'Joshua Pritchard - 2026.11.12',
+  subtitle: 'Seaside & winter, 有点/很 + adj, US states with 州, and 打不开 / 听不懂 / 吃不完',
+  date: '2026-11-12',
+  vocabCount: LESSON13_VOCAB.length,
+  sentenceCount: LESSON13_SENTENCES.length,
+  images: ['images/Joshua_Pritchard-2026-11-12/0.png', 'images/Joshua_Pritchard-2026-11-12/1.png', 'images/Joshua_Pritchard-2026-11-12/2.png'],
+  rev: 1,
+};
+
 // The three February lessons were imported later than the rest, so they sit at the
 // end of this file even though they are the earliest lessons chronologically.
 // Their source pages are gone from the bucket; everything here came from the
@@ -2869,6 +2923,7 @@ const ALL_SEED_LESSONS = [
   [LESSON10,       LESSON10_VOCAB,     LESSON10_SENTENCES],
   [LESSON11,       LESSON11_VOCAB,     LESSON11_SENTENCES],
   [LESSON12,       LESSON12_VOCAB,     LESSON12_SENTENCES],
+  [LESSON13,       LESSON13_VOCAB,     LESSON13_SENTENCES],
 ];
 
 function seedLessons() {
@@ -2907,7 +2962,7 @@ function loadState() {
   // Backfill English meanings that were blank in previously-saved data,
   // using the (now complete) seed data as the source of truth
   const seedMeanings = {};
-  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB, LESSON11_VOCAB, LESSON12_VOCAB,
+  [INITIAL_VOCAB, LESSON2_VOCAB, LESSON3_VOCAB, LESSON4_VOCAB, LESSON5_VOCAB, LESSON6_VOCAB, LESSON7_VOCAB, LESSON8_VOCAB, LESSON9_VOCAB, LESSON10_VOCAB, LESSON11_VOCAB, LESSON12_VOCAB, LESSON13_VOCAB,
    LESSON_FEB06_VOCAB, LESSON_FEB13_VOCAB, LESSON_FEB20_VOCAB]
     .forEach(arr => arr.forEach(([p, c, m]) => {
       if (m && m.trim()) seedMeanings[`${c}|${p}`] = m;
@@ -2931,7 +2986,7 @@ function loadState() {
   const seedTranslations = {};
   const hanziOf = s => (s.words || []).map(w => w[1] || '').join('');
   [INITIAL_SENTENCES, LESSON2_SENTENCES, LESSON3_SENTENCES, LESSON4_SENTENCES,
-   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES, LESSON11_SENTENCES, LESSON12_SENTENCES,
+   LESSON5_SENTENCES, LESSON6_SENTENCES, LESSON7_SENTENCES, LESSON8_SENTENCES, LESSON9_SENTENCES, LESSON10_SENTENCES, LESSON11_SENTENCES, LESSON12_SENTENCES, LESSON13_SENTENCES,
    LESSON_FEB06_SENTENCES, LESSON_FEB13_SENTENCES, LESSON_FEB20_SENTENCES]
     .forEach(arr => arr.forEach(s => {
       if (s.translation && s.translation.trim()) {
@@ -3132,7 +3187,7 @@ const WT_GRAMMAR = WT('的 了 吗 吧 呢 着 过 得 地 啊 呀 嘛 把 被 �
 const WT_CONNECT = WT('和 跟 但 但是 可是 因为 所以 如果 虽然 还是 而且 不但 然后 最后 首先 又 还有 关于 对 比 从 到 给 向 为了 除了');
 const WT_ADVERB  = WT('很 太 最 更 非常 常常 通常 有时候 已经 正在 越来越 一起 别 不 没 也 都 再 就 才 还 刚才 一定 可能 大概 差不多 当然 真 挺 特别 再次 一次 正好 只 先 快要 马上 终于 其实 好好 不常 一点 一点儿 有点儿 稍微');
 const WT_TIME    = WT('今天 明天 昨天 前天 后天 早上 上午 中午 下午 晚上 现在 以前 以后 最近 今年 去年 明年 前年 星期 周末 春天 夏天 秋天 冬天 时间 时候 小时 分钟 年 月 日 号 点 秒 平时 当时 将来 过去 每天 白天 夜里 一会儿 生日 复活节 春节 圣诞节');
-const WT_PLACE   = WT('中国 美国 日本 韩国 英国 法国 德国 加拿大 印度 马其顿 欧洲 亚洲 夏威夷 成都 北京 上海 纽约 波士顿 迈阿密 佛罗里达 瑞丽 洛杉矶 加州 学校 家 我家 他家 医院 公园 教室 机场 商店 饭馆 餐厅 银行 图书馆 办公室 农村 城市 小镇 菜市场 车站 火车站 大学 中学 小学 房间 厨房 厕所 超市 山 海 路 地方 世界 国家 附近 公司 旅馆 酒店 球场 体育馆');
+const WT_PLACE   = WT('中国 美国 日本 韩国 英国 法国 德国 加拿大 印度 马其顿 欧洲 美洲 亚洲 夏威夷 成都 广西 州 德州 马萨诸塞州 海边 海滩 北京 上海 纽约 波士顿 迈阿密 佛罗里达 瑞丽 洛杉矶 加州 学校 家 我家 他家 医院 公园 教室 机场 商店 饭馆 餐厅 银行 图书馆 办公室 农村 城市 小镇 菜市场 车站 火车站 大学 中学 小学 房间 厨房 厕所 超市 山 海 路 地方 世界 国家 附近 公司 旅馆 酒店 球场 体育馆');
 const WT_PEOPLE  = WT('妈妈 爸爸 父母 朋友 妻子 丈夫 孩子 老师 学生 同学 同事 侄子 女儿 儿子 哥哥 弟弟 姐姐 妹妹 爷爷 奶奶 外婆 外公 人 男人 女人 大人 好人 成人 年轻人 青少年 医生 警察 队友 家人 一家人 老板 邻居 美国人 中国人 参议员 团队 球队 队');
 const WT_NUMCHAR = new Set('一二三四五六七八九十百千万零两半第');
 const WT_ADJ = WT('good bad hot cold busy tired big small quick fast slow difficult easy important comfortable clever smart happy glad serious dangerous safe quiet interesting boring complicated far near warm cool expensive cheap new old young tall short long heavy light clean dirty beautiful delicious hungry thirsty alive');
