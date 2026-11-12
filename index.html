@@ -157,11 +157,15 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.3);
-      padding: 6px 4px 8px;
+      /* Negative margins pull it out over the list's padding, so rows can't
+         scroll visibly through the strip above it or past its sides. The
+         padding puts the text back where it was. */
+      margin: -12px -12px 0;
+      padding: 18px 16px 8px;
       position: sticky;
-      top: 0;
+      top: -12px;
       background: var(--ink);
-      z-index: 1;
+      z-index: 2;
     }
     .lesson-chip {
       display: flex;
