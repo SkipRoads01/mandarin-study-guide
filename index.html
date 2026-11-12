@@ -41,7 +41,8 @@
     /* ── SIDEBAR ─────────────────────────────── */
     .sidebar {
       width: 240px;
-      min-height: 100vh;
+      height: 100vh;
+      overflow-y: auto;
       background: var(--ink);
       color: #e8d8c4;
       display: flex;
@@ -88,7 +89,7 @@
 
     .sidebar-nav {
       padding: 16px 12px;
-      flex: 1;
+      flex: 0 0 auto;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -140,6 +141,15 @@
     .sidebar-lessons {
       padding: 12px;
       border-top: 1px solid rgba(255,255,255,0.08);
+      /* The list grows by a row every lesson and body is overflow:hidden, so
+         without its own scroll the oldest lessons fall off the bottom of the
+         screen with no way to reach them. */
+      flex: 1 1 auto;
+      /* Always keep a few rows usable; on a short screen the sidebar itself
+         scrolls instead of squashing this to a sliver. */
+      min-height: 150px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
     .sidebar-lessons h4 {
       font-size: 0.62rem;
@@ -147,7 +157,11 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.3);
-      padding: 0 4px 8px;
+      padding: 6px 4px 8px;
+      position: sticky;
+      top: 0;
+      background: var(--ink);
+      z-index: 1;
     }
     .lesson-chip {
       display: flex;
@@ -1280,6 +1294,9 @@ box-shadow: 0 12px 40px var(--shadow-md);
         box-shadow: 0 0 24px rgba(0,0,0,0.35);
         overflow-y: auto;
       }
+      /* The whole sidebar scrolls here, so the lesson list must not trap a
+         second scroll area inside it. */
+      .sidebar-lessons { flex: 0 0 auto; min-height: auto; overflow-y: visible; }
       body.sidebar-open .sidebar { transform: translateX(0); }
 
       .main { width: 100%; min-width: 0; }
@@ -4339,7 +4356,10 @@ function renderLessonsManager() {
 // ─────────────────────────────────────────────
 
 function renderSidebarLessons() {
-  const lessons = Object.values(state.lessons).sort((a,b) => a.date.localeCompare(b.date));
+  // Newest first — the lesson you just had is the one you reach for. Matches
+  // the ordering the lesson dropdowns already use.
+  const lessons = Object.values(state.lessons)
+    .sort((a,b) => (b.date || '').localeCompare(a.date || ''));
   const el = document.getElementById('sidebarLessons');
   el.innerHTML = `<h4>My Lessons</h4>
     <div class="lesson-chip ${!state.activeLesson ? 'active-lesson' : ''}" onclick="setActiveLesson(null)">
